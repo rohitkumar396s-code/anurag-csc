@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Anurag CSC Center</title>
+    <title>Anurag CSC Center - eDistrict Model</title>
     <style>
         * {
             margin: 0;
@@ -12,101 +12,202 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         body {
-            background-color: #f4f7f6;
+            background-color: #f0f2f5;
             color: #333;
-            line-height: 1.6;
         }
-        header {
-            background: linear-gradient(135deg, #0056b3, #0083b0);
-            color: white;
-            padding: 20px;
-            text-align: center;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        /* Top Utility Bar */
+        .top-bar {
+            background-color: #ffffff;
+            border-bottom: 1px solid #ddd;
+            padding: 8px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            color: #555;
         }
-        header h1 {
-            font-size: 24px;
-            margin-bottom: 5px;
+        .top-bar-left {
+            display: flex;
+            gap: 15px;
         }
-        header p {
+        .top-bar-right {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+        /* Main Navigation Bar */
+        .navbar {
+            background-color: #ffffff;
+            padding: 15px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .logo-section h1 {
+            font-size: 22px;
+            color: #003366;
+            font-weight: 700;
+        }
+        .logo-section p {
+            font-size: 12px;
+            color: #e65c00;
+            font-weight: bold;
+        }
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            list-style: none;
+            flex-wrap: wrap;
+        }
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 600;
             font-size: 14px;
-            opacity: 0.9;
+            transition: color 0.3s;
         }
-        .container {
-            padding: 15px;
-            max-width: 600px;
+        .nav-links a:hover {
+            color: #0056b3;
+        }
+        .login-btn {
+            background: linear-gradient(135deg, #ff7e5f, #feb47b);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 14px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        /* Hero Banner Section (Like eDistrict) */
+        .hero-section {
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: white;
+            padding: 40px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+        .hero-left {
+            flex: 1;
+            min-width: 300px;
+            text-align: center;
+        }
+        .hero-left h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #ffdf00;
+        }
+        .services-wheel {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            max-width: 400px;
             margin: auto;
         }
-        .banner {
-            background: #fff3cd;
-            border: 1px solid #ffeeba;
-            color: #856404;
-            padding: 12px;
-            border-radius: 8px;
+        .wheel-item {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 15px;
+            border-radius: 10px;
             text-align: center;
-            font-size: 14px;
-            margin-bottom: 20px;
+            font-size: 13px;
+            font-weight: 500;
+            transition: background 0.3s;
+        }
+        .wheel-item:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+        .hero-right {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            flex: 1;
+        }
+        .leader-card {
+            background: white;
+            color: #333;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            width: 160px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+        .leader-card img {
+            width: 120px;
+            height: 140px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border: 2px solid #ddd;
+        }
+        .leader-card h4 {
+            font-size: 12px;
+            color: #555;
+            line-height: 1.4;
+        }
+        /* Content Section */
+        .container {
+            max-width: 1000px;
+            margin: 30px auto;
+            padding: 0 20px;
         }
         .section-title {
-            font-size: 18px;
-            margin: 20px 0 15px 0;
-            color: #0056b3;
-            border-bottom: 2px solid #0056b3;
-            padding-bottom: 5px;
-        }
-        .services-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
+            font-size: 20px;
+            color: #003366;
             margin-bottom: 20px;
-        }
-        .service-card {
-            background: white;
-            padding: 15px;
-            border-radius: 8px;
-            text-align: center;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            font-size: 14px;
-            font-weight: 500;
+            border-left: 4px solid #e65c00;
+            padding-left: 10px;
         }
         .rate-table {
             width: 100%;
             background: white;
             border-radius: 8px;
             overflow: hidden;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
             border-collapse: collapse;
-            margin-bottom: 20px;
+            margin-bottom: 40px;
         }
         .rate-table th, .rate-table td {
-            padding: 12px 15px;
+            padding: 12px 20px;
             text-align: left;
             border-bottom: 1px solid #eee;
             font-size: 14px;
         }
         .rate-table th {
-            background: #0056b3;
+            background: #003366;
             color: white;
         }
         .contact-box {
             background: white;
-            padding: 20px;
+            padding: 30px;
             border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
             text-align: center;
         }
         .contact-box p {
-            margin-bottom: 8px;
-            font-size: 14px;
+            margin-bottom: 10px;
+            font-size: 15px;
         }
         .btn-group {
-            margin-top: 15px;
+            margin-top: 20px;
             display: flex;
-            gap: 10px;
+            gap: 15px;
             justify-content: center;
         }
         .btn {
-            display: inline-block;
-            padding: 10px 20px;
+            padding: 10px 25px;
             border-radius: 5px;
             text-decoration: none;
             color: white;
@@ -119,32 +220,73 @@
 </head>
 <body>
 
-    <header>
-        <h1>अनुराग सीएससी सेंटर</h1>
-        <p>डिजिटल सेवा एवं ऑनलाइन फॉर्म केंद्र</p>
-    </header>
+    <!-- Top Utility Bar -->
+    <div class="top-bar">
+        <div class="top-bar-left">
+            <span>बुधवार, अगस्त 26, 2026</span>
+        </div>
+        <div class="top-bar-right">
+            <span>मुख्य कंटेंट पर जाएं</span>
+            <span>|</span>
+            <span>स्क्रीन रीडर</span>
+            <span>|</span>
+            <span>साइट मैप</span>
+        </div>
+    </div>
 
+    <!-- Main Navigation -->
+    <div class="navbar">
+        <div class="logo-section">
+            <div>
+                <h1>अनुराग सीएससी सेंटर</h1>
+                <p>Digital Services & Jan Seva Kendra</p>
+            </div>
+        </div>
+        <ul class="nav-links">
+            <li><a href="#">मुख्य पृष्ठ</a></li>
+            <li><a href="#">सेवाएं</a></li>
+            <li><a href="#">प्रमाण पत्र</a></li>
+            <li><a href="#">रेट लिस्ट</a></li>
+            <li><a href="#">संपर्क करें</a></li>
+        </ul>
+        <a href="tel:9760623097" class="login-btn">लॉगिन / संपर्क</a>
+    </div>
+
+    <!-- Hero Section (eDistrict Style) -->
+    <div class="hero-section">
+        <div class="hero-left">
+            <h2>प्रमुख डिजिटल सेवाएं</h2>
+            <div class="services-wheel">
+                <div class="wheel-item">📄 जाति प्रमाण पत्र</div>
+                <div class="wheel-item">🏠 निवास प्रमाण पत्र</div>
+                <div class="wheel-item">💰 आय प्रमाण पत्र</div>
+                <div class="wheel-item">💳 नया पैन कार्ड</div>
+                <div class="wheel-item">🚆 रेल / बस टिकट</div>
+                <div class="wheel-item">📚 छात्रवृत्ति फॉर्म</div>
+            </div>
+        </div>
+        <div class="hero-right">
+            <!-- Leader 1 -->
+            <div class="leader-card">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/2/2c/Narendra_Modi_2018_%28cropped%29.jpg" alt="PM India">
+                <h4>Hon'ble Prime Minister of India</h4>
+            </div>
+            <!-- Leader 2 -->
+            <div class="leader-card">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/c/c3/Yogi_Adityanath_in_2017.jpg" alt="CM UP">
+                <h4>Hon'ble Chief Minister of Uttar Pradesh</h4>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Body Container -->
     <div class="container">
         
-        <div class="banner">
-            ⚠️ सभी प्रकार के ऑनलाइन फॉर्म, जॉब्स, और सरकारी योजना आवेदन हेतु संपर्क करें।
-        </div>
-
-        <div class="section-title">प्रमुख ऑनलाइन सेवाएँ</div>
-        <div class="services-grid">
-            <div class="service-card">जाति / आय / निवास प्रमाण पत्र</div>
-            <div class="service-card">पैन कार्ड / वोटर कार्ड</div>
-            <div class="service-card">रेलवे / बस टिकट बुकिंग</div>
-            <div class="service-card">स्कॉलरशिप / सरकारी फॉर्म</div>
-            <div class="service-card">आधार कार्ड करेक्शन</div>
-            <div class="service-card">मनी ट्रांसफर एवं निकासी</div>
-        </div>
-
         <div class="section-title">रेट लिस्ट (शुल्क विवरण)</div>
         <table class="rate-table">
             <tr>
                 <th>सेवा का नाम</th>
-                <th>शुल्क (₹)</th>
+                <th>निर्धारित शुल्क (₹)</th>
             </tr>
             <tr>
                 <td>आय / जाति / निवास प्रमाण पत्र</td>
@@ -159,8 +301,8 @@
                 <td>₹ 30</td>
             </tr>
             <tr>
-                <td>स्कॉलरशिप ऑनलाइन फॉर्म</td>
-                <td>₹ 50 (दस्तावेज़ सहित)</td>
+                <td>स्कॉलरशिप ऑनलाइन फॉर्म (दस्तावेज़ सहित)</td>
+                <td>₹ 50</td>
             </tr>
             <tr>
                 <td>रेलवे / बस टिकट बुकिंग</td>
@@ -168,15 +310,15 @@
             </tr>
         </table>
 
-        <div class="section-title">संपर्क विवरण</div>
+        <div class="section-title">संचालक एवं संपर्क विवरण</div>
         <div class="contact-box">
             <p><strong>संचालक:</strong> रोहिताश कुमार (Rohitash Kumar)</p>
             <p><strong>पता:</strong> Faridpur, Post- Mirehachi, Dist- Etah, UP - 207125</p>
-            <p><strong>मोबाइल:</strong> 9760623097</p>
-            <p><strong>ईमेल:</strong> rohitkumar396s@gmail.com</p>
+            <p><strong>मोबाइल नंबर:</strong> 9760623097</p>
+            <p><strong>ईमेल आईडी:</strong> rohitkumar396s@gmail.com</p>
             
             <div class="btn-group">
-                <a href="tel:9760623097" class="btn btn-call">📞 कॉल करें</a>
+                <a href="tel:9760623097" class="btn btn-call">📞 तुरंत कॉल करें</a>
                 <a href="https://wa.me/919760623097" class="btn btn-whatsapp">💬 WhatsApp चैट</a>
             </div>
         </div>
