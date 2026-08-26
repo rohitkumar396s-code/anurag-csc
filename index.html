@@ -1,7 +1,4 @@
-HTML
-
-
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
@@ -58,175 +55,133 @@ HTML
         }
         .services-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 20px;
         }
         .service-card {
             background: white;
             padding: 15px;
-            border-radius: 10px;
+            border-radius: 8px;
             text-align: center;
             box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-        }
-        .service-card h3 {
-            font-size: 15px;
-            color: #333;
-            margin-top: 5px;
+            font-size: 14px;
+            font-weight: 500;
         }
         .rate-table {
             width: 100%;
             background: white;
-            border-radius: 10px;
+            border-radius: 8px;
             overflow: hidden;
             box-shadow: 0 2px 4px rgba(0,0,0,0.05);
             border-collapse: collapse;
+            margin-bottom: 20px;
         }
         .rate-table th, .rate-table td {
             padding: 12px 15px;
             text-align: left;
-            font-size: 14px;
             border-bottom: 1px solid #eee;
+            font-size: 14px;
         }
         .rate-table th {
-            background-color: #0056b3;
+            background: #0056b3;
             color: white;
-        }
-        .rate-table tr:last-child td {
-            border-bottom: none;
         }
         .contact-box {
             background: white;
             padding: 20px;
-            border-radius: 10px;
+            border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.05);
             text-align: center;
-            margin-top: 20px;
         }
         .contact-box p {
-            margin: 8px 0;
+            margin-bottom: 8px;
             font-size: 14px;
         }
-        .btn-container {
+        .btn-group {
+            margin-top: 15px;
             display: flex;
             gap: 10px;
             justify-content: center;
-            margin-top: 15px;
-            flex-wrap: wrap;
         }
-        .btn-call {
-            background: #28a745;
-            color: white;
-            padding: 10px 18px;
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
             border-radius: 5px;
             text-decoration: none;
-            font-weight: bold;
-            font-size: 14px;
-            display: inline-block;
-        }
-        .btn-whatsapp {
-            background: #25D366;
             color: white;
-            padding: 10px 18px;
-            border-radius: 5px;
-            text-decoration: none;
             font-weight: bold;
             font-size: 14px;
-            display: inline-block;
         }
-        footer {
-            text-align: center;
-            padding: 15px;
-            font-size: 12px;
-            color: #777;
-            margin-top: 20px;
-        }
+        .btn-call { background: #28a745; }
+        .btn-whatsapp { background: #25d366; }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>?????? ?????? ?????</h1>
-        <p>?????? ???? ??? ?????? ????? ??????</p>
+        <h1>अनुराग सीएससी सेंटर</h1>
+        <p>डिजिटल सेवा एवं ऑनलाइन फॉर्म केंद्र</p>
     </header>
 
     <div class="container">
         
         <div class="banner">
-            ?? ??? ?????? ?? ?????? ?????, ?????? ??? ?? ?????? ????? ?? ????? ???? ???? ?? ??? ???? ????
+            ⚠️ सभी प्रकार के ऑनलाइन फॉर्म, जॉब्स, और सरकारी योजना आवेदन हेतु संपर्क करें।
         </div>
 
-        <h2 class="section-title">????? ????? ??????</h2>
+        <div class="section-title">प्रमुख ऑनलाइन सेवाएँ</div>
         <div class="services-grid">
-            <div class="service-card">
-                <h3>?? ????/??? ?????</h3>
-            </div>
-            <div class="service-card">
-                <h3>?? ????/??/?????</h3>
-            </div>
-            <div class="service-card">
-                <h3>? ????? ??? ???</h3>
-            </div>
-            <div class="service-card">
-                <h3>?? ?????/?? ????</h3>
-            </div>
-            <div class="service-card">
-                <h3>?? ???? ????? ?????</h3>
-            </div>
-            <div class="service-card">
-                <h3>?? ??? ?????? ?????</h3>
-            </div>
+            <div class="service-card">जाति / आय / निवास प्रमाण पत्र</div>
+            <div class="service-card">पैन कार्ड / वोटर कार्ड</div>
+            <div class="service-card">रेलवे / बस टिकट बुकिंग</div>
+            <div class="service-card">स्कॉलरशिप / सरकारी फॉर्म</div>
+            <div class="service-card">आधार कार्ड करेक्शन</div>
+            <div class="service-card">मनी ट्रांसफर एवं निकासी</div>
         </div>
 
-        <h2 class="section-title">??? ????? (????? ????)</h2>
+        <div class="section-title">रेट लिस्ट (शुल्क विवरण)</div>
         <table class="rate-table">
-            <thead>
-                <tr>
-                    <th>???? ?? ???</th>
-                    <th>????? (?)</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>???? / ?? / ????? ?????? ????</td>
-                    <td>? 60</td>
-                </tr>
-                <tr>
-                    <td>??? ??? ????? / ?????</td>
-                    <td>? 150</td>
-                </tr>
-                <tr>
-                    <td>???????? ????? ??????</td>
-                    <td>? 30</td>
-                </tr>
-                <tr>
-                    <td>????? ???? ??????</td>
-                    <td>? 50 (?????????)</td>
-                </tr>
-                <tr>
-                    <td>??????? ?????? ????? ????</td>
-                    <td>? 50 - ? 100</td>
-                </tr>
-            </tbody>
+            <tr>
+                <th>सेवा का नाम</th>
+                <th>शुल्क (₹)</th>
+            </tr>
+            <tr>
+                <td>आय / जाति / निवास प्रमाण पत्र</td>
+                <td>₹ 60</td>
+            </tr>
+            <tr>
+                <td>नया पैन कार्ड / संशोधन / आधार</td>
+                <td>₹ 150</td>
+            </tr>
+            <tr>
+                <td>पासपोर्ट साइज फोटो प्रिंट</td>
+                <td>₹ 30</td>
+            </tr>
+            <tr>
+                <td>स्कॉलरशिप ऑनलाइन फॉर्म</td>
+                <td>₹ 50 (दस्तावेज़ सहित)</td>
+            </tr>
+            <tr>
+                <td>रेलवे / बस टिकट बुकिंग</td>
+                <td>₹ 50 - ₹ 100</td>
+            </tr>
         </table>
 
-        <h2 class="section-title">??????? ????</h2>
+        <div class="section-title">संपर्क विवरण</div>
         <div class="contact-box">
-            <p><strong>??????:</strong> ??????? ????? (Rohitash Kumar)</p>
-            <p><strong>???:</strong> Faridpur, Post- Mirehachi, Dist- Etah, UP - 207125</p>
-            <p><strong>??????:</strong> 9760623097</p>
-            <p><strong>????:</strong> rohitkumar396s@gmail.com</p>
+            <p><strong>संचालक:</strong> रोहिताश कुमार (Rohitash Kumar)</p>
+            <p><strong>पता:</strong> Faridpur, Post- Mirehachi, Dist- Etah, UP - 207125</p>
+            <p><strong>मोबाइल:</strong> 9760623097</p>
+            <p><strong>ईमेल:</strong> rohitkumar396s@gmail.com</p>
             
-            <div class="btn-container">
-                <a href="tel:9760623097" class="btn-call">?? ??? ????</a>
-                <a href="https://wa.me/919760623097?text=Hello%20Rohitash%20Ji,%20I%20want%20to%20know%20more%20about%20CSC%20services." target="_blank" rel="noopener noreferrer" class="btn-whatsapp">?? WhatsApp ???</a>
+            <div class="btn-group">
+                <a href="tel:9760623097" class="btn btn-call">📞 कॉल करें</a>
+                <a href="https://wa.me/919760623097" class="btn btn-whatsapp">💬 WhatsApp चैट</a>
             </div>
         </div>
 
     </div>
-
-    <footer>
-        &copy; 2026 ?????? ?????? ?????. ?????????? ?????????
-    </footer>
 
 </body>
 </html>
