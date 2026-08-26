@@ -1,0 +1,144 @@
+﻿<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>अनुराग सीएससी सेंटर - मुख्य पृष्ठ</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #f4f6f9; color: #333; }
+        
+        .top-bar { background: #fff; padding: 8px 20px; font-size: 13px; color: #555; display: flex; justify-content: space-between; border-bottom: 1px solid #ddd; }
+        .top-bar-right a { margin-left: 15px; text-decoration: none; color: #333; }
+        
+        .main-header { background: #fff; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .logo-area h1 { color: #003366; font-size: 22px; font-weight: bold; }
+        .logo-area p { color: #c0392b; font-size: 11px; font-weight: bold; letter-spacing: 0.5px; }
+        
+        .nav-links { display: flex; align-items: center; gap: 20px; }
+        .nav-links a { text-decoration: none; color: #222; font-size: 14px; font-weight: 500; }
+        .login-btn { background: #f39c12; color: white !important; padding: 8px 18px; border-radius: 20px; font-weight: bold; }
+
+        .hero-section { background: #132f3f; padding: 30px 40px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; }
+        .hero-title { width: 100%; color: #f1c40f; font-size: 18px; margin-bottom: 10px; font-weight: 600; text-align: center; }
+        
+        .services-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+        .service-btn { background: #1c3d52; color: white; border: 1px solid #2a526b; padding: 12px 20px; text-decoration: none; border-radius: 6px; font-size: 14px; text-align: center; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .service-btn:hover { background: #2a526b; }
+
+        .leader-box { display: flex; gap: 15px; }
+        .card { background: white; padding: 15px; border-radius: 8px; text-align: center; width: 110px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .card span { font-size: 11px; font-weight: bold; color: #333; line-height: 1.2; display: block; }
+
+        .container { max-width: 900px; margin: 30px auto; background: #fff; padding: 25px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        
+        .section-title { color: #d35400; font-size: 16px; margin-bottom: 15px; font-weight: bold; border-left: 4px solid #d35400; padding-left: 8px; }
+        table { width: 100%; border-collapse: collapse; margin-bottom: 30px; }
+        th, td { border: 1px solid #e0e0e0; padding: 10px 15px; font-size: 14px; text-align: left; }
+        th { background: #003366; color: white; }
+        tr:nth-child(even) { background: #f9f9f9; }
+
+        .contact-box { background: #fff; border: 1px solid #e0e0e0; border-radius: 6px; padding: 20px; text-align: center; }
+        .contact-box p { font-size: 14px; margin: 6px 0; color: #444; }
+        .action-btns { margin-top: 15px; display: flex; justify-content: center; gap: 10px; }
+        .btn-call { background: #27ae60; color: white; padding: 8px 16px; text-decoration: none; border-radius: 4px; font-size: 13px; font-weight: bold; }
+        .btn-wa { background: #2ecc71; color: white; padding: 8px 16px; text-decoration: none; border-radius: 4px; font-size: 13px; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <div class="top-bar">
+        <div class="top-bar-left">बुधवार, अगस्त 26, 2026</div>
+        <div class="top-bar-right">
+            <a href="#">मुख्य कंटेंट पर जाएं</a> | 
+            <a href="#">स्क्रीन रीडर</a> | 
+            <a href="#">साइट मैप</a>
+        </div>
+    </div>
+
+    <header class="main-header">
+        <div class="logo-area">
+            <h1>अनुराग सीएससी सेंटर</h1>
+            <p>Digital Services & Jan Seva Kendra</p>
+        </div>
+        <div class="nav-links">
+            <a href="index.html" style="color: #d35400; font-weight: bold;">मुख्य पृष्ठ</a>
+            <a href="#">सेवाएं</a>
+            <a href="#">प्रमाण पत्र</a>
+            <a href="#">रेट लिस्ट</a>
+            <a href="#">संपर्क करें</a>
+            <a href="#" class="login-btn">लॉगिन / संपर्क</a>
+        </div>
+    </header>
+
+    <div class="hero-section">
+        <div class="hero-title">प्रमुख डिजिटल सेवाएं</div>
+        
+        <div class="services-grid">
+            <a href="jati.html" class="service-btn">🗂 जाति प्रमाण पत्र</a>
+            <a href="domicile.html" class="service-btn">🗂 निवास प्रमाण पत्र</a>
+            <a href="income.html" class="service-btn">🗂 आय प्रमाण पत्र</a>
+            <a href="#" class="service-btn">🗂 नया पैन कार्ड</a>
+            <a href="#" class="service-btn">🗂 रेल / बस टिकट</a>
+            <a href="#" class="service-btn">🗂 छात्रवृत्ति फॉर्म</a>
+        </div>
+
+        <div class="leader-box">
+            <div class="card">
+                <div style="font-size:24px; margin-bottom:5px;">🇮🇳</div>
+                <span>माननीय प्रधानमंत्री भारत सरकार</span>
+            </div>
+            <div class="card">
+                <div style="font-size:24px; margin-bottom:5px;">🇮🇳</div>
+                <span>माननीय मुख्यमंत्री उत्तर प्रदेश सरकार</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        
+        <div class="section-title">रेट लिस्ट (शुल्क विवरण)</div>
+        <table>
+            <tr>
+                <th>सेवा का नाम</th>
+                <th>निर्धारित शुल्क (₹)</th>
+            </tr>
+            <tr>
+                <td>आय / जाति / निवास प्रमाण पत्र</td>
+                <td>₹ 60</td>
+            </tr>
+            <tr>
+                <td>नया पैन कार्ड / संशोधन / आधार</td>
+                <td>₹ 150</td>
+            </tr>
+            <tr>
+                <td>पासपोर्ट साइज फोटो प्रिंट</td>
+                <td>₹ 30</td>
+            </tr>
+            <tr>
+                <td>स्कॉलरशिप ऑनलाइन फॉर्म (दस्तावेज सहित)</td>
+                <td>₹ 50</td>
+            </tr>
+            <tr>
+                <td>रेल / बस टिकट बुकिंग</td>
+                <td>₹ 50 - ₹ 100</td>
+            </tr>
+        </table>
+
+        <div class="section-title">संचालक एवं संपर्क विवरण</div>
+        <div class="contact-box">
+            <p><strong>संचालक:</strong> रोहिताश कुमार (Rohitash Kumar)</p>
+            <p><strong>पता:</strong> Faridpur, Post- Mirehachi, Dist- Etah, UP - 207125</p>
+            <p><strong>मोबाइल नंबर:</strong> 9760623097</p>
+            <p><strong>ईमेल आईडी:</strong> rohitkumar396s@gmail.com</p>
+            
+            <div class="action-btns">
+                <a href="tel:9760623097" class="btn-call">📞 तुरंत कॉल करें</a>
+                <a href="https://wa.me/919760623097" class="btn-wa" target="_blank">🟢 WhatsApp चैट</a>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>
