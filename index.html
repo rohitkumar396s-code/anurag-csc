@@ -3,99 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Anurag CSC Center - eDistrict Model</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: #f0f2f5; color: #333; }
-        .top-bar { background-color: #ffffff; border-bottom: 1px solid #ddd; padding: 8px 5%; display: flex; justify-content: space-between; align-items: center; font-size: 13px; color: #555; }
-        .navbar { background-color: #ffffff; padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05); flex-wrap: wrap; gap: 10px; }
-        .logo-section h1 { font-size: 22px; color: #003366; font-weight: 700; }
-        .logo-section p { font-size: 12px; color: #e65c00; font-weight: bold; }
-        .nav-links { display: flex; gap: 20px; list-style: none; flex-wrap: wrap; }
-        .nav-links a { text-decoration: none; color: #333; font-weight: 600; font-size: 14px; }
-        .nav-links a:hover { color: #0056b3; }
-        .login-btn { background: linear-gradient(135deg, #ff7e5f, #feb47b); color: white; padding: 8px 20px; border-radius: 20px; text-decoration: none; font-weight: bold; font-size: 14px; }
-        .main-layout { max-width: 1100px; margin: 30px auto; padding: 0 20px; display: flex; gap: 25px; flex-wrap: wrap; }
-        .sidebar { flex: 1; min-width: 260px; }
-        .content-area { flex: 3; min-width: 300px; }
-        .cert-box { background: #fff5ec; border: 1px solid #fbd0b6; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-        .cert-header { background: #e65c00; color: white; padding: 12px 15px; font-size: 16px; font-weight: bold; }
-        .cert-list { list-style: none; padding: 5px 0; }
-        .cert-list li a { display: block; padding: 10px 15px; border-bottom: 1px solid #f3d6c4; font-size: 14px; font-weight: 500; color: #333; text-decoration: none; transition: background 0.2s; }
-        .cert-list li a:hover { background: #fde6d8; color: #d35400; }
-        .section-title { font-size: 20px; color: #003366; margin-bottom: 20px; border-left: 4px solid #e65c00; padding-left: 10px; }
-        .rate-table { width: 100%; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.05); border-collapse: collapse; margin-bottom: 40px; }
-        .rate-table th, .rate-table td { padding: 12px 20px; text-align: left; border-bottom: 1px solid #eee; font-size: 14px; }
-        .rate-table th { background: #003366; color: white; }
-        .contact-box { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); text-align: center; }
-        .contact-box p { margin-bottom: 10px; font-size: 15px; }
-        .btn-group { margin-top: 20px; display: flex; gap: 15px; justify-content: center; }
-        .btn { padding: 10px 25px; border-radius: 5px; text-decoration: none; color: white; font-weight: bold; font-size: 14px; }
-        .btn-call { background: #28a745; }
-        .btn-whatsapp { background: #25d366; }
-    </style>
-</head>
-<body>
-
-    <div class="top-bar">
-        <span>बुधवार, अगस्त 26, 2026</span>
-        <span>अनुराग सीएससी सेंटर, फरीदपुर, एटा (उ.प्र.)</span>
-    </div>
-
-    <div class="navbar">
-        <div class="logo-section">
-            <h1>अनुराग सीएससी सेंटर</h1>
-            <p>Digital Services & Jan Seva Kendra</p>
-        </div>
-        <ul class="nav-links">
-            <li><a href="index.html">मुख्य पृष्ठ</a></li>
-            <li><a href="#rates">रेट लिस्ट</a></li>
-            <li><a href="#contact">संपर्क करें</a></li>
-        </ul>
-        <a href="tel:9760623097" class="login-btn">लॉगिन / संपर्क</a>
-    </div>
-
-    <div class="main-layout">
-        <div class="sidebar">
-            <div class="cert-box">
-                <div class="cert-header">प्रमाण पत्र सेवाएं</div>
-                <ul class="cert-list">
-                    <li><a href="jati.html">▷ जाति प्रमाण पत्र (फॉर्म भरें)</a></li>
-                    <li><a href="nivas.html">▷ निवास प्रमाण पत्र (फॉर्म भरें)</a></li>
-                    <li><a href="#">▷ आय प्रमाण पत्र (शीघ्र उपलब्ध)</a></li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="content-area">
-            <div class="section-title" id="rates">रेट लिस्ट (शुल्क विवरण)</div>
-            <table class="rate-table">
-                <tr><th>सेवा का नाम</th><th>निर्धारित शुल्क (₹)</th></tr>
-                <tr><td>आय / जाति / निवास प्रमाण पत्र</td><td>₹ 60</td></tr>
-                <tr><td>नया पैन कार्ड / संशोधन</td><td>₹ 150</td></tr>
-                <tr><td>स्कॉलरशिप ऑनलाइन फॉर्म</td><td>₹ 50</td></tr>
-                <tr><td>रेलवे / बस टिकट बुकिंग</td><td>₹ 50 - ₹ 100</td></tr>
-            </table>
-
-            <div class="section-title" id="contact">संचालक एवं संपर्क विवरण</div>
-            <div class="contact-box">
-                <p><strong>संचालक:</strong> रोहिताश कुमार</p>
-                <p><strong>पता:</strong> Faridpur, Post- Mirehachi, Dist- Etah, UP - 207125</p>
-                <p><strong>मोबाइल नंबर:</strong> 9760623097</p>
-                <div class="btn-group">
-                    <a href="tel:9760623097" class="btn btn-call">📞 तुरंत कॉल करें</a>
-                    <a href="https://wa.me/919760623097" class="btn btn-whatsapp">💬 WhatsApp चैट</a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-</body>
-</html><!DOCTYPE html>
-<html lang="hi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>जाति प्रमाण पत्र आवेदन - अनुराग सीएससी सेंटर</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
@@ -120,84 +27,135 @@
                 <label style="display: block; font-weight: bold; margin-bottom: 5px; font-size: 14px;">2. प्रार्थी का नाम (अँग्रेजी में):</label>
                 <input type="text" name="Jati_Prarthi_English" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;">
             </div>
+            
+            <!-- जाति वर्ग चुनने का विकल्प -->
             <div style="margin-bottom: 15px;">
-                <label style="display: block; font-weight: bold; margin-bottom: 5px; font-size: 14px;">3. जाति / उपजाति:</label>
-                <input type="text" name="Jati_Category" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;">
+                <label style="display: block; font-weight: bold; margin-bottom: 5px; font-size: 14px;">3. जाति वर्ग चुनें (Category):</label>
+                <select name="Jati_Varg" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; background: #fff;">
+                    <option value="">-- अपनी जाति वर्ग चुनें --</option>
+                    <option value="सामान्य (General)">सामान्य (General)</option>
+                    <option value="पिछड़ा वर्ग (OBC)">पिछड़ा वर्ग (OBC)</option>
+                    <option value="अनुसूचित जाति (SC)">अनुसूचित जाति (SC)</option>
+                    <option value="अनुसूचित जनजाति (ST)">अनुसूचित जनजाति (ST)</option>
+                </select>
             </div>
+
+            <!-- उपजाति चुनने का विकल्प -->
             <div style="margin-bottom: 15px;">
-                <label style="display: block; font-weight: bold; margin-bottom: 5px; font-size: 14px;">4. पिता/पति/संरक्षक का नाम:</label>
+                <label style="display: block; font-weight: bold; margin-bottom: 5px; font-size: 14px;">4. उपजाति चुनें:</label>
+                <select name="Upjati" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; background: #fff;">
+                    <option value="">-- अपनी उपजाति चुनें --</option>
+                    <option value="ब्राह्मण (Brahman)">ब्राह्मण (Brahman)</option>
+                    <option value="राजपूत / ठाकुर (Rajput/Thakur)">राजपूत / ठाकुर (Rajput / Thakur)</option>
+                    <option value="वैश्य / बनिया (Vaishya/Bania)">वैश्य / बनिया (Vaishya / Bania)</option>
+                    <option value="कायस्थ (Kayastha)">कायस्थ (Kayastha)</option>
+                    <option value="भूमिहार (Bhumihar)">भूमिहार (Bhumihar)</option>
+                    <option value="लोधी (Lodhi)">लोधी (Lodhi)</option>
+                    <option value="शाक्य / मौर्य / कुशवाह (Shakya/Maurya)">शाक्य / मौर्य / कुशवाह (Shakya / Maurya)</option>
+                    <option value="यादव / अहीर (Yadav/Ahir)">यादव / अहीर (Yadav / Ahir)</option>
+                    <option value="गुर्जर (Gurjar)">गुर्जर (Gurjar)</option>
+                    <option value="पाल / गड़रिया (Pal/Gadariya)">पाल / गड़रिया (Pal / Gadariya)</option>
+                    <option value="कुर्मी (Kurmi)">कुर्मी (Kurmi)</option>
+                    <option value="जाट (Jat)">जाट (Jat)</option>
+                    <option value="निषाद / मल्लाह / कश्यप (Nishad/Kashyap)">निषाद / मल्लाह / कश्यप (Nishad / Kashyap)</option>
+                    <option value="प्रजापति / कुम्हार (Prajapati)">प्रजापति / कुम्हार (Prajapati)</option>
+                    <option value="सैनी (Saini)">सैनी (Saini)</option>
+                    <option value="नाई (Nai)">नाई (Nai)</option>
+                    <option value="धोबी (Dhobi)">धोबी (Dhobi)</option>
+                    <option value="तेली / साहू (Teli/Sahu)">तेली / साहू (Teli / Sahu)</option>
+                    <option value="जाटव / चमार (Jatav/Chamar)">जाटव / चमार (Jatav / Chamar)</option>
+                    <option value="बाल्मीकि (Valmiki)">बाल्मीकि (Valmiki)</option>
+                    <option value="पासी (Pasi)">पासी (Pasi)</option>
+                    <option value="कोरी (Kori)">कोरी (Kori)</option>
+                    <option value="खटिक (Khatik)">खटिक (Khatik)</option>
+                    <option value="अन्य (Other)">अन्य (यदि सूची में न हो)</option>
+                </select>
+            </div>
+
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; font-weight: bold; margin-bottom: 5px; font-size: 14px;">5. पिता/पति/संरक्षक का नाम:</label>
                 <input type="text" name="Jati_Guardian_Name" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;">
             </div>
             <div style="margin-bottom: 15px;">
-                <label style="display: block; font-weight: bold; margin-bottom: 5px; font-size: 14px;">5. माता का नाम:</label>
+                <label style="display: block; font-weight: bold; margin-bottom: 5px; font-size: 14px;">6. माता का नाम:</label>
                 <input type="text" name="Jati_Mother_Name" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;">
             </div>
             <div style="margin-bottom: 15px;">
-                <label style="display: block; font-weight: bold; margin-bottom: 5px; font-size: 14px;">6. मोबाइल नंबर:</label>
+                <label style="display: block; font-weight: bold; margin-bottom: 5px; font-size: 14px;">7. मोबाइल नंबर:</label>
                 <input type="tel" name="Jati_Mobile_Number" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;">
             </div>
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; font-weight: bold; margin-bottom: 5px; font-size: 14px;">8. आधार कार्ड नंबर (12 अंक):</label>
+                <input type="text" name="Jati_Aadhaar_Number" maxlength="12" placeholder="आधार नंबर दर्ज करें" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;">
+            </div>
+
+            <!-- गाँव / मोहल्ला चुनने का विकल्प -->
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; font-weight: bold; margin-bottom: 5px; font-size: 14px;">9. गाँव / क्षेत्र चुनें:</label>
+                <select name="Jati_Village" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; background: #fff;">
+                    <option value="">-- अपना गाँव चुनें --</option>
+                    <option value="हुसैन चक फरीदपुर (Husain Chak Faridpur)">हुसैन चक फरीदपुर (Husain Chak Faridpur)</option>
+                    <option value="हुसैन चक (Husain Chak)">हुसैन चक (Husain Chak)</option>
+                    <option value="नगला चहबच्चा (Nagla Chahbacchcha)">नगला चहबच्चा (Nagla Chahbacchcha)</option>
+                    <option value="आजमपुर (Ajampur)">आजमपुर (Ajampur)</option>
+                    <option value="बंथल कुतुकपुर (Banthal Kutukpur)">बंथल कुतुकपुर (Banthal Kutukpur)</option>
+                    <option value="बुर्हेनाबाद (Burhenabad)">बुर्हेनाबाद (Burhenabad)</option>
+                    <option value="धीरामई (Dhiramai)">धीरामई (Dhiramai)</option>
+                    <option value="गोबरा (Gobra)">गोबरा (Gobra)</option>
+                    <option value="लोधामई (Lodhamai)">लोधामई (Lodhamai)</option>
+                    <option value="मिरहची (Mirehachi)">मिरहची (Mirehachi)</option>
+                    <option value="नया बांस (Naya Bans)">नया बांस (Naya Bans)</option>
+                    <option value="शेरोई (Sheorai)">शेरोई (Sheorai)</option>
+                    <option value="सिरसा टिप्पू (Sirsa Tippu)">सिरसा टिप्पू (Sirsa Tippu)</option>
+                    <option value="फरीदपुर (Faridpur)">फरीदपुर (Faridpur)</option>
+                    <option value="अन्य गाँव (Other Village)">अन्य गाँव (यदि सूची में न हो)</option>
+                </select>
+            </div>
+
+            <!-- पोस्ट ऑफिस चुनने का विकल्प -->
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; font-weight: bold; margin-bottom: 5px; font-size: 14px;">10. पोस्ट ऑफिस (Post Office) चुनें:</label>
+                <select name="Jati_Post" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; background: #fff;">
+                    <option value="">-- अपना पोस्ट ऑफिस चुनें --</option>
+                    <option value="एटा हेड पोस्ट ऑफिस (Etah Head PO)">एटा हेड पोस्ट ऑफिस (Etah Head PO)</option>
+                    <option value="अलीगंज (Aliganj)">अलीगंज (Aliganj)</option>
+                    <option value="जलेसर (Jalesar)">जलेसर (Jalesar)</option>
+                    <option value="मारहरा (Marhara)">मारहरा (Marhara)</option>
+                    <option value="सकीट (Sakit)">सकीट (Sakit)</option>
+                    <option value="अवागढ़ (Awagarh)">अवागढ़ (Awagarh)</option>
+                    <option value="जैथरा (Jaithra)">जैथरा (Jaithra)</option>
+                    <option value="निधौली कलाँ (Nidhauli Kalan)">निधौली कलाँ (Nidhauli Kalan)</option>
+                    <option value="मिरहची (Mirhachi)">मिरहची (Mirhachi)</option>
+                    <option value="अन्य (Other)">अन्य (यदि सूची में न हो)</option>
+                </select>
+            </div>
+
+            <!-- तहसील चुनने का विकल्प -->
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; font-weight: bold; margin-bottom: 5px; font-size: 14px;">11. तहसील (Tehsil) चुनें:</label>
+                <select name="Jati_Tehsil" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; background: #fff;">
+                    <option value="">-- अपनी तहसील चुनें --</option>
+                    <option value="एटा सदर (Etah Sadar)">एटा सदर (Etah Sadar)</option>
+                    <option value="अलीगंज (Aliganj)">अलीगंज (Aliganj)</option>
+                    <option value="जलेसर (Jalesar)">जलेसर (Jalesar)</option>
+                </select>
+            </div>
+
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; font-weight: bold; margin-bottom: 5px; font-size: 14px;">12. जिला (District):</label>
+                <input type="text" name="Jati_District" value="Etah" readonly style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; background: #e9ecef; font-weight: bold; color: #003366;">
+            </div>
+
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; font-weight: bold; margin-bottom: 5px; font-size: 14px;">13. प्रार्थी की फोटो अपलोड करें:</label>
+                <input type="file" name="Jati_Photo" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; background: #fafafa;">
+            </div>
             <div style="margin-bottom: 20px;">
-                <label style="display: block; font-weight: bold; margin-bottom: 5px; font-size: 14px;">7. पूरा पता (गाँव, पोस्ट, तहसील, जिला):</label>
-                <textarea name="Jati_Full_Address" rows="3" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;"></textarea>
+                <label style="display: block; font-weight: bold; margin-bottom: 5px; font-size: 14px;">14. आधार कार्ड की फोटो/कॉपी अपलोड करें:</label>
+                <input type="file" name="Jati_Aadhaar_Document" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; background: #fafafa;">
             </div>
             <div style="text-align: center;">
                 <button type="submit" style="background: #e65c00; color: white; padding: 12px 30px; border: none; border-radius: 5px; font-size: 16px; font-weight: bold; cursor: pointer;">जाति फॉर्म भेजें (Submit)</button>
-            </div>
-        </form>
-    </div>
-
-</body>
-</html><!DOCTYPE html>
-<html lang="hi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>निवास प्रमाण पत्र आवेदन - अनुराग सीएससी सेंटर</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: #f0f2f5; color: #333; padding: 20px; }
-        .back-link { display: inline-block; margin-bottom: 20px; color: #003366; text-decoration: none; font-weight: bold; }
-        .back-link:hover { text-decoration: underline; }
-    </style>
-</head>
-<body>
-
-    <a href="index.html" class="back-link">← मुख्य पृष्ठ पर वापस जाएं</a>
-
-    <div style="max-width: 600px; margin: 0 auto; background: #fff; padding: 25px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); border-top: 4px solid #003366;">
-        <h2 style="color: #003366; text-align: center; margin-bottom: 20px; font-size: 22px;">मूल निवास प्रमाण पत्र हेतु आवेदन-पत्र</h2>
-        
-        <form action="mailto:rohitkumar396s@gmail.com" method="post" enctype="text/plain">
-            <div style="margin-bottom: 15px;">
-                <label style="display: block; font-weight: bold; margin-bottom: 5px; font-size: 14px;">1. प्रार्थी का नाम (हिंदी में):</label>
-                <input type="text" name="Nivas_Prarthi_Hindi" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;">
-            </div>
-            <div style="margin-bottom: 15px;">
-                <label style="display: block; font-weight: bold; margin-bottom: 5px; font-size: 14px;">2. प्रार्थी का नाम (अँग्रेजी में):</label>
-                <input type="text" name="Nivas_Prarthi_English" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;">
-            </div>
-            <div style="margin-bottom: 15px;">
-                <label style="display: block; font-weight: bold; margin-bottom: 5px; font-size: 14px;">3. कितने वर्षों से निवास कर रहे हैं:</label>
-                <input type="text" name="Residence_Years" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;">
-            </div>
-            <div style="margin-bottom: 15px;">
-                <label style="display: block; font-weight: bold; margin-bottom: 5px; font-size: 14px;">4. पिता/पति/संरक्षक का नाम:</label>
-                <input type="text" name="Nivas_Guardian_Name" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;">
-            </div>
-            <div style="margin-bottom: 15px;">
-                <label style="display: block; font-weight: bold; margin-bottom: 5px; font-size: 14px;">5. माता का नाम:</label>
-                <input type="text" name="Nivas_Mother_Name" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;">
-            </div>
-            <div style="margin-bottom: 15px;">
-                <label style="display: block; font-weight: bold; margin-bottom: 5px; font-size: 14px;">6. मोबाइल नंबर:</label>
-                <input type="tel" name="Nivas_Mobile_Number" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;">
-            </div>
-            <div style="margin-bottom: 20px;">
-                <label style="display: block; font-weight: bold; margin-bottom: 5px; font-size: 14px;">7. पूरा स्थायी पता (गाँव, पोस्ट, तहसील, जिला):</label>
-                <textarea name="Nivas_Full_Address" rows="3" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;"></textarea>
-            </div>
-            <div style="text-align: center;">
-                <button type="submit" style="background: #003366; color: white; padding: 12px 30px; border: none; border-radius: 5px; font-size: 16px; font-weight: bold; cursor: pointer;">निवास फॉर्म भेजें (Submit)</button>
             </div>
         </form>
     </div>
