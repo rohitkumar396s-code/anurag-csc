@@ -1,0 +1,232 @@
+HTML
+
+
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anurag CSC Center</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background-color: #f4f7f6;
+            color: #333;
+            line-height: 1.6;
+        }
+        header {
+            background: linear-gradient(135deg, #0056b3, #0083b0);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        header h1 {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+        header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        .container {
+            padding: 15px;
+            max-width: 600px;
+            margin: auto;
+        }
+        .banner {
+            background: #fff3cd;
+            border: 1px solid #ffeeba;
+            color: #856404;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+        .section-title {
+            font-size: 18px;
+            margin: 20px 0 15px 0;
+            color: #0056b3;
+            border-bottom: 2px solid #0056b3;
+            padding-bottom: 5px;
+        }
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+        .service-card {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .service-card h3 {
+            font-size: 15px;
+            color: #333;
+            margin-top: 5px;
+        }
+        .rate-table {
+            width: 100%;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            border-collapse: collapse;
+        }
+        .rate-table th, .rate-table td {
+            padding: 12px 15px;
+            text-align: left;
+            font-size: 14px;
+            border-bottom: 1px solid #eee;
+        }
+        .rate-table th {
+            background-color: #0056b3;
+            color: white;
+        }
+        .rate-table tr:last-child td {
+            border-bottom: none;
+        }
+        .contact-box {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            text-align: center;
+            margin-top: 20px;
+        }
+        .contact-box p {
+            margin: 8px 0;
+            font-size: 14px;
+        }
+        .btn-container {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+        .btn-call {
+            background: #28a745;
+            color: white;
+            padding: 10px 18px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 14px;
+            display: inline-block;
+        }
+        .btn-whatsapp {
+            background: #25D366;
+            color: white;
+            padding: 10px 18px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 14px;
+            display: inline-block;
+        }
+        footer {
+            text-align: center;
+            padding: 15px;
+            font-size: 12px;
+            color: #777;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>?????? ?????? ?????</h1>
+        <p>?????? ???? ??? ?????? ????? ??????</p>
+    </header>
+
+    <div class="container">
+        
+        <div class="banner">
+            ?? ??? ?????? ?? ?????? ?????, ?????? ??? ?? ?????? ????? ?? ????? ???? ???? ?? ??? ???? ????
+        </div>
+
+        <h2 class="section-title">????? ????? ??????</h2>
+        <div class="services-grid">
+            <div class="service-card">
+                <h3>?? ????/??? ?????</h3>
+            </div>
+            <div class="service-card">
+                <h3>?? ????/??/?????</h3>
+            </div>
+            <div class="service-card">
+                <h3>? ????? ??? ???</h3>
+            </div>
+            <div class="service-card">
+                <h3>?? ?????/?? ????</h3>
+            </div>
+            <div class="service-card">
+                <h3>?? ???? ????? ?????</h3>
+            </div>
+            <div class="service-card">
+                <h3>?? ??? ?????? ?????</h3>
+            </div>
+        </div>
+
+        <h2 class="section-title">??? ????? (????? ????)</h2>
+        <table class="rate-table">
+            <thead>
+                <tr>
+                    <th>???? ?? ???</th>
+                    <th>????? (?)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>???? / ?? / ????? ?????? ????</td>
+                    <td>? 60</td>
+                </tr>
+                <tr>
+                    <td>??? ??? ????? / ?????</td>
+                    <td>? 150</td>
+                </tr>
+                <tr>
+                    <td>???????? ????? ??????</td>
+                    <td>? 30</td>
+                </tr>
+                <tr>
+                    <td>????? ???? ??????</td>
+                    <td>? 50 (?????????)</td>
+                </tr>
+                <tr>
+                    <td>??????? ?????? ????? ????</td>
+                    <td>? 50 - ? 100</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2 class="section-title">??????? ????</h2>
+        <div class="contact-box">
+            <p><strong>??????:</strong> ??????? ????? (Rohitash Kumar)</p>
+            <p><strong>???:</strong> Faridpur, Post- Mirehachi, Dist- Etah, UP - 207125</p>
+            <p><strong>??????:</strong> 9760623097</p>
+            <p><strong>????:</strong> rohitkumar396s@gmail.com</p>
+            
+            <div class="btn-container">
+                <a href="tel:9760623097" class="btn-call">?? ??? ????</a>
+                <a href="https://wa.me/919760623097?text=Hello%20Rohitash%20Ji,%20I%20want%20to%20know%20more%20about%20CSC%20services." target="_blank" rel="noopener noreferrer" class="btn-whatsapp">?? WhatsApp ???</a>
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        &copy; 2026 ?????? ?????? ?????. ?????????? ?????????
+    </footer>
+
+</body>
+</html>
