@@ -5,194 +5,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Anurag CSC Center - eDistrict Model</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        body {
-            background-color: #f0f2f5;
-            color: #333;
-        }
-        .top-bar {
-            background-color: #ffffff;
-            border-bottom: 1px solid #ddd;
-            padding: 8px 5%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 13px;
-            color: #555;
-        }
-        .top-bar-left, .top-bar-right {
-            display: flex;
-            gap: 15px;
-            align-items: center;
-        }
-        .navbar {
-            background-color: #ffffff;
-            padding: 15px 5%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-        .logo-section h1 {
-            font-size: 22px;
-            color: #003366;
-            font-weight: 700;
-        }
-        .logo-section p {
-            font-size: 12px;
-            color: #e65c00;
-            font-weight: bold;
-        }
-        .nav-links {
-            display: flex;
-            gap: 20px;
-            list-style: none;
-            flex-wrap: wrap;
-        }
-        .nav-links a {
-            text-decoration: none;
-            color: #333;
-            font-weight: 600;
-            font-size: 14px;
-        }
-        .nav-links a:hover {
-            color: #0056b3;
-        }
-        .login-btn {
-            background: linear-gradient(135deg, #ff7e5f, #feb47b);
-            color: white;
-            padding: 8px 20px;
-            border-radius: 20px;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 14px;
-        }
-        .hero-section {
-            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-            color: white;
-            padding: 40px 5%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 30px;
-        }
-        .hero-left {
-            flex: 1;
-            min-width: 300px;
-        }
-        .hero-left h2 {
-            font-size: 22px;
-            margin-bottom: 20px;
-            color: #ffdf00;
-            text-align: center;
-        }
-        .services-wheel {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-            max-width: 400px;
-            margin: auto;
-        }
-        .wheel-item {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            padding: 15px;
-            border-radius: 10px;
-            text-align: center;
-            font-size: 13px;
-            font-weight: 500;
-        }
-        .hero-right {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-            flex-wrap: wrap;
-            flex: 1;
-        }
-        .leader-card {
-            background: white;
-            color: #333;
-            padding: 20px 15px;
-            border-radius: 10px;
-            text-align: center;
-            width: 180px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-            border-top: 4px solid #ff9933;
-        }
-        .leader-card .icon {
-            font-size: 35px;
-            margin-bottom: 10px;
-        }
-        .leader-card h4 {
-            font-size: 13px;
-            color: #003366;
-            line-height: 1.4;
-            font-weight: bold;
-        }
-        .container {
-            max-width: 1000px;
-            margin: 30px auto;
-            padding: 0 20px;
-        }
-        .section-title {
-            font-size: 20px;
-            color: #003366;
-            margin-bottom: 20px;
-            border-left: 4px solid #e65c00;
-            padding-left: 10px;
-        }
-        .rate-table {
-            width: 100%;
-            background: white;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            border-collapse: collapse;
-            margin-bottom: 40px;
-        }
-        .rate-table th, .rate-table td {
-            padding: 12px 20px;
-            text-align: left;
-            border-bottom: 1px solid #eee;
-            font-size: 14px;
-        }
-        .rate-table th {
-            background: #003366;
-            color: white;
-        }
-        .contact-box {
-            background: white;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            text-align: center;
-        }
-        .contact-box p {
-            margin-bottom: 10px;
-            font-size: 15px;
-        }
-        .btn-group {
-            margin-top: 20px;
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-        }
-        .btn {
-            padding: 10px 25px;
-            border-radius: 5px;
-            text-decoration: none;
-            color: white;
-            font-weight: bold;
-            font-size: 14px;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #f0f2f5; color: #333; }
+        .top-bar { background-color: #ffffff; border-bottom: 1px solid #ddd; padding: 8px 5%; display: flex; justify-content: space-between; align-items: center; font-size: 13px; color: #555; }
+        .navbar { background-color: #ffffff; padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05); flex-wrap: wrap; gap: 10px; }
+        .logo-section h1 { font-size: 22px; color: #003366; font-weight: 700; }
+        .logo-section p { font-size: 12px; color: #e65c00; font-weight: bold; }
+        .nav-links { display: flex; gap: 20px; list-style: none; flex-wrap: wrap; }
+        .nav-links a { text-decoration: none; color: #333; font-weight: 600; font-size: 14px; }
+        .nav-links a:hover { color: #0056b3; }
+        .login-btn { background: linear-gradient(135deg, #ff7e5f, #feb47b); color: white; padding: 8px 20px; border-radius: 20px; text-decoration: none; font-weight: bold; font-size: 14px; }
+        .main-layout { max-width: 1100px; margin: 30px auto; padding: 0 20px; display: flex; gap: 25px; flex-wrap: wrap; }
+        .sidebar { flex: 1; min-width: 260px; }
+        .content-area { flex: 3; min-width: 300px; }
+        .cert-box { background: #fff5ec; border: 1px solid #fbd0b6; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .cert-header { background: #e65c00; color: white; padding: 12px 15px; font-size: 16px; font-weight: bold; }
+        .cert-list { list-style: none; padding: 5px 0; }
+        .cert-list li a { display: block; padding: 10px 15px; border-bottom: 1px solid #f3d6c4; font-size: 14px; font-weight: 500; color: #333; text-decoration: none; transition: background 0.2s; }
+        .cert-list li a:hover { background: #fde6d8; color: #d35400; }
+        .section-title { font-size: 20px; color: #003366; margin-bottom: 20px; border-left: 4px solid #e65c00; padding-left: 10px; }
+        .rate-table { width: 100%; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.05); border-collapse: collapse; margin-bottom: 40px; }
+        .rate-table th, .rate-table td { padding: 12px 20px; text-align: left; border-bottom: 1px solid #eee; font-size: 14px; }
+        .rate-table th { background: #003366; color: white; }
+        .contact-box { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); text-align: center; }
+        .contact-box p { margin-bottom: 10px; font-size: 15px; }
+        .btn-group { margin-top: 20px; display: flex; gap: 15px; justify-content: center; }
+        .btn { padding: 10px 25px; border-radius: 5px; text-decoration: none; color: white; font-weight: bold; font-size: 14px; }
         .btn-call { background: #28a745; }
         .btn-whatsapp { background: #25d366; }
     </style>
@@ -200,12 +38,8 @@
 <body>
 
     <div class="top-bar">
-        <div class="top-bar-left">
-            <span>बुधवार, अगस्त 26, 2026</span>
-        </div>
-        <div class="top-bar-right">
-            <span>मुख्य कंटेंट पर जाएं</span> | <span>स्क्रीन रीडर</span> | <span>साइट मैप</span>
-        </div>
+        <span>बुधवार, अगस्त 26, 2026</span>
+        <span>अनुराग सीएससी सेंटर, फरीदपुर, एटा (उ.प्र.)</span>
     </div>
 
     <div class="navbar">
@@ -214,80 +48,158 @@
             <p>Digital Services & Jan Seva Kendra</p>
         </div>
         <ul class="nav-links">
-            <li><a href="#">मुख्य पृष्ठ</a></li>
-            <li><a href="#">सेवाएं</a></li>
-            <li><a href="#">प्रमाण पत्र</a></li>
-            <li><a href="#">रेट लिस्ट</a></li>
-            <li><a href="#">संपर्क करें</a></li>
+            <li><a href="index.html">मुख्य पृष्ठ</a></li>
+            <li><a href="#rates">रेट लिस्ट</a></li>
+            <li><a href="#contact">संपर्क करें</a></li>
         </ul>
         <a href="tel:9760623097" class="login-btn">लॉगिन / संपर्क</a>
     </div>
 
-    <div class="hero-section">
-        <div class="hero-left">
-            <h2>प्रमुख डिजिटल सेवाएं</h2>
-            <div class="services-wheel">
-                <div class="wheel-item">📄 जाति प्रमाण पत्र</div>
-                <div class="wheel-item">🏠 निवास प्रमाण पत्र</div>
-                <div class="wheel-item">💰 आय प्रमाण पत्र</div>
-                <div class="wheel-item">💳 नया पैन कार्ड</div>
-                <div class="wheel-item">🚆 रेल / बस टिकट</div>
-                <div class="wheel-item">📚 छात्रवृत्ति फॉर्म</div>
+    <div class="main-layout">
+        <div class="sidebar">
+            <div class="cert-box">
+                <div class="cert-header">प्रमाण पत्र सेवाएं</div>
+                <ul class="cert-list">
+                    <li><a href="jati.html">▷ जाति प्रमाण पत्र (फॉर्म भरें)</a></li>
+                    <li><a href="nivas.html">▷ निवास प्रमाण पत्र (फॉर्म भरें)</a></li>
+                    <li><a href="#">▷ आय प्रमाण पत्र (शीघ्र उपलब्ध)</a></li>
+                </ul>
             </div>
         </div>
-        <div class="hero-right">
-            <div class="leader-card">
-                <div class="icon">🏛️</div>
-                <h4>माननीय प्रधानमंत्री<br>भारत सरकार</h4>
-            </div>
-            <div class="leader-card">
-                <div class="icon">🇮🇳</div>
-                <h4>माननीय मुख्यमंत्री<br>उत्तर प्रदेश सरकार</h4>
+
+        <div class="content-area">
+            <div class="section-title" id="rates">रेट लिस्ट (शुल्क विवरण)</div>
+            <table class="rate-table">
+                <tr><th>सेवा का नाम</th><th>निर्धारित शुल्क (₹)</th></tr>
+                <tr><td>आय / जाति / निवास प्रमाण पत्र</td><td>₹ 60</td></tr>
+                <tr><td>नया पैन कार्ड / संशोधन</td><td>₹ 150</td></tr>
+                <tr><td>स्कॉलरशिप ऑनलाइन फॉर्म</td><td>₹ 50</td></tr>
+                <tr><td>रेलवे / बस टिकट बुकिंग</td><td>₹ 50 - ₹ 100</td></tr>
+            </table>
+
+            <div class="section-title" id="contact">संचालक एवं संपर्क विवरण</div>
+            <div class="contact-box">
+                <p><strong>संचालक:</strong> रोहिताश कुमार</p>
+                <p><strong>पता:</strong> Faridpur, Post- Mirehachi, Dist- Etah, UP - 207125</p>
+                <p><strong>मोबाइल नंबर:</strong> 9760623097</p>
+                <div class="btn-group">
+                    <a href="tel:9760623097" class="btn btn-call">📞 तुरंत कॉल करें</a>
+                    <a href="https://wa.me/919760623097" class="btn btn-whatsapp">💬 WhatsApp चैट</a>
+                </div>
             </div>
         </div>
     </div>
 
-    <div class="container">
-        <div class="section-title">रेट लिस्ट (शुल्क विवरण)</div>
-        <table class="rate-table">
-            <tr>
-                <th>सेवा का नाम</th>
-                <th>निर्धारित शुल्क (₹)</th>
-            </tr>
-            <tr>
-                <td>आय / जाति / निवास प्रमाण पत्र</td>
-                <td>₹ 60</td>
-            </tr>
-            <tr>
-                <td>नया पैन कार्ड / संशोधन / आधार</td>
-                <td>₹ 150</td>
-            </tr>
-            <tr>
-                <td>पासपोर्ट साइज फोटो प्रिंट</td>
-                <td>₹ 30</td>
-            </tr>
-            <tr>
-                <td>स्कॉलरशिप ऑनलाइन फॉर्म (दस्तावेज़ सहित)</td>
-                <td>₹ 50</td>
-            </tr>
-            <tr>
-                <td>रेलवे / बस टिकट बुकिंग</td>
-                <td>₹ 50 - ₹ 100</td>
-            </tr>
-        </table>
+</body>
+</html><!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>जाति प्रमाण पत्र आवेदन - अनुराग सीएससी सेंटर</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #f0f2f5; color: #333; padding: 20px; }
+        .back-link { display: inline-block; margin-bottom: 20px; color: #003366; text-decoration: none; font-weight: bold; }
+        .back-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
 
-        <div class="section-title">संचालक एवं संपर्क विवरण</div>
-        <div class="contact-box">
-            <p><strong>संचालक:</strong> रोहिताश कुमार (Rohitash Kumar)</p>
-            <p><strong>पता:</strong> Faridpur, Post- Mirehachi, Dist- Etah, UP - 207125</p>
-            <p><strong>मोबाइल नंबर:</strong> 9760623097</p>
-            <p><strong>ईमेल आईडी:</strong> rohitkumar396s@gmail.com</p>
-            
-            <div class="btn-group">
-                <a href="tel:9760623097" class="btn btn-call">📞 तुरंत कॉल करें</a>
-                <a href="https://wa.me/919760623097" class="btn btn-whatsapp">💬 WhatsApp चैट</a>
+    <a href="index.html" class="back-link">← मुख्य पृष्ठ पर वापस जाएं</a>
+
+    <div style="max-width: 600px; margin: 0 auto; background: #fff; padding: 25px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); border-top: 4px solid #e65c00;">
+        <h2 style="color: #003366; text-align: center; margin-bottom: 20px; font-size: 22px;">जाति प्रमाण पत्र हेतु आवेदन-पत्र</h2>
+        
+        <form action="mailto:rohitkumar396s@gmail.com" method="post" enctype="text/plain">
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; font-weight: bold; margin-bottom: 5px; font-size: 14px;">1. प्रार्थी का नाम (हिंदी में):</label>
+                <input type="text" name="Jati_Prarthi_Hindi" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;">
             </div>
-        </div>
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; font-weight: bold; margin-bottom: 5px; font-size: 14px;">2. प्रार्थी का नाम (अँग्रेजी में):</label>
+                <input type="text" name="Jati_Prarthi_English" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;">
+            </div>
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; font-weight: bold; margin-bottom: 5px; font-size: 14px;">3. जाति / उपजाति:</label>
+                <input type="text" name="Jati_Category" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;">
+            </div>
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; font-weight: bold; margin-bottom: 5px; font-size: 14px;">4. पिता/पति/संरक्षक का नाम:</label>
+                <input type="text" name="Jati_Guardian_Name" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;">
+            </div>
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; font-weight: bold; margin-bottom: 5px; font-size: 14px;">5. माता का नाम:</label>
+                <input type="text" name="Jati_Mother_Name" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;">
+            </div>
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; font-weight: bold; margin-bottom: 5px; font-size: 14px;">6. मोबाइल नंबर:</label>
+                <input type="tel" name="Jati_Mobile_Number" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;">
+            </div>
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; font-weight: bold; margin-bottom: 5px; font-size: 14px;">7. पूरा पता (गाँव, पोस्ट, तहसील, जिला):</label>
+                <textarea name="Jati_Full_Address" rows="3" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;"></textarea>
+            </div>
+            <div style="text-align: center;">
+                <button type="submit" style="background: #e65c00; color: white; padding: 12px 30px; border: none; border-radius: 5px; font-size: 16px; font-weight: bold; cursor: pointer;">जाति फॉर्म भेजें (Submit)</button>
+            </div>
+        </form>
+    </div>
+
+</body>
+</html><!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>निवास प्रमाण पत्र आवेदन - अनुराग सीएससी सेंटर</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #f0f2f5; color: #333; padding: 20px; }
+        .back-link { display: inline-block; margin-bottom: 20px; color: #003366; text-decoration: none; font-weight: bold; }
+        .back-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+
+    <a href="index.html" class="back-link">← मुख्य पृष्ठ पर वापस जाएं</a>
+
+    <div style="max-width: 600px; margin: 0 auto; background: #fff; padding: 25px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); border-top: 4px solid #003366;">
+        <h2 style="color: #003366; text-align: center; margin-bottom: 20px; font-size: 22px;">मूल निवास प्रमाण पत्र हेतु आवेदन-पत्र</h2>
+        
+        <form action="mailto:rohitkumar396s@gmail.com" method="post" enctype="text/plain">
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; font-weight: bold; margin-bottom: 5px; font-size: 14px;">1. प्रार्थी का नाम (हिंदी में):</label>
+                <input type="text" name="Nivas_Prarthi_Hindi" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;">
+            </div>
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; font-weight: bold; margin-bottom: 5px; font-size: 14px;">2. प्रार्थी का नाम (अँग्रेजी में):</label>
+                <input type="text" name="Nivas_Prarthi_English" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;">
+            </div>
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; font-weight: bold; margin-bottom: 5px; font-size: 14px;">3. कितने वर्षों से निवास कर रहे हैं:</label>
+                <input type="text" name="Residence_Years" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;">
+            </div>
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; font-weight: bold; margin-bottom: 5px; font-size: 14px;">4. पिता/पति/संरक्षक का नाम:</label>
+                <input type="text" name="Nivas_Guardian_Name" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;">
+            </div>
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; font-weight: bold; margin-bottom: 5px; font-size: 14px;">5. माता का नाम:</label>
+                <input type="text" name="Nivas_Mother_Name" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;">
+            </div>
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; font-weight: bold; margin-bottom: 5px; font-size: 14px;">6. मोबाइल नंबर:</label>
+                <input type="tel" name="Nivas_Mobile_Number" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;">
+            </div>
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; font-weight: bold; margin-bottom: 5px; font-size: 14px;">7. पूरा स्थायी पता (गाँव, पोस्ट, तहसील, जिला):</label>
+                <textarea name="Nivas_Full_Address" rows="3" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;"></textarea>
+            </div>
+            <div style="text-align: center;">
+                <button type="submit" style="background: #003366; color: white; padding: 12px 30px; border: none; border-radius: 5px; font-size: 16px; font-weight: bold; cursor: pointer;">निवास फॉर्म भेजें (Submit)</button>
+            </div>
+        </form>
     </div>
 
 </body>
