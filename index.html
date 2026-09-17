@@ -84,14 +84,6 @@
         .container { max-width: 1000px; margin: 30px auto; background: #ffffff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
         .section-title { color: #1e3a8a; font-size: 18px; margin-bottom: 20px; font-weight: 700; border-left: 5px solid #2563eb; padding-left: 10px; }
         
-        .customer-portal-box { background: #f8fafc; border: 2px dashed #2563eb; padding: 25px; border-radius: 10px; margin-bottom: 30px; text-align: left; }
-        .customer-portal-box h3 { color: #1e3a8a; margin-bottom: 15px; font-size: 18px; }
-        .customer-portal-box input[type="text"] { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; margin-bottom: 10px; font-size: 14px; }
-        .customer-portal-box button { background: #2563eb; color: white; border: none; padding: 10px 20px; border-radius: 6px; font-weight: 600; cursor: pointer; }
-        .customer-portal-box button:hover { background: #1d4ed8; }
-        .btn-download { display: inline-block; background: #16a34a; color: white !important; padding: 8px 15px; border-radius: 6px; text-decoration: none; font-weight: 600; margin-top: 10px; cursor: pointer; }
-        .btn-download:hover { background: #15803d; }
-
         table { width: 100%; border-collapse: collapse; margin-bottom: 30px; border-radius: 8px; overflow: hidden; }
         th, td { border: 1px solid #e2e8f0; padding: 12px 14px; font-size: 13px; text-align: left; }
         th { background: #1e3a8a; color: white; font-weight: 600; }
@@ -141,14 +133,26 @@
         .dash-top-btns { display: flex; gap: 10px; align-items: center; }
         
         .logout-btn { background: #dc2626; color: white; border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer; font-weight: 600; }
-        .word-download-btn { background: #2563eb; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-size: 11.5px; font-weight: 600; display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; text-decoration: none; }
+
+        .word-download-btn { background: #2563eb; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-size: 11.5px; font-weight: 600; display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; margin-bottom: 4px; text-decoration: none; }
         .word-download-btn:hover { background: #1d4ed8; color: white; }
+        
+        .cert-upload-btn { background: #16a34a; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-size: 11.5px; font-weight: 600; display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; }
+        .cert-upload-btn:hover { background: #15803d; }
 
-        .status-badge { padding: 4px 8px; border-radius: 4px; font-size: 11.5px; font-weight: 600; display: inline-block; background: #dcfce7; color: #166534; }
+        .delete-btn { background: #dc2626; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-size: 11.5px; font-weight: 600; display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; margin-top: 4px; }
+        .delete-btn:hover { background: #b91c1c; }
 
+        .status-badge { padding: 4px 8px; border-radius: 4px; font-size: 11.5px; font-weight: 600; display: inline-block; }
+        .status-pending { background: #fef3c7; color: #b45309; }
+        .status-ready { background: #dcfce7; color: #166534; }
+
+        /* Modal Popup Styles */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 2000; justify-content: center; align-items: center; }
         .modal-content { background: #fff; width: 90%; max-width: 600px; padding: 25px; border-radius: 10px; box-shadow: 0 5px 20px rgba(0,0,0,0.3); text-align: center; position: relative; }
         .modal-close { position: absolute; top: 12px; right: 15px; background: #dc2626; color: white; border: none; width: 30px; height: 30px; border-radius: 50%; font-weight: bold; cursor: pointer; font-size: 16px; }
+        .modal-body { margin-top: 15px; max-height: 400px; overflow-y: auto; }
+        .modal-body img, .modal-body iframe { max-width: 100%; height: auto; border: 1px solid #ccc; border-radius: 6px; }
 
         footer { text-align: center; padding: 20px; color: #64748b; font-size: 13px; background: #fff; border-top: 1px solid #e2e8f0; margin-top: 40px; }
 
@@ -223,7 +227,7 @@
             <div class="ticker-title"><i class="fa-solid fa-bullhorn"></i> ताज़ा सूचना</div>
             <div class="ticker-content">
                 <marquee behavior="scroll" direction="left" scrollamount="5" onmouseover="this.stop();" onmouseout="this.start();">
-                    अनुराग सीएससी सेंटर में आपका स्वागत है! फॉर्म सबमिट करते ही सर्टिफिकेट ऑटोमैटिक जनरेट हो जाता है जिसे आप तुरंत डाउनलोड कर सकते हैं। हेल्पलाइन नंबर: 9760623097
+                    अनुराग सीएससी सेंटर में आपका स्वागत है! आय, जाति, मूल निवास प्रमाण पत्र, पैन कार्ड, नया राशन कार्ड, पीएफ (EPFO) और सभी प्रकार के ऑनलाइन फॉर्म उचित शुल्क पर भरे जाते हैं। हेल्पलाइन नंबर: 9760623097
                 </marquee>
             </div>
         </div>
@@ -250,21 +254,6 @@
         </div>
 
         <div class="container">
-            <!-- Customer Portal Box (ऑटोमैटिक स्टेटस चेक और डाउनलोड) -->
-            <div class="customer-portal-box">
-                <h3><i class="fa-solid fa-magnifying-glass"></i> अपना आवेदन स्टेटस देखें और ऑटो-जनरेटेड सर्टिफिकेट डाउनलोड करें</h3>
-                <form id="statusCheckForm" onsubmit="checkCustomerStatus(event)">
-                    <label for="appNumber">आवेदन संख्या / फॉर्म नंबर (जैसे: 0, 1, 2...) दर्ज करें:</label>
-                    <input type="text" id="appNumber" name="appNumber" placeholder="अपना एप्लीकेशन नंबर या सीरियल नंबर डालें" required>
-                    <button type="submit">स्टेटस देखें</button>
-                </form>
-
-                <div id="resultArea" style="margin-top: 15px; display: none;">
-                    <p>स्थिति: <span id="statusText" style="font-weight: bold; color: green;"></span></p>
-                    <div id="downloadLinkArea"></div>
-                </div>
-            </div>
-
             <div id="rate-list" class="section-title">रेट लिस्ट (शुल्क विवरण)</div>
             <table>
                 <tr><th>सेवा का नाम</th><th>निर्धारित शुल्क (₹)</th></tr>
@@ -293,8 +282,14 @@
         <div class="form-container">
             <h2>📄 आय प्रमाण पत्र आवेदन फॉर्म</h2>
             <form id="formIncome" onsubmit="submitApplication(event, 'आय प्रमाण पत्र')">
-                <div class="form-group"><label>आवेदक का पूरा नाम</label><input type="text" id="inc_name" placeholder="अपना नाम दर्ज करें" required></div>
-                <div class="form-group"><label>माता का नाम</label><input type="text" id="inc_mother" placeholder="माता का नाम दर्ज करें" required></div>
+                <div class="form-group">
+                    <label for="inc_name">आवेदक का पूरा नाम</label>
+                    <input type="text" id="inc_name" placeholder="अपना नाम दर्ज करें" required>
+                </div>
+                <div class="form-group">
+                    <label for="inc_mother">माता का नाम</label>
+                    <input type="text" id="inc_mother" placeholder="माता का नाम दर्ज करें" required>
+                </div>
                 <div class="form-group">
                     <label>पिता / पति का चयन करें और नाम दर्ज करें</label>
                     <div class="guardian-row">
@@ -302,28 +297,31 @@
                         <input type="text" id="inc_gname" placeholder="नाम दर्ज करें" required>
                     </div>
                 </div>
-                <div class="form-group"><label>क्षेत्र (Area Type)</label><select id="inc_area" required><option value="">-- क्षेत्र चुनें --</option><option value="Rural">ग्रामीण (Rural)</option><option value="Urban">नगरीय (Urban)</option></select></div>
-                <div class="row">
-                    <div class="form-group"><label>ग्राम / मोहल्ला</label><input type="text" id="inc_village" placeholder="गाँव का नाम" required></div>
-                    <div class="form-group"><label>पोस्ट ऑफिस</label><input type="text" id="inc_post" placeholder="पोस्ट का नाम" required></div>
+                <div class="form-group">
+                    <label for="inc_area">क्षेत्र (Area Type)</label>
+                    <select id="inc_area" required><option value="">-- क्षेत्र चुनें --</option><option value="Rural">ग्रामीण (Rural)</option><option value="Urban">नगरीय (Urban)</option></select>
                 </div>
                 <div class="row">
-                    <div class="form-group"><label>थाना</label><input type="text" id="inc_thana" placeholder="थाने का नाम" required></div>
-                    <div class="form-group"><label>विकास खंड / ब्लॉक</label><input type="text" id="inc_block" placeholder="ब्लॉक का नाम" required></div>
+                    <div class="form-group"><label for="inc_village">ग्राम / मोहल्ला</label><input type="text" id="inc_village" placeholder="गाँव का नाम" required></div>
+                    <div class="form-group"><label for="inc_post">पोस्ट ऑफिस</label><input type="text" id="inc_post" placeholder="पोस्ट का नाम" required></div>
                 </div>
                 <div class="row">
-                    <div class="form-group"><label>तहसील</label><input type="text" id="inc_tahsil" placeholder="तहसील का नाम" required></div>
-                    <div class="form-group"><label>जिला</label><input type="text" id="inc_district" value="एटा" required></div>
+                    <div class="form-group"><label for="inc_thana">थाना</label><input type="text" id="inc_thana" placeholder="थाने का नाम" required></div>
+                    <div class="form-group"><label for="inc_block">विकास खंड / ब्लॉक</label><input type="text" id="inc_block" placeholder="ब्लॉक का नाम" required></div>
                 </div>
                 <div class="row">
-                    <div class="form-group"><label>मोबाइल नंबर</label><input type="tel" id="inc_mobile" pattern="[0-9]{10}" placeholder="10 अंकों का नंबर" required></div>
-                    <div class="form-group"><label>वार्षिक आय (₹)</label><input type="number" id="inc_income" placeholder="जैसे: 50000" required></div>
+                    <div class="form-group"><label for="inc_tahsil">तहसील</label><input type="text" id="inc_tahsil" placeholder="तहसील का नाम" required></div>
+                    <div class="form-group"><label for="inc_district">जिला</label><input type="text" id="inc_district" value="एटा" required></div>
                 </div>
-                <div class="form-group"><label>व्यवसाय</label><input type="text" id="inc_occ" placeholder="जैसे: मजदूरी, खेती..." required></div>
-                <div class="form-group"><label>पासपोर्ट साइज फोटो</label><input type="file" id="inc_photo" accept="image/*" required></div>
-                <div class="form-group"><label>आधार कार्ड / आईडी अपलोड करें</label><input type="file" id="inc_aadhar" accept="image/*,.pdf" required></div>
+                <div class="row">
+                    <div class="form-group"><label for="inc_mobile">मोबाइल नंबर</label><input type="tel" id="inc_mobile" pattern="[0-9]{10}" placeholder="10 अंकों का नंबर" required></div>
+                    <div class="form-group"><label for="inc_income">वार्षिक आय (₹)</label><input type="number" id="inc_income" placeholder="जैसे: 50000" required></div>
+                </div>
+                <div class="form-group"><label for="inc_occ">व्यवसाय</label><input type="text" id="inc_occ" placeholder="जैसे: मजदूरी, खेती..." required></div>
+                <div class="form-group"><label for="inc_photo">पासपोर्ट साइज फोटो</label><input type="file" id="inc_photo" accept="image/*" required></div>
+                <div class="form-group"><label for="inc_aadhar">आधार कार्ड / आईडी अपलोड करें</label><input type="file" id="inc_aadhar" accept="image/*,.pdf" required></div>
 
-                <button type="submit" class="submit-btn">🚀 फॉर्म सबमिट करें & ऑटो-सर्टिफिकेट बनाएं</button>
+                <button type="submit" class="submit-btn">🚀 फॉर्म सबमिट करें</button>
                 <div class="back-link"><a onclick="showSection('home')">← मुख्य पृष्ठ पर वापस जाएं</a></div>
             </form>
         </div>
@@ -334,8 +332,14 @@
         <div class="form-container">
             <h2>📄 जाति प्रमाण पत्र आवेदन फॉर्म</h2>
             <form id="formCaste" onsubmit="submitApplication(event, 'जाति प्रमाण पत्र')">
-                <div class="form-group"><label>आवेदक का पूरा नाम</label><input type="text" id="cas_name" placeholder="अपना नाम दर्ज करें" required></div>
-                <div class="form-group"><label>माता का नाम</label><input type="text" id="cas_mother" placeholder="माता का नाम दर्ज करें" required></div>
+                <div class="form-group">
+                    <label for="cas_name">आवेदक का पूरा नाम</label>
+                    <input type="text" id="cas_name" placeholder="अपना नाम दर्ज करें" required>
+                </div>
+                <div class="form-group">
+                    <label for="cas_mother">माता का नाम</label>
+                    <input type="text" id="cas_mother" placeholder="माता का नाम दर्ज करें" required>
+                </div>
                 <div class="form-group">
                     <label>पिता / पति का चयन करें और नाम दर्ज करें</label>
                     <div class="guardian-row">
@@ -344,27 +348,33 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="form-group"><label>जाति वर्ग</label><select id="cas_cat" required><option value="">-- वर्ग चुनें --</option><option value="General">सामान्य (General)</option><option value="OBC">पिछड़ा वर्ग (OBC)</option><option value="SC">अनुसूचित जाति (SC)</option><option value="ST">अनुसूचित जनजाति (ST)</option></select></div>
-                    <div class="form-group"><label>उपजाति</label><input type="text" id="cas_subcaste" placeholder="जैसे: लोधी, यादव..." required></div>
+                    <div class="form-group">
+                        <label for="cas_cat">जाति वर्ग</label>
+                        <select id="cas_cat" required><option value="">-- वर्ग चुनें --</option><option value="General">सामान्य (General)</option><option value="OBC">पिछड़ा वर्ग (OBC)</option><option value="SC">अनुसूचित जाति (SC)</option><option value="ST">अनुसूचित जनजाति (ST)</option></select>
+                    </div>
+                    <div class="form-group"><label for="cas_subcaste">उपजाति</label><input type="text" id="cas_subcaste" placeholder="जैसे: लोधी, यादव..." required></div>
                 </div>
-                <div class="form-group"><label>क्षेत्र (Area Type)</label><select id="cas_area" required><option value="">-- क्षेत्र चुनें --</option><option value="Rural">ग्रामीण (Rural)</option><option value="Urban">नगरीय (Urban)</option></select></div>
-                <div class="row">
-                    <div class="form-group"><label>ग्राम / मोहल्ला</label><input type="text" id="cas_village" placeholder="गाँव का नाम" required></div>
-                    <div class="form-group"><label>पोस्ट ऑफिस</label><input type="text" id="cas_post" placeholder="पोस्ट का नाम" required></div>
-                </div>
-                <div class="row">
-                    <div class="form-group"><label>थाना</label><input type="text" id="cas_thana" placeholder="थाने का नाम" required></div>
-                    <div class="form-group"><label>विकास खंड / ब्लॉक</label><input type="text" id="cas_block" placeholder="ब्लॉक का नाम" required></div>
+                <div class="form-group">
+                    <label for="cas_area">क्षेत्र (Area Type)</label>
+                    <select id="cas_area" required><option value="">-- क्षेत्र चुनें --</option><option value="Rural">ग्रामीण (Rural)</option><option value="Urban">नगरीय (Urban)</option></select>
                 </div>
                 <div class="row">
-                    <div class="form-group"><label>तहसील</label><input type="text" id="cas_tahsil" placeholder="तहसील का नाम" required></div>
-                    <div class="form-group"><label>जिला</label><input type="text" id="cas_district" value="एटा" required></div>
+                    <div class="form-group"><label for="cas_village">ग्राम / मोहल्ला</label><input type="text" id="cas_village" placeholder="गाँव का नाम" required></div>
+                    <div class="form-group"><label for="cas_post">पोस्ट ऑफिस</label><input type="text" id="cas_post" placeholder="पोस्ट का नाम" required></div>
                 </div>
-                <div class="form-group"><label>मोबाइल नंबर</label><input type="tel" id="cas_mobile" pattern="[0-9]{10}" placeholder="10 अंकों का नंबर" required></div>
-                <div class="form-group"><label>पासपोर्ट साइज फोटो</label><input type="file" id="cas_photo" accept="image/*" required></div>
-                <div class="form-group"><label>आधार कार्ड / आईडी अपलोड करें</label><input type="file" id="cas_aadhar" accept="image/*,.pdf" required></div>
+                <div class="row">
+                    <div class="form-group"><label for="cas_thana">थाना</label><input type="text" id="cas_thana" placeholder="थाने का नाम" required></div>
+                    <div class="form-group"><label for="cas_block">विकास खंड / ब्लॉक</label><input type="text" id="cas_block" placeholder="ब्लॉक का नाम" required></div>
+                </div>
+                <div class="row">
+                    <div class="form-group"><label for="cas_tahsil">तहसील</label><input type="text" id="cas_tahsil" placeholder="तहसील का नाम" required></div>
+                    <div class="form-group"><label for="cas_district">जिला</label><input type="text" id="cas_district" value="एटा" required></div>
+                </div>
+                <div class="form-group"><label for="cas_mobile">मोबाइल नंबर</label><input type="tel" id="cas_mobile" pattern="[0-9]{10}" placeholder="10 अंकों का नंबर" required></div>
+                <div class="form-group"><label for="cas_photo">पासपोर्ट साइज फोटो</label><input type="file" id="cas_photo" accept="image/*" required></div>
+                <div class="form-group"><label for="cas_aadhar">आधार कार्ड / आईडी अपलोड करें</label><input type="file" id="cas_aadhar" accept="image/*,.pdf" required></div>
 
-                <button type="submit" class="submit-btn">🚀 फॉर्म सबमिट करें & ऑटो-सर्टिफिकेट बनाएं</button>
+                <button type="submit" class="submit-btn">🚀 फॉर्म सबमिट करें</button>
                 <div class="back-link"><a onclick="showSection('home')">← मुख्य पृष्ठ पर वापस जाएं</a></div>
             </form>
         </div>
@@ -375,8 +385,14 @@
         <div class="form-container">
             <h2>📄 निवास प्रमाण पत्र आवेदन फॉर्म</h2>
             <form id="formDomicile" onsubmit="submitApplication(event, 'निवास प्रमाण पत्र')">
-                <div class="form-group"><label>आवेदक का पूरा नाम</label><input type="text" id="dom_name" placeholder="अपना नाम दर्ज करें" required></div>
-                <div class="form-group"><label>माता का नाम</label><input type="text" id="dom_mother" placeholder="माता का नाम दर्ज करें" required></div>
+                <div class="form-group">
+                    <label for="dom_name">आवेदक का पूरा नाम</label>
+                    <input type="text" id="dom_name" placeholder="अपना नाम दर्ज करें" required>
+                </div>
+                <div class="form-group">
+                    <label for="dom_mother">माता का नाम</label>
+                    <input type="text" id="dom_mother" placeholder="माता का नाम दर्ज करें" required>
+                </div>
                 <div class="form-group">
                     <label>पिता / पति का चयन करें और नाम दर्ज करें</label>
                     <div class="guardian-row">
@@ -384,24 +400,27 @@
                         <input type="text" id="dom_gname" placeholder="नाम दर्ज करें" required>
                     </div>
                 </div>
-                <div class="form-group"><label>क्षेत्र (Area Type)</label><select id="dom_area" required><option value="">-- क्षेत्र चुनें --</option><option value="Rural">ग्रामीण (Rural)</option><option value="Urban">नगरीय (Urban)</option></select></div>
-                <div class="row">
-                    <div class="form-group"><label>ग्राम / मोहल्ला</label><input type="text" id="dom_village" placeholder="गाँव का नाम" required></div>
-                    <div class="form-group"><label>पोस्ट ऑफिस</label><input type="text" id="dom_post" placeholder="पोस्ट का नाम" required></div>
+                <div class="form-group">
+                    <label for="dom_area">क्षेत्र (Area Type)</label>
+                    <select id="dom_area" required><option value="">-- क्षेत्र चुनें --</option><option value="Rural">ग्रामीण (Rural)</option><option value="Urban">नगरीय (Urban)</option></select>
                 </div>
                 <div class="row">
-                    <div class="form-group"><label>थाना</label><input type="text" id="dom_thana" placeholder="थाने का नाम" required></div>
-                    <div class="form-group"><label>विकास खंड / ब्लॉक</label><input type="text" id="dom_block" placeholder="ब्लॉक का नाम" required></div>
+                    <div class="form-group"><label for="dom_village">ग्राम / मोहल्ला</label><input type="text" id="dom_village" placeholder="गाँव का नाम" required></div>
+                    <div class="form-group"><label for="dom_post">पोस्ट ऑफिस</label><input type="text" id="dom_post" placeholder="पोस्ट का नाम" required></div>
                 </div>
                 <div class="row">
-                    <div class="form-group"><label>तहसील</label><input type="text" id="dom_tahsil" placeholder="तहसील का नाम" required></div>
-                    <div class="form-group"><label>जिला</label><input type="text" id="dom_district" value="एटा" required></div>
+                    <div class="form-group"><label for="dom_thana">थाना</label><input type="text" id="dom_thana" placeholder="थाने का नाम" required></div>
+                    <div class="form-group"><label for="dom_block">विकास खंड / ब्लॉक</label><input type="text" id="dom_block" placeholder="ब्लॉक का नाम" required></div>
                 </div>
-                <div class="form-group"><label>मोबाइल नंबर</label><input type="tel" id="dom_mobile" pattern="[0-9]{10}" placeholder="10 अंकों का नंबर" required></div>
-                <div class="form-group"><label>पासपोर्ट साइज फोटो</label><input type="file" id="dom_photo" accept="image/*" required></div>
-                <div class="form-group"><label>आधार कार्ड / आईडी अपलोड करें</label><input type="file" id="dom_aadhar" accept="image/*,.pdf" required></div>
+                <div class="row">
+                    <div class="form-group"><label for="dom_tahsil">तहसील</label><input type="text" id="dom_tahsil" placeholder="तहसील का नाम" required></div>
+                    <div class="form-group"><label for="dom_district">जिला</label><input type="text" id="dom_district" value="एटा" required></div>
+                </div>
+                <div class="form-group"><label for="dom_mobile">मोबाइल नंबर</label><input type="tel" id="dom_mobile" pattern="[0-9]{10}" placeholder="10 अंकों का नंबर" required></div>
+                <div class="form-group"><label for="dom_photo">पासपोर्ट साइज फोटो</label><input type="file" id="dom_photo" accept="image/*" required></div>
+                <div class="form-group"><label for="dom_aadhar">आधार कार्ड / आईडी अपलोड करें</label><input type="file" id="dom_aadhar" accept="image/*,.pdf" required></div>
 
-                <button type="submit" class="submit-btn">🚀 फॉर्म सबमिट करें & ऑटो-सर्टिफिकेट बनाएं</button>
+                <button type="submit" class="submit-btn">🚀 फॉर्म सबमिट करें</button>
                 <div class="back-link"><a onclick="showSection('home')">← मुख्य पृष्ठ पर वापस जाएं</a></div>
             </form>
         </div>
@@ -412,15 +431,22 @@
         <div class="login-card">
             <div class="login-header">
                 <div class="icon-box"><i class="fa-solid fa-user-shield"></i></div>
-                <h2>अधिकारी पोर्टल</h2>
-                <p>अनुराग सीएससी सेंटर - एडमिनिस्ट्रेटर लॉगिन</p>
+                <h2 id="login-card-title">अधिकारी पोर्टल</h2>
+                <p id="login-card-sub">अनुराग सीएससी सेंटर - एडमिनिस्ट्रेटर लॉगिन</p>
             </div>
             
             <div id="errorAlert" class="error-msg">गलत यूज़रनेम या पासवर्ड!</div>
+            <div id="successAlert" class="success-msg"></div>
 
             <form id="loginFormSection" onsubmit="handleLogin(event)">
-                <div class="form-group"><label>यूज़रनेम</label><input type="text" id="username" placeholder="यूज़रनेम दर्ज करें" required></div>
-                <div class="form-group"><label>पासवर्ड</label><input type="password" id="password" placeholder="••••••••" required></div>
+                <div class="form-group">
+                    <label>यूज़रनेम</label>
+                    <input type="text" id="username" placeholder="यूज़रनेम दर्ज करें" required>
+                </div>
+                <div class="form-group">
+                    <label>पासवर्ड</label>
+                    <input type="password" id="password" placeholder="••••••••" required>
+                </div>
                 <button type="submit" class="login-btn-main"><i class="fa-solid fa-right-to-bracket"></i> लॉगिन करें</button>
             </form>
             <div class="back-link"><a onclick="showSection('home')">← मुख्य पृष्ठ पर वापस जाएं</a></div>
@@ -435,34 +461,40 @@
                 <button class="logout-btn" onclick="showSection('home')">लॉग आउट</button>
             </div>
         </div>
+
+        <p style="margin-bottom: 15px; color: #555;">ग्राहकों के सभी डेटा, फोटो और आधार कार्ड यहाँ सुरक्षित हैं। आप सीधे **'MS Word में डाउनलोड'** बटन पर क्लिक करके पूरी फाइल एमएस वर्ड फॉर्मेट में डाउनलोड कर सकते हैं:</p>
+        
         <div style="overflow-x: auto;">
             <table>
                 <thead>
                     <tr>
-                        <th>फॉर्म नं. (ID)</th>
+                        <th>क्र.</th>
                         <th>प्रमाण पत्र प्रकार</th>
                         <th>आवेदक का नाम</th>
-                        <th>माता / अभिभावक</th>
+                        <th>माता / पिता का नाम</th>
                         <th>मोबाइल नंबर</th>
                         <th>ग्राम / पता</th>
-                        <th>स्थिति</th>
-                        <th>कार्रवाई (Word Download)</th>
+                        <th>स्थिति & सर्टिफिकेट</th>
+                        <th>कार्रवाई (Action)</th>
                     </tr>
                 </thead>
-                <tbody id="applicationTableBody"></tbody>
+                <tbody id="applicationTableBody">
+                    <!-- डेटा डायनामिक लोड होगा -->
+                </tbody>
             </table>
         </div>
     </div>
 
-    <!-- सक्सेस / ऑटो-सर्टिफिकेट पॉपअप -->
+    <!-- सर्टिफिकेट प्रीव्यू मॉडल (Popup) -->
     <div id="certModal" class="modal-overlay">
         <div class="modal-content">
             <button class="modal-close" onclick="closeCertModal()">×</button>
-            <h3 style="color: #16a34a; margin-bottom: 10px;"><i class="fa-solid fa-circle-check"></i> फॉर्म सफलतापूर्वक सबमिट हुआ!</h3>
-            <p id="modalAppIdText" style="font-weight: bold; margin-bottom: 15px; color: #1e3a8a;"></p>
-            <p style="font-size: 13.5px; color: #555; margin-bottom: 20px;">आपका डिजिटल सर्टिफिकेट ऑटोमैटिक जनरेट हो गया है। आप नीचे दिए गए बटन से तुरंत डाउनलोड कर सकते हैं:</p>
-            <div>
-                <a id="downloadCertBtn" href="#" download="Certificate.doc" class="btn-download" style="padding: 10px 20px; font-size: 15px;"><i class="fa-solid fa-download"></i> ऑटो-सर्टिफिकेट डाउनलोड करें</a>
+            <h3 style="color: #1e3a8a; margin-bottom: 10px;"><i class="fa-solid fa-file-shield"></i> सर्टिफिकेट प्रीव्यू</h3>
+            <div class="modal-body" id="modalBodyContent">
+                <!-- यहाँ सर्टिफिकेट या इमेज लोड होगी -->
+            </div>
+            <div style="margin-top: 15px;">
+                <a id="downloadCertBtn" href="#" download="Certificate" class="word-download-btn" style="background: #16a34a; padding: 8px 15px;"><i class="fa-solid fa-download"></i> सर्टिफिकेट डाउनलोड करें</a>
             </div>
         </div>
     </div>
@@ -484,7 +516,10 @@
             document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('active'));
             document.getElementById(sectionId).classList.add('active');
             window.scrollTo(0, 0);
-            if(sectionId === 'officer-dashboard') loadApplicationsToTable();
+            
+            if(sectionId === 'officer-dashboard') {
+                loadApplicationsToTable();
+            }
         }
 
         function readFileAsDataURL(file) {
@@ -508,7 +543,8 @@
             let formData = {
                 type: certType,
                 date: new Date().toLocaleString('hi-IN'),
-                status: 'तैयार (Ready)',
+                status: 'पेंडिंग (Pending)',
+                certData: null,
                 photo: photoData,
                 aadhar: aadharData
             };
@@ -543,118 +579,9 @@
             applications.push(formData);
             localStorage.setItem('csc_applications', JSON.stringify(applications));
 
-            let newId = applications.length - 1;
-            
-            // ऑटोमैटिक सर्टिफिकेट / रिसीविंग फ़ाइल बनाएँ
-            generateAutoCertificate(newId, formData);
-
+            alert(certType + ' का फॉर्म और सभी डॉक्यूमेंट्स सफलतापूर्वक सबमिट हो गए हैं!');
             event.target.reset();
-        }
-
-        // ऑटोमैटिक सर्टिफिकेट (Word Format) जनरेट करने का फंक्शन
-        function generateAutoCertificate(index, app) {
-            let htmlContent = `
-                <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
-                <head><meta charset='utf-8'><title>Certificate</title></head>
-                <body style="font-family: Arial, sans-serif; padding: 30px;">
-                    <div style="border: 4px double #1e3a8a; padding: 30px; border-radius: 10px; text-align: center;">
-                        <h2 style="color: #1e3a8a; margin-bottom: 5px;">अनुराग सीएससी सेंटर</h2>
-                        <p style="font-size: 14px; color: #dc2626; font-weight: bold;">डिजिटल एवं जन सेवा केंद्र, फरीदपुर, मिरेहाची, एटा (उ.प्र.)</p>
-                        <hr style="border: 1px solid #1e3a8a; margin: 20px 0;">
-                        <h1 style="color: #16a34a; font-size: 24px; text-transform: uppercase;">${app.type}</h1>
-                        <p style="font-size: 13px; color: #555;">प्रमाण पत्र क्रमांक (Form ID): #${index} | दिनांक: ${app.date}</p>
-                        <br>
-                        <div style="text-align: left; font-size: 16px; line-height: 1.8; padding: 0 40px;">
-                            <p>प्रमाणित किया जाता है कि श्री/कुमारी/सुश्री <b>${app.name}</b>,</p>
-                            <p>माता का नाम: <b>${app.mother}</b></p>
-                            <p>${app.guardianType} का नाम: <b>${app.guardianName}</b></p>
-                            <p>निवासी ग्राम: <b>${app.village}</b>, पोस्ट- मिरेहाची, तहसील एवं जिला- एटा (उत्तर प्रदेश)।</p>
-                            <p>विवरण/श्रेणी: <b>${app.extra}</b></p>
-                            <p>यह प्रमाण पत्र अनुराग सीएससी सेंटर पोर्टल के माध्यम से डिजिटल रूप से सत्यापित एवं ऑटो-जनरेटेड है।</p>
-                        </div>
-                        <br><br><br>
-                        <div style="display: flex; justify-content: space-between; padding: 0 40px; font-size: 14px;">
-                            <div><b>हस्ताक्षर आवेदक</b></div>
-                            <div><b>संचालक: रोहिताश कुमार</b><br>अनुराग सीएससी सेंटर</div>
-                        </div>
-                    </div>
-                </body>
-                </html>
-            `;
-
-            let blob = new Blob(['\ufeff' + htmlContent], { type: 'application/msword' });
-            let url = URL.createObjectURL(blob);
-
-            // पॉपअप में डाउनलोड बटन सेट करें
-            document.getElementById('modalAppIdText').innerHTML = `आपका फॉर्म सफलतापूर्वक जमा हो गया है!<br>फॉर्म आईडी (ID): #${index} | आवेदक: ${app.name}`;
-            let downloadBtn = document.getElementById('downloadCertBtn');
-            downloadBtn.href = url;
-            downloadBtn.download = `${app.name}_${app.type}.doc`;
-            
-            document.getElementById('certModal').style.display = 'flex';
-        }
-
-        function closeCertModal() {
-            document.getElementById('certModal').style.display = 'none';
             showSection('home');
-        }
-
-        // ग्राहक द्वारा स्टेटस चेक करने का लॉजिक
-        function checkCustomerStatus(event) {
-            event.preventDefault();
-            let appId = document.getElementById('appNumber').value.trim();
-            let applications = JSON.parse(localStorage.getItem('csc_applications')) || [];
-            let resultArea = document.getElementById('resultArea');
-            let statusText = document.getElementById('statusText');
-            let downloadLinkArea = document.getElementById('downloadLinkArea');
-
-            resultArea.style.display = 'block';
-
-            let index = parseInt(appId);
-            if(isNaN(index) || !applications[index]) {
-                statusText.innerHTML = "गलत आवेदन संख्या! कृपया सही आईडी दर्ज करें।";
-                statusText.style.color = "red";
-                downloadLinkArea.innerHTML = "";
-                return;
-            }
-
-            let app = applications[index];
-            statusText.innerHTML = `सर्टिफिकेट तैयार है (${app.type} - ${app.name})`;
-            statusText.style.color = "green";
-
-            // दुबारा डाउनलोड लिंक बनाने के लिए ब्लोब तैयार करना
-            let htmlContent = `
-                <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
-                <head><meta charset='utf-8'><title>Certificate</title></head>
-                <body style="font-family: Arial, sans-serif; padding: 30px;">
-                    <div style="border: 4px double #1e3a8a; padding: 30px; border-radius: 10px; text-align: center;">
-                        <h2 style="color: #1e3a8a; margin-bottom: 5px;">अनुराग सीएससी सेंटर</h2>
-                        <p style="font-size: 14px; color: #dc2626; font-weight: bold;">डिजिटल एवं जन सेवा केंद्र, फरीदपुर, मिरेहाची, एटा (उ.प्र.)</p>
-                        <hr style="border: 1px solid #1e3a8a; margin: 20px 0;">
-                        <h1 style="color: #16a34a; font-size: 24px; text-transform: uppercase;">${app.type}</h1>
-                        <p style="font-size: 13px; color: #555;">प्रमाण पत्र क्रमांक (Form ID): #${index} | दिनांक: ${app.date}</p>
-                        <br>
-                        <div style="text-align: left; font-size: 16px; line-height: 1.8; padding: 0 40px;">
-                            <p>प्रमाणित किया जाता है कि श्री/कुमारी/सुश्री <b>${app.name}</b>,</p>
-                            <p>माता का नाम: <b>${app.mother}</b></p>
-                            <p>${app.guardianType} का नाम: <b>${app.guardianName}</b></p>
-                            <p>निवासी ग्राम: <b>${app.village}</b>, पोस्ट- मिरेहाची, तहसील एवं जिला- एटा (उत्तर प्रदेश)।</p>
-                            <p>विवरण/श्रेणी: <b>${app.extra}</b></p>
-                            <p>यह प्रमाण पत्र अनुराग सीएससी सेंटर पोर्टल के माध्यम से डिजिटल रूप से सत्यापित एवं ऑटो-जनरेटेड है।</p>
-                        </div>
-                        <br><br><br>
-                        <div style="display: flex; justify-content: space-between; padding: 0 40px; font-size: 14px;">
-                            <div><b>हस्ताक्षर आवेदक</b></div>
-                            <div><b>संचालक: रोहिताश कुमार</b><br>अनुराग सीएससी सेंटर</div>
-                        </div>
-                    </div>
-                </body>
-                </html>
-            `;
-            let blob = new Blob(['\ufeff' + htmlContent], { type: 'application/msword' });
-            let url = URL.createObjectURL(blob);
-
-            downloadLinkArea.innerHTML = `<a href="${url}" download="${app.name}_${app.type}.doc" class="btn-download"><i class="fa-solid fa-download"></i> ऑटो-सर्टिफिकेट डाउनलोड करें</a>`;
         }
 
         function handleLogin(event) {
@@ -671,9 +598,16 @@
             }
         }
 
+        function resetLoginForm() {
+            document.getElementById('username').value = "";
+            document.getElementById('password').value = "";
+            document.getElementById('errorAlert').style.display = "none";
+        }
+
         function loadApplicationsToTable() {
             const tableBody = document.getElementById('applicationTableBody');
             let applications = JSON.parse(localStorage.getItem('csc_applications')) || [];
+            
             tableBody.innerHTML = "";
 
             if(applications.length === 0) {
@@ -682,20 +616,124 @@
             }
 
             applications.forEach((app, index) => {
-                let actionHtml = `<button class="word-download-btn" onclick="generateAutoCertificate(${index}, JSON.parse(localStorage.getItem('csc_applications'))[${index}])"><i class="fa-solid fa-file-word"></i> डाउनलोड सर्टिफिकेट</button>`;
+                let statusHtml = `<span class="status-badge status-pending">पेंडिंग (Pending)</span>`;
+                
+                if(app.status === 'तैयार (Ready)') {
+                    statusHtml = `<span class="status-badge status-ready">सर्टिफिकेट तैयार</span><br><a onclick="openCertModal(${index})" style="font-size:11.5px; color:#2563eb; font-weight:bold; text-decoration:underline; cursor:pointer;"><i class="fa-solid fa-eye"></i> देखें सर्टिफिकेट</a>`;
+                }
+
+                let actionHtml = `<button class="word-download-btn" onclick="downloadWord(${index})"><i class="fa-solid fa-file-word"></i> MS Word में डाउनलोड</button><br>`;
+                actionHtml += `<label class="cert-upload-btn" style="cursor:pointer; display:inline-block; margin-top:4px;"><i class="fa-solid fa-upload"></i> सर्टिफिकेट अपलोड <input type="file" accept="application/pdf,image/*" style="display:none;" onchange="uploadCertificate(event, ${index})"></label><br>`;
+                // यहाँ डिलीट बटन जोड़ा गया है
+                actionHtml += `<button class="delete-btn" onclick="deleteApplication(${index})"><i class="fa-solid fa-trash"></i> डिलीट</button>`;
 
                 const row = `<tr>
-                    <td><b>#${index}</b></td>
+                    <td>${index + 1}</td>
                     <td><b>${app.type}</b></td>
                     <td>${app.name}</td>
                     <td>${app.mother} / ${app.guardianName}</td>
                     <td>${app.mobile}</td>
                     <td>${app.village}</td>
-                    <td><span class="status-badge">ऑटो-तैयार</span></td>
+                    <td>${statusHtml}</td>
                     <td>${actionHtml}</td>
                 </tr>`;
                 tableBody.innerHTML += row;
             });
+        }
+
+        // आवेदन डिलीट करने का फंक्शन
+        function deleteApplication(index) {
+            if(confirm('क्या आप वाकई इस आवेदन को डिलीट करना चाहते हैं?')) {
+                let applications = JSON.parse(localStorage.getItem('csc_applications')) || [];
+                applications.splice(index, 1); // उस इंडेक्स के डेटा को हटा दें
+                localStorage.setItem('csc_applications', JSON.stringify(applications));
+                loadApplicationsToTable(); // टेबल को दोबारा रिफ्रेश करें
+            }
+        }
+
+        // सर्टिफिकेट पॉप-अप (Modal) खोलने का फंक्शन
+        function openCertModal(index) {
+            let applications = JSON.parse(localStorage.getItem('csc_applications')) || [];
+            let app = applications[index];
+            if(!app || !app.certData) return;
+
+            let modalBody = document.getElementById('modalBodyContent');
+            let downloadBtn = document.getElementById('downloadCertBtn');
+
+            if(app.certData.includes('data:application/pdf') || app.certData.includes('.pdf')) {
+                modalBody.innerHTML = `<iframe src="${app.certData}" width="100%" height="350px"></iframe>`;
+            } else {
+                modalBody.innerHTML = `<img src="${app.certData}" alt="Certificate" style="max-height: 350px;" />`;
+            }
+
+            downloadBtn.href = app.certData;
+            downloadBtn.download = `${app.name}_Certificate`;
+            document.getElementById('certModal').style.display = 'flex';
+        }
+
+        function closeCertModal() {
+            document.getElementById('certModal').style.display = 'none';
+        }
+
+        function downloadWord(index) {
+            let applications = JSON.parse(localStorage.getItem('csc_applications')) || [];
+            let app = applications[index];
+            if(!app) return;
+
+            let htmlContent = `
+                <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
+                <head><meta charset='utf-8'><title>Application Receipt</title></head>
+                <body style="font-family: Arial, sans-serif; padding: 20px;">
+                    <div style="border: 2px solid #1e3a8a; padding: 20px; border-radius: 8px;">
+                        <h2 style="text-align: center; color: #1e3a8a;">अनुराग सीएससी सेंटर - डिजिटल एवं जन सेवा केंद्र</h2>
+                        <p style="text-align: center; font-size: 13px; color: #555;">Faridpur, Mirehachi, Etah, UP | Helpline: 9760623097</p>
+                        <hr style="border: 1px solid #1e3a8a; margin: 15px 0;">
+                        <h3 style="background: #f1f5f9; padding: 8px; text-align: center; color: #334155;">${app.type.toUpperCase()} - आवेदन विवरण</h3>
+                        <p><b>आवेदन दिनांक:</b> ${app.date}</p>
+                        <p><b>आवेदक का नाम:</b> ${app.name}</p>
+                        <p><b>माता का नाम:</b> ${app.mother}</p>
+                        <p><b>${app.guardianType} का नाम:</b> ${app.guardianName}</p>
+                        <p><b>ग्राम / मोहल्ला:</b> ${app.village}</p>
+                        <p><b>मोबाइल नंबर:</b> ${app.mobile}</p>
+                        <p><b>अन्य विवरण:</b> ${app.extra}</p>
+                        <br>
+                        <h3>आवेदक के डॉक्यूमेंट्स (फोटो और आधार कार्ड):</h3>
+                        <div style="display: flex; gap: 20px; margin-top: 10px;">
+                            ${app.photo ? `<div><p><b>पासपोर्ट फोटो:</b></p><img src="${app.photo}" width="150" style="border:1px solid #ccc; padding:5px;" /></div>` : ''}
+                            ${app.aadhar ? `<div><p><b>आधार कार्ड / आईडी:</b></p><img src="${app.aadhar}" width="250" style="border:1px solid #ccc; padding:5px;" /></div>` : ''}
+                        </div>
+                        <br><br>
+                        <p style="text-align: right;"><b>Authorized Signature:</b><br>Rohitash Kumar (Operator)</p>
+                    </div>
+                </body>
+                </html>
+            `;
+
+            let blob = new Blob(['\ufeff' + htmlContent], { type: 'application/msword' });
+            let url = URL.createObjectURL(blob);
+            let a = document.createElement('a');
+            a.href = url;
+            a.download = `${app.name}_${app.type}.doc`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+
+        function uploadCertificate(event, index) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                let applications = JSON.parse(localStorage.getItem('csc_applications')) || [];
+                applications[index].certData = e.target.result;
+                applications[index].status = 'तैयार (Ready)';
+                
+                localStorage.setItem('csc_applications', JSON.stringify(applications));
+                alert('सर्टिफिकेट सफलतापूर्वक अपलोड हो गया है!');
+                loadApplicationsToTable();
+            };
+            reader.readAsDataURL(file);
         }
     </script>
 </body>
