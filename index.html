@@ -56,6 +56,9 @@
         .dropdown-content a:hover { background-color: #f1f5f9; color: #2563eb; }
         .dropdown:hover .dropdown-content { display: block; }
         
+        .cert-nav-btn { background: #ff5722; color: white !important; padding: 7px 12px; border-radius: 20px; font-weight: 600; font-size: 12.5px; box-shadow: 0 2px 4px rgba(255, 87, 34, 0.3); display: inline-flex; align-items: center; gap: 5px; text-decoration: none; white-space: nowrap; cursor: pointer; transition: 0.3s; }
+        .cert-nav-btn:hover { background: #e64a19; color: white !important; }
+
         .login-btn { background: #f59e0b; color: white !important; padding: 7px 12px; border-radius: 20px; font-weight: 600; font-size: 12.5px; box-shadow: 0 2px 4px rgba(245, 158, 11, 0.3); display: inline-flex; align-items: center; gap: 5px; text-decoration: none; white-space: nowrap; cursor: pointer; }
         .officer-btn { background: #1e3a8a; color: white !important; padding: 7px 12px; border-radius: 20px; font-weight: 600; font-size: 12.5px; box-shadow: 0 2px 4px rgba(30, 58, 138, 0.3); display: inline-flex; align-items: center; gap: 5px; text-decoration: none; white-space: nowrap; cursor: pointer; }
         .csc-login-btn { background: #16a34a; color: white !important; padding: 7px 12px; border-radius: 20px; font-weight: 600; font-size: 12.5px; box-shadow: 0 2px 4px rgba(22, 163, 74, 0.3); display: inline-flex; align-items: center; gap: 5px; text-decoration: none; }
@@ -206,6 +209,9 @@
             </div>
 
             <a onclick="showSection('home')" class="simple-link">रेट लिस्ट</a>
+            
+            <a onclick="showSection('home')" class="cert-nav-btn"><i class="fas fa-certificate"></i> सर्टिफिकेट देखें</a>
+
             <a href="https://edistrict.up.gov.in/" target="_blank" class="edistrict-btn"><i class="fa-solid fa-user-shield"></i> ई-डिस्ट्रिक्ट लॉगिन</a>
             <a href="https://digitalseva.csc.gov.in/" target="_blank" class="csc-login-btn"><i class="fa-solid fa-right-to-bracket"></i> डिजिटल सेवा लॉगिन</a>
             <a onclick="showSection('adhikari-login'); resetLoginForm();" class="officer-btn"><i class="fa-solid fa-user-shield"></i> अधिकारी लॉगिन</a>
@@ -246,6 +252,17 @@
         </div>
 
         <div class="container">
+            <!-- नया सर्टिफिकेट चेक एवं डाउनलोड बॉक्स -->
+            <div style="background: #f0fdf4; border: 2px dashed #16a34a; padding: 25px; border-radius: 12px; margin-bottom: 30px; text-align: center;">
+                <h3 style="color: #166534; margin-bottom: 10px;"><i class="fa-solid fa-certificate"></i> अपना बना हुआ सर्टिफिकेट डाउनलोड करें</h3>
+                <p style="color: #475569; font-size: 14px; margin-bottom: 15px;">आवेदन करते समय दिया गया 10 अंकों का मोबाइल नंबर नीचे दर्ज करें:</p>
+                <div style="display: flex; gap: 10px; max-width: 400px; margin: 0 auto; justify-content: center; flex-wrap: wrap;">
+                    <input type="tel" id="search_mobile" placeholder="10 अंकों का मोबाइल नंबर" pattern="[0-9]{10}" style="flex: 1; min-width: 220px; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px;">
+                    <button onclick="searchCustomerCertificate()" style="background: #16a34a; color: white; border: none; padding: 10px 20px; border-radius: 6px; font-weight: bold; cursor: pointer;"><i class="fa-solid fa-magnifying-glass"></i> खोजें</button>
+                </div>
+                <div id="searchResultArea" style="margin-top: 20px;"></div>
+            </div>
+
             <div id="rate-list" class="section-title">रेट लिस्ट (शुल्क विवरण)</div>
             <table>
                 <tr><th>सेवा का नाम</th><th>निर्धारित शुल्क (₹)</th></tr>
@@ -311,7 +328,6 @@
                 </div>
                 <div class="form-group"><label for="inc_occ">व्यवसाय</label><input type="text" id="inc_occ" placeholder="जैसे: मजदूरी, खेती..." required></div>
 
-                <!-- फोटो और आधार कार्ड अपलोड फील्ड्स -->
                 <div class="row">
                     <div class="form-group">
                         <label for="inc_photo">पासपोर्ट फोटो अपलोड करें</label>
@@ -374,7 +390,6 @@
                 </div>
                 <div class="form-group"><label for="cas_mobile">मोबाइल नंबर</label><input type="tel" id="cas_mobile" pattern="[0-9]{10}" placeholder="10 अंकों का नंबर" required></div>
                 
-                <!-- फोटो और आधार कार्ड अपलोड फील्ड्स -->
                 <div class="row">
                     <div class="form-group">
                         <label for="cas_photo">पासपोर्ट फोटो अपलोड करें</label>
@@ -430,7 +445,6 @@
                 </div>
                 <div class="form-group"><label for="dom_mobile">मोबाइल नंबर</label><input type="tel" id="dom_mobile" pattern="[0-9]{10}" placeholder="10 अंकों का नंबर" required></div>
                 
-                <!-- फोटो और आधार कार्ड अपलोड फील्ड्स -->
                 <div class="row">
                     <div class="form-group">
                         <label for="dom_photo">पासपोर्ट फोटो अपलोड करें</label>
@@ -590,7 +604,6 @@
                 aadharInput = document.getElementById('dom_aadhar').files[0];
             }
 
-            // Read files and save
             let readerCount = 0;
             let totalReaders = (photoInput ? 1 : 0) + (aadharInput ? 1 : 0);
 
@@ -650,6 +663,56 @@
             document.getElementById('errorAlert').style.display = "none";
         }
 
+        // ग्राहक द्वारा मोबाइल नंबर से सर्टिफिकेट सर्च करने का फंक्शन
+        function searchCustomerCertificate() {
+            let mob = document.getElementById('search_mobile').value.trim();
+            let resultArea = document.getElementById('searchResultArea');
+            
+            if(mob.length !== 10) {
+                alert('कृपया सही 10 अंकों का मोबाइल नंबर दर्ज करें!');
+                return;
+            }
+
+            let applications = JSON.parse(localStorage.getItem('csc_applications')) || [];
+            let foundApp = applications.find(app => app.mobile === mob);
+
+            if(!foundApp) {
+                resultArea.innerHTML = `<p style="color: #dc2626; font-weight: 600;">इस मोबाइल नंबर से कोई आवेदन नहीं मिला है या अभी प्रक्रिया में है।</p>`;
+                return;
+            }
+
+            if(foundApp.status !== 'तैयार (Ready)' || !foundApp.certData) {
+                resultArea.innerHTML = `<p style="color: #d97706; font-weight: 600;">नमस्ते ${foundApp.name}, आपका ${foundApp.type} अभी पेंडिंग है या तैयार नहीं हुआ है। कृपया कुछ समय बाद प्रयास करें।</p>`;
+                return;
+            }
+
+            resultArea.innerHTML = `
+                <div style="background: #fff; padding: 15px; border-radius: 8px; border: 1px solid #bbf7d0; display: inline-block; text-align: left; width: 100%; max-width: 450px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+                    <p style="margin: 5px 0;"><b>आवेदक का नाम:</b> ${foundApp.name}</p>
+                    <p style="margin: 5px 0;"><b>प्रमाण पत्र:</b> ${foundApp.type}</p>
+                    <p style="margin: 5px 0; color: #16a34a;"><b>स्थिति:</b> सर्टिफिकेट तैयार है ✅</p>
+                    <div style="margin-top: 15px; text-align: center; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+                        <a href="${foundApp.certData}" download="${foundApp.name}_Certificate" style="background: #2563eb; color: white; padding: 8px 15px; text-decoration: none; border-radius: 6px; font-size: 13.5px; font-weight: 600; display: inline-flex; align-items: center; gap: 6px;"><i class="fa-solid fa-download"></i> PDF डाउनलोड करें</a>
+                        <button onclick="openCertModalByData('${foundApp.certData}')" style="background: #0d9488; color: white; border: none; padding: 8px 15px; border-radius: 6px; font-size: 13.5px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;"><i class="fa-solid fa-eye"></i> देखें (Preview)</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function openCertModalByData(dataUrl) {
+            let modalBody = document.getElementById('modalBodyContent');
+            let downloadBtn = document.getElementById('downloadCertBtn');
+
+            if(dataUrl.includes('application/pdf')) {
+                modalBody.innerHTML = `<iframe src="${dataUrl}" width="100%" height="350px"></iframe>`;
+            } else {
+                modalBody.innerHTML = `<img src="${dataUrl}" alt="Certificate" style="max-height: 350px;" />`;
+            }
+
+            downloadBtn.href = dataUrl;
+            document.getElementById('certModal').style.display = 'flex';
+        }
+
         function loadApplicationsToTable() {
             const tableBody = document.getElementById('applicationTableBody');
             let applications = JSON.parse(localStorage.getItem('csc_applications')) || [];
@@ -665,20 +728,20 @@
                 let statusHtml = `<span class="status-badge status-pending">पेंडिंग (Pending)</span>`;
                 
                 if(app.status === 'तैयार (Ready)') {
-                    statusHtml = `<span class="status-badge status-ready">सर्टिफिकेट तैयार</span><br><a onclick="openCertModal(${index})" style="font-size:11.5px; color:#2563eb; font-weight:bold; text-decoration:underline; cursor:pointer;"><i class="fa-solid fa-eye"></i> देखें सर्टिफिकेट</a>`;
+                    statusHtml = `<span class="status-badge status-ready" style="color:green; font-weight:bold;">सर्टिफिकेट तैयार</span><br><a onclick="openCertModal(${index})" style="font-size:11.5px; color:#2563eb; font-weight:bold; text-decoration:underline; cursor:pointer;"><i class="fa-solid fa-eye"></i> देखें सर्टिफिकेट</a>`;
                 }
 
                 let actionHtml = `<button class="pdf-download-btn" onclick="downloadPdf(${index})"><i class="fa-solid fa-file-pdf"></i> PDF / प्रिंट</button><br>`;
                 
                 if(app.photo) {
-                    actionHtml += `<button class="photo-download-btn" onclick="downloadFile('${app.photo}', '${app.name}_photo')" style="background:#0d9488; color:white; border:none; padding:5px 8px; border-radius:4px; font-size:11px; margin-bottom:3px; cursor:pointer;"><i class="fa-solid fa-image"></i> फोटो डाउनलोड</button><br>`;
+                    actionHtml += `<button onclick="downloadFile('${app.photo}', '${app.name}_photo')" style="background:#0d9488; color:white; border:none; padding:5px 8px; border-radius:4px; font-size:11px; margin-bottom:3px; cursor:pointer;"><i class="fa-solid fa-image"></i> फोटो डाउनलोड</button><br>`;
                 }
                 if(app.aadhar) {
-                    actionHtml += `<button class="aadhar-download-btn" onclick="downloadFile('${app.aadhar}', '${app.name}_aadhar')" style="background:#d97706; color:white; border:none; padding:5px 8px; border-radius:4px; font-size:11px; margin-bottom:3px; cursor:pointer;"><i class="fa-solid fa-id-card"></i> आधार डाउनलोड</button><br>`;
+                    actionHtml += `<button onclick="downloadFile('${app.aadhar}', '${app.name}_aadhar')" style="background:#d97706; color:white; border:none; padding:5px 8px; border-radius:4px; font-size:11px; margin-bottom:3px; cursor:pointer;"><i class="fa-solid fa-id-card"></i> आधार डाउनलोड</button><br>`;
                 }
                 
-                actionHtml += `<label class="cert-upload-btn" style="cursor:pointer; display:inline-block; background:#16a34a; color:white; padding:5px 8px; border-radius:4px; font-size:11px; margin-bottom:3px;"><i class="fa-solid fa-upload"></i> सर्टिफिकेट अपलोड <input type="file" accept="application/pdf,image/*" style="display:none;" onchange="uploadCertificate(event, ${index})"></label><br>`;
-                actionHtml += `<button class="delete-btn" onclick="deleteApplication(${index})" style="background:#dc2626; color:white; border:none; padding:5px 8px; border-radius:4px; font-size:11px; cursor:pointer;"><i class="fa-solid fa-trash"></i> डिलीट</button>`;
+                actionHtml += `<label style="cursor:pointer; display:inline-block; background:#16a34a; color:white; padding:5px 8px; border-radius:4px; font-size:11px; margin-bottom:3px;"><i class="fa-solid fa-upload"></i> सर्टिफिकेट अपलोड <input type="file" accept="application/pdf,image/*" style="display:none;" onchange="uploadCertificate(event, ${index})"></label><br>`;
+                actionHtml += `<button onclick="deleteApplication(${index})" style="background:#dc2626; color:white; border:none; padding:5px 8px; border-radius:4px; font-size:11px; cursor:pointer;"><i class="fa-solid fa-trash"></i> डिलीट</button>`;
 
                 const row = `<tr>
                     <td>${index + 1}</td>
@@ -720,7 +783,7 @@
             let modalBody = document.getElementById('modalBodyContent');
             let downloadBtn = document.getElementById('downloadCertBtn');
 
-            if(app.certData.includes('data:application/pdf') || app.certData.includes('.pdf')) {
+            if(app.certData.includes('application/pdf')) {
                 modalBody.innerHTML = `<iframe src="${app.certData}" width="100%" height="350px"></iframe>`;
             } else {
                 modalBody.innerHTML = `<img src="${app.certData}" alt="Certificate" style="max-height: 350px;" />`;
@@ -768,17 +831,13 @@
                         <p><b>ग्राम / मोहल्ला:</b> ${app.village}</p>
                         <p><b>मोबाइल नंबर:</b> ${app.mobile}</p>
                         <p><b>अन्य विवरण:</b> ${app.extra}</p>
-                        ${app.photo ? `<p><b>पासपोर्ट फोटो संलग्न है</b></p>` : ''}
-                        ${app.aadhar ? `<p><b>आधार कार्ड संलग्न है</b></p>` : ''}
                         <div class="footer">
                             <p><b>स्थिति:</b> ${app.status}</p>
                             <p style="text-align: right;"><b>Authorized Signature:</b><br>Rohitash Kumar (Operator)</p>
                         </div>
                     </div>
                     <script>
-                        window.onload = function() {
-                            window.print();
-                        }
+                        window.onload = function() { window.print(); }
                     <\/script>
                 </body>
                 </html>
