@@ -134,26 +134,9 @@
         
         .logout-btn { background: #dc2626; color: white; border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer; font-weight: 600; }
 
-        .word-download-btn { background: #2563eb; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-size: 11.5px; font-weight: 600; display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; margin-bottom: 4px; text-decoration: none; }
-        .word-download-btn:hover { background: #1d4ed8; color: white; }
+        .pdf-download-btn { background: #2563eb; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-size: 11.5px; font-weight: 600; display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; margin-bottom: 4px; text-decoration: none; }
+        .pdf-download-btn:hover { background: #1d4ed8; color: white; }
         
-        /* नए बटन स्टाइल */
-        .photo-download-btn { background: #0284c7; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-size: 11.5px; font-weight: 600; display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; margin-bottom: 4px; text-decoration: none; }
-        .photo-download-btn:hover { background: #0369a1; color: white; }
-
-        .aadhar-download-btn { background: #d97706; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-size: 11.5px; font-weight: 600; display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; margin-bottom: 4px; text-decoration: none; }
-        .aadhar-download-btn:hover { background: #b45309; color: white; }
-
-        .cert-upload-btn { background: #16a34a; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-size: 11.5px; font-weight: 600; display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; margin-bottom: 4px; }
-        .cert-upload-btn:hover { background: #15803d; }
-
-        .delete-btn { background: #dc2626; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-size: 11.5px; font-weight: 600; display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; margin-bottom: 4px; }
-        .delete-btn:hover { background: #b91c1c; }
-
-        .status-badge { padding: 4px 8px; border-radius: 4px; font-size: 11.5px; font-weight: 600; display: inline-block; }
-        .status-pending { background: #fef3c7; color: #b45309; }
-        .status-ready { background: #dcfce7; color: #166534; }
-
         /* Modal Popup Styles */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 2000; justify-content: center; align-items: center; }
         .modal-content { background: #fff; width: 90%; max-width: 600px; padding: 25px; border-radius: 10px; box-shadow: 0 5px 20px rgba(0,0,0,0.3); text-align: center; position: relative; }
@@ -170,6 +153,8 @@
             .guardian-row select { flex: none; }
         }
     </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 <body>
 
@@ -325,8 +310,18 @@
                     <div class="form-group"><label for="inc_income">वार्षिक आय (₹)</label><input type="number" id="inc_income" placeholder="जैसे: 50000" required></div>
                 </div>
                 <div class="form-group"><label for="inc_occ">व्यवसाय</label><input type="text" id="inc_occ" placeholder="जैसे: मजदूरी, खेती..." required></div>
-                <div class="form-group"><label for="inc_photo">पासपोर्ट साइज फोटो</label><input type="file" id="inc_photo" accept="image/*" required></div>
-                <div class="form-group"><label for="inc_aadhar">आधार कार्ड / आईडी अपलोड करें</label><input type="file" id="inc_aadhar" accept="image/*,.pdf" required></div>
+
+                <!-- फोटो और आधार कार्ड अपलोड फील्ड्स -->
+                <div class="row">
+                    <div class="form-group">
+                        <label for="inc_photo">पासपोर्ट फोटो अपलोड करें</label>
+                        <input type="file" id="inc_photo" accept="image/*" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="inc_aadhar">आधार कार्ड अपलोड करें</label>
+                        <input type="file" id="inc_aadhar" accept="application/pdf,image/*" required>
+                    </div>
+                </div>
 
                 <button type="submit" class="submit-btn">🚀 फॉर्म सबमिट करें</button>
                 <div class="back-link"><a onclick="showSection('home')">← मुख्य पृष्ठ पर वापस जाएं</a></div>
@@ -378,8 +373,18 @@
                     <div class="form-group"><label for="cas_district">जिला</label><input type="text" id="cas_district" value="एटा" required></div>
                 </div>
                 <div class="form-group"><label for="cas_mobile">मोबाइल नंबर</label><input type="tel" id="cas_mobile" pattern="[0-9]{10}" placeholder="10 अंकों का नंबर" required></div>
-                <div class="form-group"><label for="cas_photo">पासपोर्ट साइज फोटो</label><input type="file" id="cas_photo" accept="image/*" required></div>
-                <div class="form-group"><label for="cas_aadhar">आधार कार्ड / आईडी अपलोड करें</label><input type="file" id="cas_aadhar" accept="image/*,.pdf" required></div>
+                
+                <!-- फोटो और आधार कार्ड अपलोड फील्ड्स -->
+                <div class="row">
+                    <div class="form-group">
+                        <label for="cas_photo">पासपोर्ट फोटो अपलोड करें</label>
+                        <input type="file" id="cas_photo" accept="image/*" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="cas_aadhar">आधार कार्ड अपलोड करें</label>
+                        <input type="file" id="cas_aadhar" accept="application/pdf,image/*" required>
+                    </div>
+                </div>
 
                 <button type="submit" class="submit-btn">🚀 फॉर्म सबमिट करें</button>
                 <div class="back-link"><a onclick="showSection('home')">← मुख्य पृष्ठ पर वापस जाएं</a></div>
@@ -424,8 +429,18 @@
                     <div class="form-group"><label for="dom_district">जिला</label><input type="text" id="dom_district" value="एटा" required></div>
                 </div>
                 <div class="form-group"><label for="dom_mobile">मोबाइल नंबर</label><input type="tel" id="dom_mobile" pattern="[0-9]{10}" placeholder="10 अंकों का नंबर" required></div>
-                <div class="form-group"><label for="dom_photo">पासपोर्ट साइज फोटो</label><input type="file" id="dom_photo" accept="image/*" required></div>
-                <div class="form-group"><label for="dom_aadhar">आधार कार्ड / आईडी अपलोड करें</label><input type="file" id="dom_aadhar" accept="image/*,.pdf" required></div>
+                
+                <!-- फोटो और आधार कार्ड अपलोड फील्ड्स -->
+                <div class="row">
+                    <div class="form-group">
+                        <label for="dom_photo">पासपोर्ट फोटो अपलोड करें</label>
+                        <input type="file" id="dom_photo" accept="image/*" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="dom_aadhar">आधार कार्ड अपलोड करें</label>
+                        <input type="file" id="dom_aadhar" accept="application/pdf,image/*" required>
+                    </div>
+                </div>
 
                 <button type="submit" class="submit-btn">🚀 फॉर्म सबमिट करें</button>
                 <div class="back-link"><a onclick="showSection('home')">← मुख्य पृष्ठ पर वापस जाएं</a></div>
@@ -469,7 +484,7 @@
             </div>
         </div>
 
-        <p style="margin-bottom: 15px; color: #555;">ग्राहकों के सभी डेटा, फोटो और आधार कार्ड यहाँ सुरक्षित हैं। आप सीधे **'MS Word में डाउनलोड'**, **'फोटो डाउनलोड करें'** या **'आधार डाउनलोड करें'** बटन पर क्लिक करके फाइलें डाउनलोड कर सकते हैं:</p>
+        <p style="margin-bottom: 15px; color: #555;">ग्राहकों के सभी डेटा यहाँ सुरक्षित हैं। आप यहाँ से सीधे **PDF**, **फोटो**, और **आधार कार्ड** डाउनलोड कर सकते हैं:</p>
         
         <div style="overflow-x: auto;">
             <table>
@@ -501,7 +516,7 @@
                 <!-- यहाँ सर्टिफिकेट या इमेज लोड होगी -->
             </div>
             <div style="margin-top: 15px;">
-                <a id="downloadCertBtn" href="#" download="Certificate" class="word-download-btn" style="background: #16a34a; padding: 8px 15px;"><i class="fa-solid fa-download"></i> सर्टिफिकेट डाउनलोड करें</a>
+                <a id="downloadCertBtn" href="#" download="Certificate" class="pdf-download-btn" style="background: #16a34a; padding: 8px 15px;"><i class="fa-solid fa-download"></i> सर्टिफिकेट डाउनलोड करें</a>
             </div>
         </div>
     </div>
@@ -529,32 +544,19 @@
             }
         }
 
-        function readFileAsDataURL(file) {
-            return new Promise((resolve) => {
-                if (!file) { resolve(''); return; }
-                const reader = new FileReader();
-                reader.onload = (e) => resolve(e.target.result);
-                reader.readAsDataURL(file);
-            });
-        }
-
-        async function submitApplication(event, certType) {
+        function submitApplication(event, certType) {
             event.preventDefault();
-            
-            let photoFile = document.getElementById(certType === 'आय प्रमाण पत्र' ? 'inc_photo' : (certType === 'जाति प्रमाण पत्र' ? 'cas_photo' : 'dom_photo')).files[0];
-            let aadharFile = document.getElementById(certType === 'आय प्रमाण पत्र' ? 'inc_aadhar' : (certType === 'जाति प्रमाण पत्र' ? 'cas_aadhar' : 'dom_aadhar')).files[0];
-
-            let photoData = await readFileAsDataURL(photoFile);
-            let aadharData = await readFileAsDataURL(aadharFile);
 
             let formData = {
                 type: certType,
                 date: new Date().toLocaleString('hi-IN'),
                 status: 'पेंडिंग (Pending)',
                 certData: null,
-                photo: photoData,
-                aadhar: aadharData
+                photo: null,
+                aadhar: null
             };
+
+            let photoInput, aadharInput;
 
             if(certType === 'आय प्रमाण पत्र') {
                 formData.name = document.getElementById('inc_name').value;
@@ -564,6 +566,8 @@
                 formData.village = document.getElementById('inc_village').value;
                 formData.mobile = document.getElementById('inc_mobile').value;
                 formData.extra = "वार्षिक आय: ₹ " + document.getElementById('inc_income').value + " | व्यवसाय: " + document.getElementById('inc_occ').value;
+                photoInput = document.getElementById('inc_photo').files[0];
+                aadharInput = document.getElementById('inc_aadhar').files[0];
             } else if(certType === 'जाति प्रमाण पत्र') {
                 formData.name = document.getElementById('cas_name').value;
                 formData.mother = document.getElementById('cas_mother').value;
@@ -572,6 +576,8 @@
                 formData.village = document.getElementById('cas_village').value;
                 formData.mobile = document.getElementById('cas_mobile').value;
                 formData.extra = "वर्ग: " + document.getElementById('cas_cat').value + " | उपजाति: " + document.getElementById('cas_subcaste').value;
+                photoInput = document.getElementById('cas_photo').files[0];
+                aadharInput = document.getElementById('cas_aadhar').files[0];
             } else if(certType === 'निवास प्रमाण पत्र') {
                 formData.name = document.getElementById('dom_name').value;
                 formData.mother = document.getElementById('dom_mother').value;
@@ -580,15 +586,48 @@
                 formData.village = document.getElementById('dom_village').value;
                 formData.mobile = document.getElementById('dom_mobile').value;
                 formData.extra = "क्षेत्र: " + document.getElementById('dom_area').value + " | तहसील: " + document.getElementById('dom_tahsil').value;
+                photoInput = document.getElementById('dom_photo').files[0];
+                aadharInput = document.getElementById('dom_aadhar').files[0];
             }
 
-            let applications = JSON.parse(localStorage.getItem('csc_applications')) || [];
-            applications.push(formData);
-            localStorage.setItem('csc_applications', JSON.stringify(applications));
+            // Read files and save
+            let readerCount = 0;
+            let totalReaders = (photoInput ? 1 : 0) + (aadharInput ? 1 : 0);
 
-            alert(certType + ' का फॉर्म और सभी डॉक्यूमेंट्स सफलतापूर्वक सबमिट हो गए हैं!');
-            event.target.reset();
-            showSection('home');
+            function saveAndFinish() {
+                let applications = JSON.parse(localStorage.getItem('csc_applications')) || [];
+                applications.push(formData);
+                localStorage.setItem('csc_applications', JSON.stringify(applications));
+
+                alert(certType + ' का फॉर्म सफलतापूर्वक सबमिट हो गया है!');
+                event.target.reset();
+                showSection('home');
+            }
+
+            if(totalReaders === 0) {
+                saveAndFinish();
+                return;
+            }
+
+            if(photoInput) {
+                let reader = new FileReader();
+                reader.onload = function(e) {
+                    formData.photo = e.target.result;
+                    readerCount++;
+                    if(readerCount === totalReaders) saveAndFinish();
+                };
+                reader.readAsDataURL(photoInput);
+            }
+
+            if(aadharInput) {
+                let reader = new FileReader();
+                reader.onload = function(e) {
+                    formData.aadhar = e.target.result;
+                    readerCount++;
+                    if(readerCount === totalReaders) saveAndFinish();
+                };
+                reader.readAsDataURL(aadharInput);
+            }
         }
 
         function handleLogin(event) {
@@ -629,20 +668,17 @@
                     statusHtml = `<span class="status-badge status-ready">सर्टिफिकेट तैयार</span><br><a onclick="openCertModal(${index})" style="font-size:11.5px; color:#2563eb; font-weight:bold; text-decoration:underline; cursor:pointer;"><i class="fa-solid fa-eye"></i> देखें सर्टिफिकेट</a>`;
                 }
 
-                let actionHtml = `<button class="word-download-btn" onclick="downloadWord(${index})"><i class="fa-solid fa-file-word"></i> MS Word में डाउनलोड</button><br>`;
+                let actionHtml = `<button class="pdf-download-btn" onclick="downloadPdf(${index})"><i class="fa-solid fa-file-pdf"></i> PDF / प्रिंट</button><br>`;
                 
-                // फोटो डाउनलोड बटन (यदि फोटो उपलब्ध है)
                 if(app.photo) {
-                    actionHtml += `<button class="photo-download-btn" onclick="downloadFile(${index}, 'photo')"><i class="fa-solid fa-image"></i> फोटो डाउनलोड करें</button><br>`;
+                    actionHtml += `<button class="photo-download-btn" onclick="downloadFile('${app.photo}', '${app.name}_photo')" style="background:#0d9488; color:white; border:none; padding:5px 8px; border-radius:4px; font-size:11px; margin-bottom:3px; cursor:pointer;"><i class="fa-solid fa-image"></i> फोटो डाउनलोड</button><br>`;
                 }
-
-                // आधार / आईडी डाउनलोड बटन (यदि आधार उपलब्ध है)
                 if(app.aadhar) {
-                    actionHtml += `<button class="aadhar-download-btn" onclick="downloadFile(${index}, 'aadhar')"><i class="fa-solid id-card"></i> आधार डाउनलोड करें</button><br>`;
+                    actionHtml += `<button class="aadhar-download-btn" onclick="downloadFile('${app.aadhar}', '${app.name}_aadhar')" style="background:#d97706; color:white; border:none; padding:5px 8px; border-radius:4px; font-size:11px; margin-bottom:3px; cursor:pointer;"><i class="fa-solid fa-id-card"></i> आधार डाउनलोड</button><br>`;
                 }
-
-                actionHtml += `<label class="cert-upload-btn" style="cursor:pointer; display:inline-block;"><i class="fa-solid fa-upload"></i> सर्टिफिकेट अपलोड <input type="file" accept="application/pdf,image/*" style="display:none;" onchange="uploadCertificate(event, ${index})"></label><br>`;
-                actionHtml += `<button class="delete-btn" onclick="deleteApplication(${index})"><i class="fa-solid fa-trash"></i> डिलीट</button>`;
+                
+                actionHtml += `<label class="cert-upload-btn" style="cursor:pointer; display:inline-block; background:#16a34a; color:white; padding:5px 8px; border-radius:4px; font-size:11px; margin-bottom:3px;"><i class="fa-solid fa-upload"></i> सर्टिफिकेट अपलोड <input type="file" accept="application/pdf,image/*" style="display:none;" onchange="uploadCertificate(event, ${index})"></label><br>`;
+                actionHtml += `<button class="delete-btn" onclick="deleteApplication(${index})" style="background:#dc2626; color:white; border:none; padding:5px 8px; border-radius:4px; font-size:11px; cursor:pointer;"><i class="fa-solid fa-trash"></i> डिलीट</button>`;
 
                 const row = `<tr>
                     <td>${index + 1}</td>
@@ -658,35 +694,15 @@
             });
         }
 
-        // व्यक्तिगत फोटो या आधार फाइल डाउनलोड करने का फंक्शन
-        function downloadFile(index, fileType) {
-            let applications = JSON.parse(localStorage.getItem('csc_applications')) || [];
-            let app = applications[index];
-            if(!app) return;
-
-            let fileData = fileType === 'photo' ? app.photo : app.aadhar;
-            if(!fileData) {
-                alert('फाइल उपलब्ध नहीं है!');
-                return;
-            }
-
-            // फाइल एक्सटेंशन का पता लगाना (jpg/png/pdf)
-            let extension = "jpg";
-            if(fileData.indexOf("data:application/pdf") === 0) {
-                extension = "pdf";
-            } else if(fileData.indexOf("data:image/png") === 0) {
-                extension = "png";
-            }
-
+        function downloadFile(dataUrl, filename) {
             let a = document.createElement('a');
-            a.href = fileData;
-            a.download = `${app.name}_${fileType === 'photo' ? 'Photo' : 'Aadhar'}.${extension}`;
+            a.href = dataUrl;
+            a.download = filename;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
         }
 
-        // आवेदन डिलीट करने का फंक्शन
         function deleteApplication(index) {
             if(confirm('क्या आप वाकई इस आवेदन को डिलीट करना चाहते हैं?')) {
                 let applications = JSON.parse(localStorage.getItem('csc_applications')) || [];
@@ -719,18 +735,30 @@
             document.getElementById('certModal').style.display = 'none';
         }
 
-        function downloadWord(index) {
+        function downloadPdf(index) {
             let applications = JSON.parse(localStorage.getItem('csc_applications')) || [];
             let app = applications[index];
             if(!app) return;
 
-            let htmlContent = `
-                <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
-                <head><meta charset='utf-8'><title>Application Receipt</title></head>
-                <body style="font-family: Arial, sans-serif; padding: 20px;">
-                    <div style="border: 2px solid #1e3a8a; padding: 20px; border-radius: 8px;">
-                        <h2 style="text-align: center; color: #1e3a8a;">अनुराग सीएससी सेंटर - डिजिटल एवं जन सेवा केंद्र</h2>
-                        <p style="text-align: center; font-size: 13px; color: #555;">Faridpur, Mirehachi, Etah, UP | Helpline: 9760623097</p>
+            let printWindow = window.open('', '_blank');
+            printWindow.document.write(`
+                <html lang="hi">
+                <head>
+                    <meta charset="utf-8">
+                    <title>${app.name} - ${app.type}</title>
+                    <style>
+                        body { font-family: 'Poppins', Arial, sans-serif; padding: 30px; color: #333; background: #fff; }
+                        .receipt-box { border: 2px solid #1e3a8a; padding: 25px; border-radius: 8px; max-width: 700px; margin: 0 auto; }
+                        h2 { text-align: center; color: #1e3a8a; margin-bottom: 5px; }
+                        p { font-size: 14px; line-height: 1.6; margin: 8px 0; }
+                        .center { text-align: center; }
+                        .footer { margin-top: 40px; display: flex; justify-content: space-between; align-items: center; }
+                    </style>
+                </head>
+                <body>
+                    <div class="receipt-box">
+                        <h2>अनुराग सीएससी सेंटर - डिजिटल एवं जन सेवा केंद्र</h2>
+                        <p class="center" style="font-size: 13px; color: #555;">Faridpur, Mirehachi, Etah, UP | Helpline: 9760623097</p>
                         <hr style="border: 1px solid #1e3a8a; margin: 15px 0;">
                         <h3 style="background: #f1f5f9; padding: 8px; text-align: center; color: #334155;">${app.type.toUpperCase()} - आवेदन विवरण</h3>
                         <p><b>आवेदन दिनांक:</b> ${app.date}</p>
@@ -740,27 +768,22 @@
                         <p><b>ग्राम / मोहल्ला:</b> ${app.village}</p>
                         <p><b>मोबाइल नंबर:</b> ${app.mobile}</p>
                         <p><b>अन्य विवरण:</b> ${app.extra}</p>
-                        <br>
-                        <h3>आवेदक के डॉक्यूमेंट्स (फोटो और आधार कार्ड):</h3>
-                        <div style="display: flex; gap: 20px; margin-top: 10px;">
-                            ${app.photo ? `<div><p><b>पासपोर्ट फोटो:</b></p><img src="${app.photo}" width="150" style="border:1px solid #ccc; padding:5px;" /></div>` : ''}
-                            ${app.aadhar ? `<div><p><b>आधार कार्ड / आईडी:</b></p><img src="${app.aadhar}" width="250" style="border:1px solid #ccc; padding:5px;" /></div>` : ''}
+                        ${app.photo ? `<p><b>पासपोर्ट फोटो संलग्न है</b></p>` : ''}
+                        ${app.aadhar ? `<p><b>आधार कार्ड संलग्न है</b></p>` : ''}
+                        <div class="footer">
+                            <p><b>स्थिति:</b> ${app.status}</p>
+                            <p style="text-align: right;"><b>Authorized Signature:</b><br>Rohitash Kumar (Operator)</p>
                         </div>
-                        <br><br>
-                        <p style="text-align: right;"><b>Authorized Signature:</b><br>Rohitash Kumar (Operator)</p>
                     </div>
+                    <script>
+                        window.onload = function() {
+                            window.print();
+                        }
+                    <\/script>
                 </body>
                 </html>
-            `;
-
-            let blob = new Blob(['\ufeff' + htmlContent], { type: 'application/msword' });
-            let url = URL.createObjectURL(blob);
-            let a = document.createElement('a');
-            a.href = url;
-            a.download = `${app.name}_${app.type}.doc`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
+            `);
+            printWindow.document.close();
         }
 
         function uploadCertificate(event, index) {
