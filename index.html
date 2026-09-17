@@ -137,10 +137,17 @@
         .word-download-btn { background: #2563eb; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-size: 11.5px; font-weight: 600; display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; margin-bottom: 4px; text-decoration: none; }
         .word-download-btn:hover { background: #1d4ed8; color: white; }
         
-        .cert-upload-btn { background: #16a34a; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-size: 11.5px; font-weight: 600; display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; }
+        /* नए बटन स्टाइल */
+        .photo-download-btn { background: #0284c7; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-size: 11.5px; font-weight: 600; display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; margin-bottom: 4px; text-decoration: none; }
+        .photo-download-btn:hover { background: #0369a1; color: white; }
+
+        .aadhar-download-btn { background: #d97706; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-size: 11.5px; font-weight: 600; display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; margin-bottom: 4px; text-decoration: none; }
+        .aadhar-download-btn:hover { background: #b45309; color: white; }
+
+        .cert-upload-btn { background: #16a34a; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-size: 11.5px; font-weight: 600; display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; margin-bottom: 4px; }
         .cert-upload-btn:hover { background: #15803d; }
 
-        .delete-btn { background: #dc2626; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-size: 11.5px; font-weight: 600; display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; margin-top: 4px; }
+        .delete-btn { background: #dc2626; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-size: 11.5px; font-weight: 600; display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; margin-bottom: 4px; }
         .delete-btn:hover { background: #b91c1c; }
 
         .status-badge { padding: 4px 8px; border-radius: 4px; font-size: 11.5px; font-weight: 600; display: inline-block; }
@@ -462,7 +469,7 @@
             </div>
         </div>
 
-        <p style="margin-bottom: 15px; color: #555;">ग्राहकों के सभी डेटा, फोटो और आधार कार्ड यहाँ सुरक्षित हैं। आप सीधे **'MS Word में डाउनलोड'** बटन पर क्लिक करके पूरी फाइल एमएस वर्ड फॉर्मेट में डाउनलोड कर सकते हैं:</p>
+        <p style="margin-bottom: 15px; color: #555;">ग्राहकों के सभी डेटा, फोटो और आधार कार्ड यहाँ सुरक्षित हैं। आप सीधे **'MS Word में डाउनलोड'**, **'फोटो डाउनलोड करें'** या **'आधार डाउनलोड करें'** बटन पर क्लिक करके फाइलें डाउनलोड कर सकते हैं:</p>
         
         <div style="overflow-x: auto;">
             <table>
@@ -623,8 +630,18 @@
                 }
 
                 let actionHtml = `<button class="word-download-btn" onclick="downloadWord(${index})"><i class="fa-solid fa-file-word"></i> MS Word में डाउनलोड</button><br>`;
-                actionHtml += `<label class="cert-upload-btn" style="cursor:pointer; display:inline-block; margin-top:4px;"><i class="fa-solid fa-upload"></i> सर्टिफिकेट अपलोड <input type="file" accept="application/pdf,image/*" style="display:none;" onchange="uploadCertificate(event, ${index})"></label><br>`;
-                // यहाँ डिलीट बटन जोड़ा गया है
+                
+                // फोटो डाउनलोड बटन (यदि फोटो उपलब्ध है)
+                if(app.photo) {
+                    actionHtml += `<button class="photo-download-btn" onclick="downloadFile(${index}, 'photo')"><i class="fa-solid fa-image"></i> फोटो डाउनलोड करें</button><br>`;
+                }
+
+                // आधार / आईडी डाउनलोड बटन (यदि आधार उपलब्ध है)
+                if(app.aadhar) {
+                    actionHtml += `<button class="aadhar-download-btn" onclick="downloadFile(${index}, 'aadhar')"><i class="fa-solid id-card"></i> आधार डाउनलोड करें</button><br>`;
+                }
+
+                actionHtml += `<label class="cert-upload-btn" style="cursor:pointer; display:inline-block;"><i class="fa-solid fa-upload"></i> सर्टिफिकेट अपलोड <input type="file" accept="application/pdf,image/*" style="display:none;" onchange="uploadCertificate(event, ${index})"></label><br>`;
                 actionHtml += `<button class="delete-btn" onclick="deleteApplication(${index})"><i class="fa-solid fa-trash"></i> डिलीट</button>`;
 
                 const row = `<tr>
@@ -641,17 +658,44 @@
             });
         }
 
+        // व्यक्तिगत फोटो या आधार फाइल डाउनलोड करने का फंक्शन
+        function downloadFile(index, fileType) {
+            let applications = JSON.parse(localStorage.getItem('csc_applications')) || [];
+            let app = applications[index];
+            if(!app) return;
+
+            let fileData = fileType === 'photo' ? app.photo : app.aadhar;
+            if(!fileData) {
+                alert('फाइल उपलब्ध नहीं है!');
+                return;
+            }
+
+            // फाइल एक्सटेंशन का पता लगाना (jpg/png/pdf)
+            let extension = "jpg";
+            if(fileData.indexOf("data:application/pdf") === 0) {
+                extension = "pdf";
+            } else if(fileData.indexOf("data:image/png") === 0) {
+                extension = "png";
+            }
+
+            let a = document.createElement('a');
+            a.href = fileData;
+            a.download = `${app.name}_${fileType === 'photo' ? 'Photo' : 'Aadhar'}.${extension}`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+
         // आवेदन डिलीट करने का फंक्शन
         function deleteApplication(index) {
             if(confirm('क्या आप वाकई इस आवेदन को डिलीट करना चाहते हैं?')) {
                 let applications = JSON.parse(localStorage.getItem('csc_applications')) || [];
-                applications.splice(index, 1); // उस इंडेक्स के डेटा को हटा दें
+                applications.splice(index, 1);
                 localStorage.setItem('csc_applications', JSON.stringify(applications));
-                loadApplicationsToTable(); // टेबल को दोबारा रिफ्रेश करें
+                loadApplicationsToTable();
             }
         }
 
-        // सर्टिफिकेट पॉप-अप (Modal) खोलने का फंक्शन
         function openCertModal(index) {
             let applications = JSON.parse(localStorage.getItem('csc_applications')) || [];
             let app = applications[index];
