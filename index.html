@@ -6,7 +6,9 @@
     <title>अनुराग सीएससी सेंटर - डिजिटल एवं जन सेवा केंद्र</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- jsPDF aur html2canvas library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; scroll-behavior: smooth; }
         body { background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); color: #333; min-height: 100vh; padding-bottom: 20px; }
@@ -105,7 +107,7 @@
         .form-container h2 { text-align: center; color: #1a365d; margin-bottom: 30px; font-size: 26px; border-bottom: 2px solid #e2e8f0; padding-bottom: 15px; }
         .form-group { margin-bottom: 22px; }
         label { display: block; margin-bottom: 8px; font-weight: 600; color: #2d3748; font-size: 15px; }
-        input[type="text"], input[type="number"], input[type="tel"], input[type="file"], select, input[type="password"] {
+        input[type="text"], input[type="number"], input[type="tel"], input[type="file"], select, input[type="password"], input[type="date"] {
             width: 100%; padding: 12px 16px; border: 1.5px solid #cbd5e0; border-radius: 8px; font-size: 15px; box-sizing: border-box; background-color: #f8fafc; transition: all 0.3s ease; outline: none;
         }
         input[type="file"] { padding: 9px; background-color: #fff; }
@@ -125,25 +127,42 @@
         .back-link a { color: #3182ce; text-decoration: none; font-weight: 600; font-size: 15px; cursor: pointer; }
         .back-link a:hover { text-decoration: underline; }
 
-        .login-card { max-width: 420px; background: #ffffff; padding: 35px 30px; border-radius: 12px; margin: 50px auto; box-shadow: 0 10px 25px rgba(0,0,0,0.3); border-top: 4px solid #1e3a8a; }
-        .login-header { text-align: center; margin-bottom: 25px; }
-        .login-header .icon-box { font-size: 35px; color: #1e3a8a; background: #e2e8f0; width: 70px; height: 70px; line-height: 70px; border-radius: 50%; margin: 0 auto 15px auto; }
-        .login-btn-main { width: 100%; background: #1e3a8a; color: white; border: none; padding: 12px; font-size: 15px; font-weight: 600; border-radius: 6px; cursor: pointer; margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 8px; }
-        .error-msg { background: #fee2e2; color: #b91c1c; padding: 10px; border-radius: 6px; font-size: 13px; margin-bottom: 15px; text-align: center; display: none; }
+        .login-card { max-width: 450px; background: #ffffff; padding: 30px; border-radius: 10px; margin: 40px auto; box-shadow: 0 4px 20px rgba(0,0,0,0.1); border: 1px solid #e2e8f0; }
+        .login-nav-tabs { display: flex; gap: 10px; margin-bottom: 25px; border-bottom: 1px solid #e2e8f0; padding-bottom: 15px; }
+        .login-tab-btn { background: #475569; color: white; border: none; padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 500; cursor: pointer; transition: 0.2s; }
+        .login-tab-btn.active { background: #2563eb; }
 
-        #officer-dashboard { max-width: 1250px; margin: 30px auto; background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .captcha-box-row { display: flex; align-items: center; gap: 12px; margin-top: 5px; }
+        .captcha-display { 
+            background: #e2e8f0; padding: 10px 18px; font-family: 'Courier New', Courier, monospace; 
+            font-size: 20px; font-weight: 800; letter-spacing: 3px; color: #1e3a8a; 
+            border-radius: 6px; user-select: none; border: 1.5px dashed #94a3b8; text-decoration: line-through;
+        }
+        .captcha-refresh-btn { background: none; border: none; font-size: 20px; color: #16a34a; cursor: pointer; transition: 0.2s; }
+        .captcha-refresh-btn:hover { color: #15803d; transform: rotate(180deg); }
+
+        .login-submit-btn { width: 100%; background: #2a6f8f; color: white; border: none; padding: 12px; font-size: 16px; font-weight: 600; border-radius: 6px; cursor: pointer; margin-top: 15px; transition: 0.2s; }
+        .login-submit-btn:hover { background: #215973; }
+
+        .error-msg { background: #fee2e2; color: #b91c1c; padding: 10px; border-radius: 6px; font-size: 13px; margin-bottom: 15px; text-align: center; display: none; }
+        .success-msg { background: #dcfce7; color: #166534; padding: 10px; border-radius: 6px; font-size: 13px; margin-bottom: 15px; text-align: center; display: none; }
+        .forgot-pass-link { display: block; text-align: right; margin-top: 8px; font-size: 13px; color: #2563eb; text-decoration: none; cursor: pointer; font-weight: 500; }
+        .forgot-pass-link:hover { text-decoration: underline; }
+
+        #officer-dashboard { max-width: 1350px; margin: 30px auto; background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
         .dash-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 2px solid #e2e8f0; padding-bottom: 15px; flex-wrap: wrap; gap: 15px; }
         .dash-top-btns { display: flex; gap: 10px; align-items: center; }
         
         .logout-btn { background: #dc2626; color: white; border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer; font-weight: 600; }
+        .change-pass-dash-btn { background: #d97706; color: white; border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer; font-weight: 600; }
 
         .dash-action-btn { background: #2563eb; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-size: 11.5px; font-weight: 600; display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; margin-bottom: 4px; text-decoration: none; }
         .dash-action-btn:hover { background: #1d4ed8; color: white; }
         
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 2000; justify-content: center; align-items: center; }
-        .modal-content { background: #fff; width: 90%; max-width: 600px; padding: 25px; border-radius: 10px; box-shadow: 0 5px 20px rgba(0,0,0,0.3); text-align: center; position: relative; }
+        .modal-content { background: #fff; width: 90%; max-width: 500px; padding: 25px; border-radius: 10px; box-shadow: 0 5px 20px rgba(0,0,0,0.3); text-align: center; position: relative; }
         .modal-close { position: absolute; top: 12px; right: 15px; background: #dc2626; color: white; border: none; width: 30px; height: 30px; border-radius: 50%; font-weight: bold; cursor: pointer; font-size: 16px; }
-        .modal-body { margin-top: 15px; max-height: 400px; overflow-y: auto; }
+        .modal-body { margin-top: 15px; max-height: 400px; overflow-y: auto; text-align: left; }
 
         footer { text-align: center; padding: 20px; color: #64748b; font-size: 13px; background: #fff; border-top: 1px solid #e2e8f0; margin-top: 40px; }
 
@@ -209,7 +228,7 @@
 
             <a href="https://edistrict.up.gov.in/" target="_blank" class="edistrict-btn"><i class="fa-solid fa-user-shield"></i> ई-डिस्ट्रिक्ट लॉगिन</a>
             <a href="https://digitalseva.csc.gov.in/" target="_blank" class="csc-login-btn"><i class="fa-solid fa-right-to-bracket"></i> डिजिटल सेवा लॉगिन</a>
-            <a onclick="showSection('adhikari-login'); resetLoginForm();" class="officer-btn"><i class="fa-solid fa-user-shield"></i> अधिकारी लॉगिन</a>
+            <a onclick="handleOfficerNavClick()" class="officer-btn"><i class="fa-solid fa-user-shield"></i> एडमिन लॉगिन</a>
             <a href="tel:9760623097" class="login-btn"><i class="fa-solid fa-headset"></i> सहायता</a>
         </div>
     </header>
@@ -284,17 +303,17 @@
     <div id="income-form" class="page-section">
         <div class="form-container">
             <h2>📄 आय प्रमाण पत्र आवेदन फॉर्म</h2>
-            <form id="formIncome" onsubmit="submitApplication(event, 'आय प्रमाण पत्र')">
+            <form id="formIncome" onsubmit="submitApplication(event, 'Income Certificate')">
                 <div class="form-group"><label>आवेदक का पूरा नाम</label><input type="text" id="inc_name" required></div>
                 <div class="form-group"><label>माता का नाम</label><input type="text" id="inc_mother" required></div>
                 <div class="form-group">
                     <label>पिता / पति का चयन करें और नाम दर्ज करें</label>
                     <div class="guardian-row">
-                        <select id="inc_gtype"><option value="पिता">पिता</option><option value="पति">पति</option></select>
+                        <select id="inc_gtype"><option value="Father">Father</option><option value="Husband">Husband</option></select>
                         <input type="text" id="inc_gname" required>
                     </div>
                 </div>
-                <div class="form-group"><label>क्षेत्र (Area Type)</label><select id="inc_area" required><option value="">-- चुनें --</option><option value="Rural">ग्रामीण</option><option value="Urban">नगरीय</option></select></div>
+                <div class="form-group"><label>क्षेत्र (Area Type)</label><select id="inc_area" required><option value="">-- चुनें --</option><option value="Rural">Rural</option><option value="Urban">Urban</option></select></div>
                 <div class="row">
                     <div class="form-group"><label>ग्राम / मोहल्ला</label><input type="text" id="inc_village" required></div>
                     <div class="form-group"><label>पोस्ट ऑफिस</label><input type="text" id="inc_post" required></div>
@@ -305,7 +324,7 @@
                 </div>
                 <div class="row">
                     <div class="form-group"><label>तहसील</label><input type="text" id="inc_tahsil" required></div>
-                    <div class="form-group"><label>जिला</label><input type="text" id="inc_district" value="एटा" required></div>
+                    <div class="form-group"><label>जिला</label><input type="text" id="inc_district" value="Etah" required></div>
                 </div>
                 <div class="row">
                     <div class="form-group"><label>मोबाइल नंबर</label><input type="tel" id="inc_mobile" pattern="[0-9]{10}" required></div>
@@ -326,21 +345,21 @@
     <div id="caste-form" class="page-section">
         <div class="form-container">
             <h2>📄 जाति प्रमाण पत्र आवेदन फॉर्म</h2>
-            <form id="formCaste" onsubmit="submitApplication(event, 'जाति प्रमाण पत्र')">
+            <form id="formCaste" onsubmit="submitApplication(event, 'Caste Certificate')">
                 <div class="form-group"><label>आवेदक का पूरा नाम</label><input type="text" id="cas_name" required></div>
                 <div class="form-group"><label>माता का नाम</label><input type="text" id="cas_mother" required></div>
                 <div class="form-group">
                     <label>पिता / पति</label>
                     <div class="guardian-row">
-                        <select id="cas_gtype"><option value="पिता">पिता</option><option value="पति">पति</option></select>
+                        <select id="cas_gtype"><option value="Father">Father</option><option value="Husband">Husband</option></select>
                         <input type="text" id="cas_gname" required>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="form-group"><label>जाति वर्ग</label><select id="cas_cat" required><option value="">-- वर्ग --</option><option value="General">सामान्य</option><option value="OBC">पिछड़ा वर्ग</option><option value="SC">अनुसूचित जाति</option><option value="ST">अनुसूचित जनजाति</option></select></div>
+                    <div class="form-group"><label>जाति वर्ग</label><select id="cas_cat" required><option value="">-- वर्ग --</option><option value="General">General</option><option value="OBC">OBC</option><option value="SC">SC</option><option value="ST">ST</option></select></div>
                     <div class="form-group"><label>उपजाति</label><input type="text" id="cas_subcaste" required></div>
                 </div>
-                <div class="form-group"><label>क्षेत्र</label><select id="cas_area" required><option value="">-- चुनें --</option><option value="Rural">ग्रामीण</option><option value="Urban">नगरीय</option></select></div>
+                <div class="form-group"><label>क्षेत्र</label><select id="cas_area" required><option value="">-- चुनें --</option><option value="Rural">Rural</option><option value="Urban">Urban</option></select></div>
                 <div class="row">
                     <div class="form-group"><label>ग्राम / मोहल्ला</label><input type="text" id="cas_village" required></div>
                     <div class="form-group"><label>पोस्ट</label><input type="text" id="cas_post" required></div>
@@ -351,7 +370,7 @@
                 </div>
                 <div class="row">
                     <div class="form-group"><label>तहसील</label><input type="text" id="cas_tahsil" required></div>
-                    <div class="form-group"><label>जिला</label><input type="text" id="cas_district" value="एटा" required></div>
+                    <div class="form-group"><label>जिला</label><input type="text" id="cas_district" value="Etah" required></div>
                 </div>
                 <div class="form-group"><label>मोबाइल नंबर</label><input type="tel" id="cas_mobile" pattern="[0-9]{10}" required></div>
                 <div class="row">
@@ -368,17 +387,17 @@
     <div id="domicile-form" class="page-section">
         <div class="form-container">
             <h2>📄 निवास प्रमाण पत्र आवेदन फॉर्म</h2>
-            <form id="formDomicile" onsubmit="submitApplication(event, 'निवास प्रमाण पत्र')">
+            <form id="formDomicile" onsubmit="submitApplication(event, 'Domicile Certificate')">
                 <div class="form-group"><label>आवेदक का पूरा नाम</label><input type="text" id="dom_name" required></div>
                 <div class="form-group"><label>माता का नाम</label><input type="text" id="dom_mother" required></div>
                 <div class="form-group">
                     <label>पिता / पति</label>
                     <div class="guardian-row">
-                        <select id="dom_gtype"><option value="पिता">पिता</option><option value="पति">पति</option></select>
+                        <select id="dom_gtype"><option value="Father">Father</option><option value="Husband">Husband</option></select>
                         <input type="text" id="dom_gname" required>
                     </div>
                 </div>
-                <div class="form-group"><label>क्षेत्र</label><select id="dom_area" required><option value="">-- चुनें --</option><option value="Rural">ग्रामीण</option><option value="Urban">नगरीय</option></select></div>
+                <div class="form-group"><label>क्षेत्र</label><select id="dom_area" required><option value="">-- चुनें --</option><option value="Rural">Rural</option><option value="Urban">Urban</option></select></div>
                 <div class="row">
                     <div class="form-group"><label>ग्राम / मोहल्ला</label><input type="text" id="dom_village" required></div>
                     <div class="form-group"><label>पोस्ट</label><input type="text" id="dom_post" required></div>
@@ -389,7 +408,7 @@
                 </div>
                 <div class="row">
                     <div class="form-group"><label>तहसील</label><input type="text" id="dom_tahsil" required></div>
-                    <div class="form-group"><label>जिला</label><input type="text" id="dom_district" value="एटा" required></div>
+                    <div class="form-group"><label>जिला</label><input type="text" id="dom_district" value="Etah" required></div>
                 </div>
                 <div class="form-group"><label>मोबाइल नंबर</label><input type="tel" id="dom_mobile" pattern="[0-9]{10}" required></div>
                 <div class="row">
@@ -402,47 +421,126 @@
         </div>
     </div>
 
-    <!-- 5. अधिकारी लॉगिन पेज -->
+    <!-- 5. एडमिन लॉगिन पेज -->
     <div id="adhikari-login" class="page-section">
         <div class="login-card">
-            <div class="login-header">
-                <div class="icon-box"><i class="fa-solid fa-user-shield"></i></div>
-                <h2>अधिकारी पोर्टल</h2>
-                <p>अनुराग सीएससी सेंटर - एडमिनिस्ट्रेटर लॉगिन</p>
+            <div class="login-nav-tabs">
+                <button class="login-tab-btn active">Home</button>
+                <button class="login-tab-btn" onclick="showSection('home')">Service Centres</button>
             </div>
-            <div id="errorAlert" class="error-msg">गलत यूज़रनेम या पासवर्ड!</div>
+            <div id="errorAlert" class="error-msg">गलत यूज़रनेम, पासवर्ड या कैप्चा!</div>
+            <div id="successAlert" class="success-msg">पासवर्ड सफलतापूर्वक बदल गया है!</div>
             <form id="loginFormSection" onsubmit="handleLogin(event)">
-                <div class="form-group"><label>यूज़रनेम</label><input type="text" id="username" required></div>
-                <div class="form-group"><label>पासवर्ड</label><input type="password" id="password" required></div>
-                <button type="submit" class="login-btn-main"><i class="fa-solid fa-right-to-bracket"></i> लॉगिन करें</button>
+                <div class="form-group">
+                    <label>Login Type</label>
+                    <select id="login_type" style="width: 100%; padding: 12px 16px; border: 1.5px solid #cbd5e0; border-radius: 8px; font-size: 15px; background-color: #f8fafc;" required>
+                        <option value="">--Select Login Type--</option>
+                        <option value="Admin">Admin</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>User Name <span style="color:red;">*</span></label>
+                    <input type="text" id="username" placeholder="Username" required>
+                </div>
+                <div class="form-group">
+                    <label>Password <span style="color:red;">*</span></label>
+                    <input type="password" id="password" placeholder="Password" required>
+                    <a class="forgot-pass-link" onclick="openForgotPasswordModal()">पासवर्ड भूल गए? (Forgot Password)</a>
+                </div>
+                <div class="form-group">
+                    <label>Captcha <span style="color:red;">*</span></label>
+                    <div class="captcha-box-row">
+                        <div id="captchaCode" class="captcha-display">VB9Jj</div>
+                        <button type="button" class="captcha-refresh-btn" onclick="generateCaptcha()"><i class="fa-solid fa-rotate"></i></button>
+                    </div>
+                    <input type="text" id="captchaInput" placeholder="Captcha" style="margin-top: 8px;" required>
+                </div>
+                <button type="submit" class="login-submit-btn">Login</button>
             </form>
-            <div class="back-link"><a onclick="showSection('home')">← मुख्य पृष्ठ पर वापस जाएं</a></div>
+            <div class="back-link" style="margin-top: 15px;"><a onclick="showSection('home')">← मुख्य पृष्ठ पर वापस जाएं</a></div>
         </div>
     </div>
 
     <!-- 6. अधिकारी डैशबोर्ड -->
     <div id="officer-dashboard" class="page-section">
         <div class="dash-header">
-            <h2>👑 अधिकारी पोर्टल - प्राप्त आवेदन सूची</h2>
-            <div class="dash-top-btns"><button class="logout-btn" onclick="logoutAdmin()">लॉग आउट</button></div>
+            <h2>👑 एडमिन पोर्टल - प्राप्त आवेदन सूची</h2>
+            <div class="dash-top-btns">
+                <button class="change-pass-dash-btn" onclick="openChangePasswordModal()"><i class="fa-solid fa-key"></i> पासवर्ड बदलें</button>
+                <button class="logout-btn" onclick="logoutAdmin()">लॉग आउट</button>
+            </div>
         </div>
+
+        <!-- फ़िल्टर और सर्च बार यहाँ जोड़े गए हैं (Income, Caste, Domicile फ़िल्टर सहित) -->
+        <div style="background: #f1f5f9; padding: 15px; border-radius: 8px; margin-bottom: 20px; display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
+            <input 
+                type="text" 
+                id="searchInput" 
+                placeholder="नाम या मोबाइल नंबर से खोजें..." 
+                onkeyup="filterTable()" 
+                style="padding: 10px; width: 220px; border: 1px solid #cbd5e1; border-radius: 6px; background: #fff; font-size: 14px;"
+            >
+
+            <!-- प्रमाण पत्र प्रकार (Certificate Type) फ़िल्टर -->
+            <select id="certTypeFilter" onchange="filterTable()" style="padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; background: #fff; font-size: 14px;">
+                <option value="">सभी प्रमाण पत्र (All Types)</option>
+                <option value="Income Certificate">आय प्रमाण पत्र (Income)</option>
+                <option value="Caste Certificate">जाति प्रमाण पत्र (Caste)</option>
+                <option value="Domicile Certificate">निवास प्रमाण पत्र (Domicile)</option>
+            </select>
+
+            <select id="statusFilter" onchange="filterTable()" style="padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; background: #fff; font-size: 14px;">
+                <option value="">सभी स्टेटस (All Status)</option>
+                <option value="pending">Pending</option>
+                <option value="ready">Ready</option>
+            </select>
+
+            <input 
+                type="date" 
+                id="dateFilter" 
+                onchange="filterTable()" 
+                style="padding: 9px; border: 1px solid #cbd5e1; border-radius: 6px; background: #fff; font-size: 14px;"
+            >
+
+            <button onclick="resetFilters()" style="background: #64748b; color: white; border: none; padding: 10px 15px; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 13px;"><i class="fa-solid fa-rotate-right"></i> रीसेट</button>
+        </div>
+
         <div style="overflow-x: auto;">
-            <table>
+            <table id="customerTable">
                 <thead>
-                    <tr><th>क्र.</th><th>आवेदन संख्या</th><th>प्रमाण पत्र प्रकार</th><th>आवेदक का नाम</th><th>मोबाइल नंबर</th><th>दस्तावेज़ (JPG)</th><th>विवरण PDF</th><th>स्थिति</th><th>कार्रवाई</th></tr>
+                    <tr>
+                        <th>क्र.</th>
+                        <th>आवेदन संख्या</th>
+                        <th>दिनांक एवं समय</th>
+                        <th>प्रमाण पत्र प्रकार</th>
+                        <th>आवेदक का नाम</th>
+                        <th>मोबाइल नंबर</th>
+                        <th>दस्तावेज़ (JPG)</th>
+                        <th>विवरण PDF</th>
+                        <th>स्थिति</th>
+                        <th>कार्रवाई</th>
+                    </tr>
                 </thead>
                 <tbody id="applicationTableBody"></tbody>
             </table>
         </div>
     </div>
 
-    <!-- मॉडल पॉपअप -->
+    <!-- मॉडल्स -->
     <div id="certModal" class="modal-overlay">
         <div class="modal-content">
             <button class="modal-close" onclick="closeCertModal()">×</button>
             <h3 style="color: #1e3a8a; margin-bottom: 10px;" id="modalTitle"><i class="fa-solid fa-file-shield"></i> प्रीव्यू</h3>
             <div class="modal-body" id="modalBodyContent"></div>
             <div style="margin-top: 15px;" id="modalActionArea"></div>
+        </div>
+    </div>
+
+    <div id="passwordModal" class="modal-overlay">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closePasswordModal()">×</button>
+            <h3 style="color: #1e3a8a; margin-bottom: 15px;" id="passModalTitle"><i class="fa-solid fa-key"></i> पासवर्ड प्रबंधन</h3>
+            <div class="modal-body" id="passModalBodyContent"></div>
         </div>
     </div>
 
@@ -459,19 +557,27 @@
         updateDateTime();
         setInterval(updateDateTime, 1000);
 
-        // सेशन और ऑटो-लॉगआउट मैनेजमेंट वेरिएबल्स
-        let sessionInterval;
-        let inactivityTimeout;
+        let generatedOtp = "";
+        let currentCaptchaText = "";
+
+        function generateCaptcha() {
+            const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+            let captcha = "";
+            for (let i = 0; i < 5; i++) {
+                captcha += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            currentCaptchaText = captcha;
+            document.getElementById('captchaCode').innerText = captcha;
+        }
+
+        function getAdminPassword() {
+            return localStorage.getItem('admin_current_password') || "Anu@5094";
+        }
 
         function showSection(sectionId) {
-            // अगर कोई सीधे डैशबोर्ड खोलने की कोशिश करे बिना लॉगिन के या सेशन एक्सपायर होने पर
             if (sectionId === 'officer-dashboard') {
                 let isLoggedIn = localStorage.getItem('admin_logged_in');
-                let loginTime = localStorage.getItem('login_time');
-                let currentTime = new Date().getTime();
-                
-                if (!isLoggedIn || !loginTime || (currentTime - parseInt(loginTime) >= 20 * 60 * 1000)) {
-                    logoutAdmin();
+                if (isLoggedIn !== 'true') {
                     sectionId = 'adhikari-login';
                 }
             }
@@ -480,9 +586,22 @@
             document.getElementById(sectionId).classList.add('active');
             window.scrollTo(0, 0);
 
+            if(sectionId === 'adhikari-login') {
+                generateCaptcha();
+            }
+
             if(sectionId === 'officer-dashboard') { 
                 loadApplicationsToTable(); 
-                startSessionTimer();
+            }
+        }
+
+        function handleOfficerNavClick() {
+            let isLoggedIn = localStorage.getItem('admin_logged_in');
+            if (isLoggedIn === 'true') {
+                showSection('officer-dashboard');
+            } else {
+                showSection('adhikari-login');
+                resetLoginForm();
             }
         }
 
@@ -497,16 +616,24 @@
 
         function submitApplication(event, certType) {
             event.preventDefault();
+            
+            let nowObj = new Date();
+            let yyyy = nowObj.getFullYear();
+            let mm = String(nowObj.getMonth() + 1).padStart(2, '0');
+            let dd = String(nowObj.getDate()).padStart(2, '0');
+            let rawDateString = `${yyyy}-${mm}-${dd}`;
+
             let formData = {
                 appId: 'CSC' + Math.floor(100000 + Math.random() * 900000),
                 type: certType,
-                date: new Date().toLocaleString('hi-IN'),
-                status: 'पेंडिंग (Pending)',
+                date: nowObj.toLocaleString('en-IN'),
+                rawDate: rawDateString,
+                status: 'Pending',
                 certData: null, photo: null, aadhar: null
             };
 
             let photoInput, aadharInput;
-            if(certType === 'आय प्रमाण पत्र') {
+            if(certType === 'Income Certificate') {
                 formData.name = document.getElementById('inc_name').value;
                 formData.mother = document.getElementById('inc_mother').value;
                 formData.guardianType = document.getElementById('inc_gtype').value;
@@ -519,10 +646,10 @@
                 formData.tahsil = document.getElementById('inc_tahsil').value;
                 formData.district = document.getElementById('inc_district').value;
                 formData.mobile = document.getElementById('inc_mobile').value;
-                formData.incomeOrDetails = 'वार्षिक आय: ₹ ' + document.getElementById('inc_income').value + ' | व्यवसाय: ' + document.getElementById('inc_occ').value;
+                formData.incomeOrDetails = 'Annual Income: Rs. ' + document.getElementById('inc_income').value + ' | Occupation: ' + document.getElementById('inc_occ').value;
                 photoInput = document.getElementById('inc_photo').files[0];
                 aadharInput = document.getElementById('inc_aadhar').files[0];
-            } else if(certType === 'जाति प्रमाण पत्र') {
+            } else if(certType === 'Caste Certificate') {
                 formData.name = document.getElementById('cas_name').value;
                 formData.mother = document.getElementById('cas_mother').value;
                 formData.guardianType = document.getElementById('cas_gtype').value;
@@ -535,10 +662,10 @@
                 formData.tahsil = document.getElementById('cas_tahsil').value;
                 formData.district = document.getElementById('cas_district').value;
                 formData.mobile = document.getElementById('cas_mobile').value;
-                formData.incomeOrDetails = 'वर्ग: ' + document.getElementById('cas_cat').value + ' | उपजाति: ' + document.getElementById('cas_subcaste').value;
+                formData.incomeOrDetails = 'Category: ' + document.getElementById('cas_cat').value + ' | Sub-Caste: ' + document.getElementById('cas_subcaste').value;
                 photoInput = document.getElementById('cas_photo').files[0];
                 aadharInput = document.getElementById('cas_aadhar').files[0];
-            } else if(certType === 'निवास प्रमाण पत्र') {
+            } else if(certType === 'Domicile Certificate') {
                 formData.name = document.getElementById('dom_name').value;
                 formData.mother = document.getElementById('dom_mother').value;
                 formData.guardianType = document.getElementById('dom_gtype').value;
@@ -551,7 +678,7 @@
                 formData.tahsil = document.getElementById('dom_tahsil').value;
                 formData.district = document.getElementById('dom_district').value;
                 formData.mobile = document.getElementById('dom_mobile').value;
-                formData.incomeOrDetails = 'निवास प्रमाण पत्र आवेदन';
+                formData.incomeOrDetails = 'Domicile Certificate Application';
                 photoInput = document.getElementById('dom_photo').files[0];
                 aadharInput = document.getElementById('dom_aadhar').files[0];
             }
@@ -584,63 +711,74 @@
         function downloadCustomerDetailsPDF(appId) {
             let applications = JSON.parse(localStorage.getItem('csc_applications')) || [];
             let app = applications.find(a => a.appId === appId);
-            if(!app) { alert('रिकॉर्ड नहीं मिला!'); return; }
+            if(!app) { alert('Record not found!'); return; }
 
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
+            let printContainer = document.createElement('div');
+            printContainer.style.position = 'absolute';
+            printContainer.style.left = '-9999px';
+            printContainer.style.top = '0';
+            printContainer.style.width = '700px';
+            printContainer.style.background = '#ffffff';
+            printContainer.style.padding = '30px';
+            printContainer.style.fontFamily = "'Poppins', sans-serif";
+            printContainer.style.color = '#333333';
+            printContainer.style.border = '2px solid #1e3a8a';
+            printContainer.style.borderRadius = '8px';
 
-            doc.setFont("helvetica", "bold");
-            doc.setFontSize(18);
-            doc.setTextColor(30, 58, 138);
-            doc.text("ANURAG CSC CENTER", 105, 15, { align: "center" });
+            printContainer.innerHTML = `
+                <div style="text-align: center; border-bottom: 2px solid #2563eb; padding-bottom: 15px; margin-bottom: 20px;">
+                    <h2 style="color: #1e3a8a; margin: 0; font-size: 22px;">अनुराग सीएससी सेंटर</h2>
+                    <p style="color: #64748b; font-size: 12px; margin: 5px 0 0 0;">Faridpur, Post- Mirehachi, Dist- Etah, UP - 207125 | Helpline: 9760623097</p>
+                </div>
+                <h3 style="color: #16a34a; font-size: 16px; margin-bottom: 15px; border-left: 4px solid #16a34a; padding-left: 8px;">आवेदन विवरण (${app.type})</h3>
+                <table style="width: 100%; border-collapse: collapse; font-size: 13.5px;">
+                    <tr><td style="border: 1px solid #cbd5e1; padding: 8px 12px; background: #f8fafc; font-weight: bold; width: 38%;">आवेदन संख्या (App ID)</td><td style="border: 1px solid #cbd5e1; padding: 8px 12px; color: #dc2626; font-weight: bold;">${app.appId}</td></tr>
+                    <tr><td style="border: 1px solid #cbd5e1; padding: 8px 12px; background: #f8fafc; font-weight: bold;">आवेदन दिनांक एवं समय</td><td style="border: 1px solid #cbd5e1; padding: 8px 12px;">${app.date}</td></tr>
+                    <tr><td style="border: 1px solid #cbd5e1; padding: 8px 12px; background: #f8fafc; font-weight: bold;">आवेदक का नाम (Applicant Name)</td><td style="border: 1px solid #cbd5e1; padding: 8px 12px; font-weight: bold;">${app.name}</td></tr>
+                    <tr><td style="border: 1px solid #cbd5e1; padding: 8px 12px; background: #f8fafc; font-weight: bold;">माता का नाम (Mother's Name)</td><td style="border: 1px solid #cbd5e1; padding: 8px 12px;">${app.mother}</td></tr>
+                    <tr><td style="border: 1px solid #cbd5e1; padding: 8px 12px; background: #f8fafc; font-weight: bold;">${app.guardianType} का नाम</td><td style="border: 1px solid #cbd5e1; padding: 8px 12px;">${app.guardianName}</td></tr>
+                    <tr><td style="border: 1px solid #cbd5e1; padding: 8px 12px; background: #f8fafc; font-weight: bold;">क्षेत्र (Area Type)</td><td style="border: 1px solid #cbd5e1; padding: 8px 12px;">${app.area || 'N/A'}</td></tr>
+                    <tr><td style="border: 1px solid #cbd5e1; padding: 8px 12px; background: #f8fafc; font-weight: bold;">ग्राम / मोहल्ला (Village)</td><td style="border: 1px solid #cbd5e1; padding: 8px 12px;">${app.village}</td></tr>
+                    <tr><td style="border: 1px solid #cbd5e1; padding: 8px 12px; background: #f8fafc; font-weight: bold;">पोस्ट ऑफिस (Post)</td><td style="border: 1px solid #cbd5e1; padding: 8px 12px;">${app.post || 'N/A'}</td></tr>
+                    <tr><td style="border: 1px solid #cbd5e1; padding: 8px 12px; background: #f8fafc; font-weight: bold;">थाना (Thana)</td><td style="border: 1px solid #cbd5e1; padding: 8px 12px;">${app.thana || 'N/A'}</td></tr>
+                    <tr><td style="border: 1px solid #cbd5e1; padding: 8px 12px; background: #f8fafc; font-weight: bold;">ब्लॉक (Block)</td><td style="border: 1px solid #cbd5e1; padding: 8px 12px;">${app.block || 'N/A'}</td></tr>
+                    <tr><td style="border: 1px solid #cbd5e1; padding: 8px 12px; background: #f8fafc; font-weight: bold;">तहसील (Tahsil)</td><td style="border: 1px solid #cbd5e1; padding: 8px 12px;">${app.tahsil || 'N/A'}</td></tr>
+                    <tr><td style="border: 1px solid #cbd5e1; padding: 8px 12px; background: #f8fafc; font-weight: bold;">जिला (District)</td><td style="border: 1px solid #cbd5e1; padding: 8px 12px;">${app.district}</td></tr>
+                    <tr><td style="border: 1px solid #cbd5e1; padding: 8px 12px; background: #f8fafc; font-weight: bold;">मोबाइल नंबर (Mobile)</td><td style="border: 1px solid #cbd5e1; padding: 8px 12px;">${app.mobile}</td></tr>
+                    <tr><td style="border: 1px solid #cbd5e1; padding: 8px 12px; background: #f8fafc; font-weight: bold;">अन्य विवरण (Details)</td><td style="border: 1px solid #cbd5e1; padding: 8px 12px;">${app.incomeOrDetails}</td></tr>
+                    <tr><td style="border: 1px solid #cbd5e1; padding: 8px 12px; background: #f8fafc; font-weight: bold;">वर्तमान स्थिति (Status)</td><td style="border: 1px solid #cbd5e1; padding: 8px 12px; font-weight: bold; color: #16a34a;">${app.status}</td></tr>
+                </table>
+                <p style="text-align: center; font-size: 11px; color: #64748b; margin-top: 25px;">यह अनुराग सीएससी सेंटर पोर्टल से कंप्यूटर जनित दस्तावेज़ है।</p>
+            `;
 
-            doc.setFontSize(11);
-            doc.setTextColor(100, 100, 100);
-            doc.text("Faridpur, Post- Mirehachi, Dist- Etah, UP - 207125 | Helpline: 9760623097", 105, 22, { align: "center" });
+            document.body.appendChild(printContainer);
 
-            doc.setLineWidth(0.5);
-            doc.line(15, 26, 195, 26);
+            html2canvas(printContainer, { scale: 2 }).then(canvas => {
+                document.body.removeChild(printContainer);
+                const imgData = canvas.toDataURL('image/png');
+                const { jsPDF } = window.jspdf;
+                const pdf = new jsPDF('p', 'mm', 'a4');
+                const imgWidth = 190; 
+                const pageHeight = 295;
+                const imgHeight = (canvas.height * imgWidth) / canvas.width;
+                let heightLeft = imgHeight;
+                let position = 10;
 
-            doc.setFontSize(14);
-            doc.setTextColor(22, 101, 52);
-            doc.text(`Application Form Details: ${app.type}`, 15, 36);
+                pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
+                heightLeft -= pageHeight;
 
-            doc.setFontSize(11);
-            doc.setTextColor(50, 50, 50);
-            let startY = 46;
-            let gap = 9;
+                while (heightLeft >= 0) {
+                    position = heightLeft - imgHeight;
+                    pdf.addPage();
+                    pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
+                    heightLeft -= pageHeight;
+                }
 
-            let details = [
-                ["Application ID:", app.appId],
-                ["Submission Date:", app.date],
-                ["Applicant Name:", app.name],
-                ["Mother's Name:", app.mother],
-                [`${app.guardianType}'s Name:`, app.guardianName],
-                ["Area Type:", app.area || 'N/A'],
-                ["Village / Mohalla:", app.village],
-                ["Post Office:", app.post || 'N/A'],
-                ["Thana:", app.thana || 'N/A'],
-                ["Block:", app.block || 'N/A'],
-                ["Tahsil:", app.tahsil || 'N/A'],
-                ["District:", app.district],
-                ["Mobile Number:", app.mobile],
-                ["Additional Details:", app.incomeOrDetails],
-                ["Current Status:", app.status]
-            ];
-
-            details.forEach(item => {
-                doc.setFont("helvetica", "bold");
-                doc.text(item[0], 20, startY);
-                doc.setFont("helvetica", "normal");
-                doc.text(String(item[1]), 70, startY);
-                startY += gap;
+                pdf.save(`${app.appId}_Details.pdf`);
+            }).catch(err => {
+                document.body.removeChild(printContainer);
+                alert("PDF जनरेट करने में त्रुटि हुई: " + err);
             });
-
-            doc.setFontSize(10);
-            doc.setTextColor(150, 150, 150);
-            doc.text("This is a computer-generated document from Anurag CSC Center Portal.", 105, 285, { align: "center" });
-
-            doc.save(`${app.appId}_Details.pdf`);
         }
 
         function showAutoReceiptModal(app) {
@@ -654,7 +792,7 @@
                     <hr style="border: 1px solid #ddd; margin: 10px 0;">
                     <p style="text-align: center; color: #16a34a; font-weight: bold; margin-bottom: 10px;">✅ आवेदन सफलतापूर्व जमा हो गया है!</p>
                     <p style="margin: 5px 0;"><b>आवेदन संख्या:</b> <span style="color: #dc2626;">${app.appId}</span></p>
-                    <p style="margin: 5px 0;"><b>दिनांक:</b> ${app.date}</p>
+                    <p style="margin: 5px 0;"><b>दिनांक एवं समय:</b> ${app.date}</p>
                     <p style="margin: 5px 0;"><b>सेवा:</b> ${app.type}</p>
                     <p style="margin: 5px 0;"><b>आवेदक का नाम:</b> ${app.name}</p>
                     <p style="margin: 5px 0;"><b>मोबाइल नंबर:</b> ${app.mobile}</p>
@@ -681,65 +819,153 @@
 
         function handleLogin(event) {
             event.preventDefault();
-            if (document.getElementById('username').value.trim() === "rohit396s" && document.getElementById('password').value.trim() === "Anu@5094") {
-                document.getElementById('errorAlert').style.display = "none";
-                
-                // लॉगिन समय सेव करें (20 मिनट टाइमर के लिए)
-                localStorage.setItem('admin_logged_in', 'true');
-                localStorage.setItem('login_time', new Date().getTime());
+            let loginType = document.getElementById('login_type').value;
+            let enteredUser = document.getElementById('username').value.trim();
+            let enteredPass = document.getElementById('password').value.trim();
+            let enteredCaptcha = document.getElementById('captchaInput').value.trim();
+            let actualPass = getAdminPassword();
 
+            if (!loginType) {
+                document.getElementById('errorAlert').innerText = "कृपया Login Type चुनें!";
+                document.getElementById('errorAlert').style.display = "block";
+                return;
+            }
+
+            if (enteredCaptcha !== currentCaptchaText) {
+                document.getElementById('errorAlert').innerText = "गलत कैप्चा कोड! कृपया पुनः प्रयास करें।";
+                document.getElementById('errorAlert').style.display = "block";
+                generateCaptcha();
+                return;
+            }
+
+            if (enteredUser === "rohit396s" && enteredPass === actualPass) {
+                document.getElementById('errorAlert').style.display = "none";
+                localStorage.setItem('admin_logged_in', 'true');
                 showSection('officer-dashboard');
             } else {
+                document.getElementById('errorAlert').innerText = "गलत यूज़रनेम या पासवर्ड!";
                 document.getElementById('errorAlert').style.display = "block";
+                generateCaptcha();
             }
         }
 
         function resetLoginForm() {
+            document.getElementById('login_type').value = "";
             document.getElementById('username').value = "";
             document.getElementById('password').value = "";
+            document.getElementById('captchaInput').value = "";
             document.getElementById('errorAlert').style.display = "none";
+            document.getElementById('successAlert').style.display = "none";
+            generateCaptcha();
         }
 
-        // ऑटो-लॉगआउट और सेशन टाइमर फंक्शंस
-        function startSessionTimer() {
-            if (sessionInterval) clearInterval(sessionInterval);
+        function openForgotPasswordModal() {
+            let modalBody = document.getElementById('passModalBodyContent');
+            document.getElementById('passModalTitle').innerHTML = `<i class="fa-solid fa-shield-halved"></i> सुरक्षित पासवर्ड रीसेट`;
             
-            sessionInterval = setInterval(() => {
-                let loginTime = localStorage.getItem('login_time');
-                if (!loginTime) return;
-
-                let currentTime = new Date().getTime();
-                let elapsedTime = currentTime - parseInt(loginTime);
-                let twentyMinutes = 20 * 60 * 1000; // 20 मिनट
-
-                if (elapsedTime >= twentyMinutes) {
-                    logoutAdmin("सत्र (Session) समाप्त हो गया है। सुरक्षा की दृष्टि से आपको ऑटो-लॉगआउट कर दिया गया है।");
-                }
-            }, 1000);
-
-            resetInactivityTimer();
-            window.addEventListener('mousemove', resetInactivityTimer);
-            window.addEventListener('keypress', resetInactivityTimer);
+            modalBody.innerHTML = `
+                <p style="font-size: 13.5px; color: #475569; margin-bottom: 15px;">पंजीकृत मोबाइल नंबर (******3097) पर सुरक्षित ओटीपी भेजने के लिए अपना गुप्त मास्टर पिन (Master PIN) दर्ज करें:</p>
+                <div class="form-group">
+                    <label>मास्टर सुरक्षा पिन (Master PIN)</label>
+                    <input type="password" id="fp_master_pin" placeholder="गुप्त पिन दर्ज करें">
+                </div>
+                <button onclick="verifyMasterPinAndSendOtp()" style="width: 100%; background: #2563eb; color: white; padding: 11px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;">ओटीपी भेजें</button>
+            `;
+            document.getElementById('passwordModal').style.display = 'flex';
         }
 
-        function resetInactivityTimer() {
-            if (localStorage.getItem('admin_logged_in') !== 'true') return;
-            
-            clearTimeout(inactivityTimeout);
-            inactivityTimeout = setTimeout(() => {
-                logoutAdmin("लंबे समय तक कोई गतिविधि न होने के कारण आपको ऑटो-लॉगआउट कर दिया गया है।");
-            }, 20 * 60 * 1000);
-        }
+        function verifyMasterPinAndSendOtp() {
+            let pin = document.getElementById('fp_master_pin').value.trim();
+            let securePin = "1996";
 
-        function logoutAdmin(message) {
-            if(message && document.getElementById('officer-dashboard').classList.contains('active')) {
-                alert(message);
+            if(pin !== securePin) {
+                alert("अमान्य मास्टर पिन! सुरक्षा कारणों से ओटीपी नहीं भेजा जा सकता।");
+                return;
             }
-            localStorage.removeItem('admin_logged_in');
-            localStorage.removeItem('login_time');
-            if (sessionInterval) clearInterval(sessionInterval);
-            clearTimeout(inactivityTimeout);
+
+            generatedOtp = Math.floor(1000 + Math.random() * 9000).toString();
+            console.log("Secure System OTP:", generatedOtp);
+
+            let modalBody = document.getElementById('passModalBodyContent');
+            modalBody.innerHTML = `
+                <p style="color: #16a34a; font-size: 13.5px; margin-bottom: 12px;">✅ गुप्त ओटीपी आपके रजिस्टर्ड मोबाइल नंबर पर भेज दिया गया है। (F12 > Console में चेक करें)</p>
+                <div class="form-group">
+                    <label>मोबाइल पर प्राप्त 4-अंकों का ओटीपी दर्ज करें</label>
+                    <input type="text" id="fp_otp" placeholder="OTP दर्ज करें" maxlength="4">
+                </div>
+                <div class="form-group">
+                    <label>नया पासवर्ड बनाएं</label>
+                    <input type="password" id="fp_new_pass" placeholder="नया पासवर्ड">
+                </div>
+                <button onclick="verifyAndResetPassword()" style="width: 100%; background: #16a34a; color: white; padding: 11px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;">पासवर्ड सुरक्षित रूप से बदलें</button>
+            `;
+        }
+
+        function verifyAndResetPassword() {
+            let otpInput = document.getElementById('fp_otp').value.trim();
+            let newPass = document.getElementById('fp_new_pass').value.trim();
+
+            if(otpInput !== generatedOtp) {
+                alert("गलत ओटीपी (Invalid OTP)!");
+                return;
+            }
+            if(!newPass || newPass.length < 6) {
+                alert("नया पासवर्ड कम से कम 6 अक्षरों का होना चाहिए!");
+                return;
+            }
+
+            localStorage.setItem('admin_current_password', newPass);
+            closePasswordModal();
+            document.getElementById('successAlert').style.display = "block";
+        }
+
+        function openChangePasswordModal() {
+            let modalBody = document.getElementById('passModalBodyContent');
+            document.getElementById('passModalTitle').innerHTML = `<i class="fa-solid fa-key"></i> पासवर्ड बदलें (Change Password)`;
             
+            modalBody.innerHTML = `
+                <div class="form-group">
+                    <label>पुराना पासवर्ड</label>
+                    <input type="password" id="cp_old" placeholder="वर्तमान पासवर्ड">
+                </div>
+                <div class="form-group">
+                    <label>नया पासवर्ड</label>
+                    <input type="password" id="cp_new" placeholder="नया पासवर्ड">
+                </div>
+                <div class="form-group">
+                    <label>नया पासवर्ड पुनः दर्ज करें</label>
+                    <input type="password" id="cp_confirm" placeholder="कन्फर्म पासवर्ड">
+                </div>
+                <button onclick="executePasswordChange()" style="width: 100%; background: #d97706; color: white; padding: 10px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;">पासवर्ड अपडेट करें</button>
+            `;
+            document.getElementById('passwordModal').style.display = 'flex';
+        }
+
+        function executePasswordChange() {
+            let oldP = document.getElementById('cp_old').value.trim();
+            let newP = document.getElementById('cp_new').value.trim();
+            let confP = document.getElementById('cp_confirm').value.trim();
+
+            if(oldP !== getAdminPassword()) {
+                alert("पुराना पासवर्ड गलत है!");
+                return;
+            }
+            if(!newP || newP !== confP) {
+                alert("नया पासवर्ड और कन्फर्म पासवर्ड मेल नहीं खा रहे हैं!");
+                return;
+            }
+
+            localStorage.setItem('admin_current_password', newP);
+            closePasswordModal();
+            alert("पासवर्ड सफलतापूर्वक बदल दिया गया है!");
+        }
+
+        function closePasswordModal() {
+            document.getElementById('passwordModal').style.display = 'none';
+        }
+
+        function logoutAdmin() {
+            localStorage.removeItem('admin_logged_in');
             showSection('home');
         }
 
@@ -756,13 +982,13 @@
                 return;
             }
 
-            if(foundApp.status !== 'तैयार (Ready)' || !foundApp.certData) {
+            if(foundApp.status !== 'Ready' || !foundApp.certData) {
                 resultArea.innerHTML = `
                     <div style="background: #fff; padding: 15px; border-radius: 8px; border: 1px solid #fef08a; display: inline-block; text-align: left; width: 100%; max-width: 450px;">
                         <p><b>आवेदन संख्या:</b> <span style="color:#dc2626;">${foundApp.appId}</span></p>
                         <p><b>नाम:</b> ${foundApp.name}</p>
                         <p><b>सेवा:</b> ${foundApp.type}</p>
-                        <p style="color: #d97706; margin-top: 5px;"><b>स्थिति:</b> आपका आवेदन अभी प्रक्रिया में है (Pending)।</p>
+                        <p style="color: #d97706; margin-top: 5px;"><b>स्थिति:</b> आपका आवेदन अभी प्रक्रिया में है (Pending).</p>
                     </div>
                 `;
                 return;
@@ -786,12 +1012,15 @@
             let applications = JSON.parse(localStorage.getItem('csc_applications')) || [];
             tableBody.innerHTML = "";
             if(applications.length === 0) {
-                tableBody.innerHTML = `<tr><td colspan="9" style="text-align: center; color: #718096;">कोई आवेदन नहीं है।</td></tr>`;
+                tableBody.innerHTML = `<tr><td colspan="10" style="text-align: center; color: #718096;">कोई आवेदन नहीं है।</td></tr>`;
                 return;
             }
             applications.forEach((app, index) => {
-                let statusText = app.status || 'पेंडिंग (Pending)';
-                let statusColor = statusText.includes('तैयार') ? 'green' : '#d97706';
+                let statusText = app.status || 'Pending';
+                let statusColor = statusText.includes('Ready') ? 'green' : '#d97706';
+                let appDate = app.date || 'उपलब्ध नहीं';
+                let rawDateVal = app.rawDate || '';
+                let certTypeVal = app.type || '';
                 
                 let docsHtml = `
                     ${app.photo ? `<a href="${app.photo}" target="_blank" download="${app.appId}_Photo.jpg" class="dash-action-btn" style="background:#0284c7;"><i class="fa-solid fa-image"></i> फोटो (JPG)</a>` : ''}
@@ -799,9 +1028,10 @@
                 `;
 
                 tableBody.innerHTML += `
-                    <tr>
+                    <tr data-type="${certTypeVal}" data-status="${statusText.toLowerCase()}" data-date="${rawDateVal}">
                         <td>${index + 1}</td>
                         <td><b>${app.appId}</b></td>
+                        <td style="font-size: 12px; white-space: nowrap;">${appDate}</td>
                         <td><b>${app.type}</b></td>
                         <td>${app.name}</td>
                         <td>${app.mobile}</td>
@@ -817,6 +1047,53 @@
             });
         }
 
+        // अपडेटेड फ़िल्टर लॉजिक (सर्च, सर्टिफिकेट टाइप, स्टेटस और तारीख के लिए)
+        function filterTable() {
+            const input = document.getElementById('searchInput');
+            const filter = input.value.toLowerCase();
+            
+            const certTypeSelect = document.getElementById('certTypeFilter');
+            const certTypeFilterValue = certTypeSelect.value;
+            
+            const statusSelect = document.getElementById('statusFilter');
+            const statusFilterValue = statusSelect.value.toLowerCase();
+            
+            const dateSelect = document.getElementById('dateFilter');
+            const dateFilterValue = dateSelect.value;
+            
+            const table = document.getElementById('customerTable');
+            const tr = table.getElementsByTagName('tr');
+
+            for (let i = 1; i < tr.length; i++) {
+                let tdRow = tr[i];
+                if (tdRow) {
+                    let textValue = tdRow.textContent || tdRow.innerText;
+                    let typeCell = tdRow.getAttribute('data-type') || '';
+                    let statusCell = tdRow.getAttribute('data-status') || '';
+                    let dateCell = tdRow.getAttribute('data-date') || '';
+
+                    let matchesSearch = textValue.toLowerCase().indexOf(filter) > -1;
+                    let matchesCertType = (certTypeFilterValue === "" || typeCell === certTypeFilterValue);
+                    let matchesStatus = (statusFilterValue === "" || statusCell.indexOf(statusFilterValue) > -1);
+                    let matchesDate = (dateFilterValue === "" || dateCell === dateFilterValue);
+
+                    if (matchesSearch && matchesCertType && matchesStatus && matchesDate) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+        }
+
+        function resetFilters() {
+            document.getElementById('searchInput').value = "";
+            document.getElementById('certTypeFilter').value = "";
+            document.getElementById('statusFilter').value = "";
+            document.getElementById('dateFilter').value = "";
+            filterTable();
+        }
+
         function uploadCertificate(index) {
             let input = document.createElement('input');
             input.type = 'file';
@@ -828,7 +1105,7 @@
                     reader.onload = function(event) {
                         let applications = JSON.parse(localStorage.getItem('csc_applications')) || [];
                         applications[index].certData = event.target.result;
-                        applications[index].status = 'तैयार (Ready)';
+                        applications[index].status = 'Ready';
                         localStorage.setItem('csc_applications', JSON.stringify(applications));
                         alert('सर्टिफिकेट सफलतापूर्वक अपलोड हो गया और स्टेटस "तैयार" हो गया!');
                         loadApplicationsToTable();
