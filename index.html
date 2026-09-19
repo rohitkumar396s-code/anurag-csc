@@ -157,10 +157,11 @@
 
         #officer-dashboard { max-width: 1400px; margin: 30px auto; background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
         .dash-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 2px solid #e2e8f0; padding-bottom: 15px; flex-wrap: wrap; gap: 15px; }
-        .dash-top-btns { display: flex; gap: 10px; align-items: center; }
+        .dash-top-btns { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
         
         .logout-btn { background: #dc2626; color: white; border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer; font-weight: 600; }
         .change-pass-dash-btn { background: #d97706; color: white; border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer; font-weight: 600; }
+        .upload-cert-dash-btn { background: #16a34a; color: white; border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; }
 
         .dash-action-btn { background: #2563eb; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-size: 11.5px; font-weight: 600; display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; margin-bottom: 4px; text-decoration: none; }
         .dash-action-btn:hover { background: #1d4ed8; color: white; }
@@ -274,7 +275,7 @@
 
         <div class="container">
             <div id="search-box-section" style="background: #f0fdf4; border: 2px dashed #16a34a; padding: 25px; border-radius: 12px; margin-bottom: 30px; text-align: center;">
-                <h3 style="color: #166534; margin-bottom: 10px;"><i class="fa-solid fa-receipt"></i> अपनी रसीद या सर्टिफिकेट खोजें और डाउनलोड करें</h3>
+                <h3 style="color: #166534; margin-bottom: 10px;"><i class="fa-solid fa-receipt"></i> अपनी रसीद या सर्टिफिकेट खोजें</h3>
                 <p style="color: #475569; font-size: 14px; margin-bottom: 15px;">10 अंकों का मोबाइल नंबर या आवेदन संख्या (जैसे: CSC289744) नीचे दर्ज करें:</p>
                 <div style="display: flex; gap: 10px; max-width: 420px; margin: 0 auto; justify-content: center; flex-wrap: wrap;">
                     <input type="text" id="search_input" placeholder="मोबाइल नंबर या आवेदन संख्या (CSC...)" style="flex: 1; min-width: 230px; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px;">
@@ -489,6 +490,7 @@
         <div class="dash-header">
             <h2>👑 एडमिन पोर्टल - प्राप्त आवेदन सूची</h2>
             <div class="dash-top-btns">
+                <button class="upload-cert-dash-btn" onclick="openUploadCertModal()"><i class="fa-solid fa-file-arrow-up"></i> सर्टिफिकेट अपलोड करें</button>
                 <button class="change-pass-dash-btn" onclick="openChangePasswordModal()"><i class="fa-solid fa-key"></i> पासवर्ड बदलें</button>
                 <button class="logout-btn" onclick="logoutAdmin()">लॉग आउट</button>
             </div>
@@ -545,6 +547,7 @@
                         <th>आधार नंबर</th>
                         <th>दस्तावेज़ (JPG)</th>
                         <th>विवरण PDF</th>
+                        <th>सर्टिफिकेट PDF</th>
                         <th>स्थिति एवं कारण</th>
                         <th>कार्रवाई</th>
                     </tr>
@@ -561,6 +564,25 @@
             <h3 style="color: #1e3a8a; margin-bottom: 10px;" id="modalTitle"><i class="fa-solid fa-file-shield"></i> प्रीव्यू</h3>
             <div class="modal-body" id="modalBodyContent"></div>
             <div style="margin-top: 15px;" id="modalActionArea"></div>
+        </div>
+    </div>
+
+    <!-- एडमिन सर्टिफिकेट अपलोड मॉडल -->
+    <div id="uploadCertModal" class="modal-overlay">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeUploadCertModal()">×</button>
+            <h3 style="color: #1e3a8a; margin-bottom: 15px;"><i class="fa-solid fa-file-arrow-up"></i> कस्टमर के लिए सर्टिफिकेट अपलोड करें</h3>
+            <div class="modal-body" style="text-align: left;">
+                <div class="form-group">
+                    <label>आवेदन संख्या (App ID दर्ज करें, जैसे: CSC123456)</label>
+                    <input type="text" id="up_app_id" placeholder="CSCXXXXXX">
+                </div>
+                <div class="form-group">
+                    <label>सर्टिफिकेट PDF फ़ाइल चुनें</label>
+                    <input type="file" id="up_cert_pdf" accept="application/pdf">
+                </div>
+                <button onclick="uploadCustomerCertificatePDF()" style="width: 100%; background: #16a34a; color: white; padding: 11px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 10px;">अपलोड और सेव करें</button>
+            </div>
         </div>
     </div>
 
@@ -760,7 +782,7 @@
                 rawDate: rawDateString,
                 status: 'Pending',
                 statusDesc: '',
-                certData: null, photo: null, aadhar: null
+                photo: null, aadhar: null, certPdf: null
             };
 
             if(certType === 'Income Certificate') {
@@ -1091,6 +1113,68 @@
             document.getElementById('successAlert').style.display = "block";
         }
 
+        function openUploadCertModal() {
+            document.getElementById('up_app_id').value = '';
+            document.getElementById('up_cert_pdf').value = '';
+            document.getElementById('uploadCertModal').style.display = 'flex';
+        }
+
+        function closeUploadCertModal() {
+            document.getElementById('uploadCertModal').style.display = 'none';
+        }
+
+        function uploadCustomerCertificatePDF() {
+            let targetAppId = document.getElementById('up_app_id').value.trim().toUpperCase();
+            let pdfFile = document.getElementById('up_cert_pdf').files[0];
+
+            if(!targetAppId) {
+                alert('कृपया आवेदन संख्या (App ID) दर्ज करें!');
+                return;
+            }
+            if(!pdfFile) {
+                alert('कृपया सर्टिफिकेट की PDF फ़ाइल चुनें!');
+                return;
+            }
+
+            let reader = new FileReader();
+            reader.onload = function(e) {
+                let base64Pdf = e.target.result;
+
+                db.ref('csc_applications').once('value', (snapshot) => {
+                    let data = snapshot.val();
+                    if(!data) {
+                        alert('डेटाबेस में कोई रिकॉर्ड नहीं मिला!');
+                        return;
+                    }
+
+                    let foundKey = null;
+                    for(let key in data) {
+                        if(data[key].appId && data[key].appId.toUpperCase() === targetAppId) {
+                            foundKey = key;
+                            break;
+                        }
+                    }
+
+                    if(!foundKey) {
+                        alert('यह आवेदन संख्या (App ID) डेटाबेस में नहीं मिली!');
+                        return;
+                    }
+
+                    db.ref('csc_applications/' + foundKey).update({
+                        certPdf: base64Pdf,
+                        status: 'Ready'
+                    }).then(() => {
+                        alert('सर्टिफिकेट PDF सफलतापूर्वक अपलोड हो गया है और स्टेटस "Ready" कर दिया गया है!');
+                        closeUploadCertModal();
+                        loadApplicationsToTable();
+                    }).catch(err => {
+                        alert('अपलोड करने में त्रुटि: ' + err.message);
+                    });
+                });
+            };
+            reader.readAsDataURL(pdfFile);
+        }
+
         function openChangePasswordModal() {
             let modalBody = document.getElementById('passModalBodyContent');
             document.getElementById('passModalTitle').innerHTML = `<i class="fa-solid fa-key"></i> पासवर्ड बदलें (Change Password)`;
@@ -1170,28 +1254,17 @@
                 }
 
                 let descText = foundApp.statusDesc ? `<br><small style="color:#555;">कारण: ${foundApp.statusDesc}</small>` : '';
-
-                if(foundApp.status !== 'Ready' || !foundApp.certData) {
-                    resultArea.innerHTML = `
-                        <div style="background: #fff; padding: 15px; border-radius: 8px; border: 1px solid #fef08a; display: inline-block; text-align: left; width: 100%; max-width: 450px;">
-                            <p><b>आवेदन संख्या:</b> <span style="color:#dc2626;">${foundApp.appId}</span></p>
-                            <p><b>नाम:</b> ${foundApp.name}</p>
-                            <p><b>सेवा:</b> ${foundApp.type}</p>
-                            <p style="color: #d97706; margin-top: 5px;"><b>स्थिति:</b> ${foundApp.status} ${descText}</p>
-                        </div>
-                    `;
-                    return;
-                }
+                let certDownloadBtn = foundApp.certPdf 
+                    ? `<br><a href="${foundApp.certPdf}" download="${foundApp.appId}_Certificate.pdf" style="display: inline-block; margin-top: 10px; background: #16a34a; color: white; padding: 8px 15px; border-radius: 6px; text-decoration: none; font-weight: bold; font-size: 13.5px;"><i class="fa-solid fa-file-pdf"></i> सर्टिफिकेट PDF डाउनलोड करें</a>`
+                    : `<br><p style="color: #d97706; font-size: 13px; margin-top: 8px;">⏳ सर्टिफिकेट अभी तैयार नहीं हुआ है या अपलोड नहीं किया गया है।</p>`;
 
                 resultArea.innerHTML = `
-                    <div style="background: #fff; padding: 15px; border-radius: 8px; border: 1px solid #bbf7d0; display: inline-block; text-align: left; width: 100%; max-width: 450px;">
+                    <div style="background: #fff; padding: 15px; border-radius: 8px; border: 1px solid #cbd5e1; display: inline-block; text-align: left; width: 100%; max-width: 450px;">
                         <p><b>आवेदन संख्या:</b> <span style="color:#dc2626;">${foundApp.appId}</span></p>
                         <p><b>नाम:</b> ${foundApp.name}</p>
                         <p><b>सेवा:</b> ${foundApp.type}</p>
-                        <p style="color: #16a34a;"><b>स्थिति:</b> तैयार है ✅</p>
-                        <div style="margin-top: 10px; display: flex; gap: 10px;">
-                            <a href="${foundApp.certData}" download="Certificate.jpg" style="background: #2563eb; color: white; padding: 6px 12px; text-decoration: none; border-radius: 4px; font-size: 13px;"><i class="fa-solid fa-download"></i> सर्टिफिकेट डाउनलोड</a>
-                        </div>
+                        <p style="color: #d97706; margin-top: 5px;"><b>स्थिति:</b> ${foundApp.status} ${descText}</p>
+                        ${certDownloadBtn}
                     </div>
                 `;
             });
@@ -1199,13 +1272,13 @@
 
         function loadApplicationsToTable() {
             const tableBody = document.getElementById('applicationTableBody');
-            tableBody.innerHTML = `<tr><td colspan="11" style="text-align: center; color: #718096;">डेटा लोड हो रहा है...</td></tr>`;
+            tableBody.innerHTML = `<tr><td colspan="12" style="text-align: center; color: #718096;">डेटा लोड हो रहा है...</td></tr>`;
             
             db.ref('csc_applications').once('value', (snapshot) => {
                 const data = snapshot.val();
                 tableBody.innerHTML = "";
                 if(!data) {
-                    tableBody.innerHTML = `<tr><td colspan="11" style="text-align: center; color: #718096;">कोई आवेदन नहीं है।</td></tr>`;
+                    tableBody.innerHTML = `<tr><td colspan="12" style="text-align: center; color: #718096;">कोई आवेदन नहीं है।</td></tr>`;
                     return;
                 }
 
@@ -1226,6 +1299,10 @@
                         ${app.aadhar ? `<a href="${app.aadhar}" target="_blank" download="${app.appId}_Aadhar.jpg" class="dash-action-btn" style="background:#7c3aed;"><i class="fa-solid fa-id-card"></i> आधार (JPG)</a>` : ''}
                     `;
 
+                    let certPdfHtml = app.certPdf 
+                        ? `<a href="${app.certPdf}" download="${app.appId}_Certificate.pdf" class="dash-action-btn" style="background:#16a34a;"><i class="fa-solid fa-file-pdf"></i> सर्टिफिकेट PDF</a>` 
+                        : `<span style="color:#718096; font-size:12px;">अपलोड नहीं</span>`;
+
                     tableBody.innerHTML += `
                         <tr data-type="${certTypeVal}" data-status="${statusText.toLowerCase()}" data-date="${rawDateVal}">
                             <td>${index + 1}</td>
@@ -1236,11 +1313,11 @@
                             <td>${app.mobile}</td>
                             <td>${app.aadharNumber || 'N/A'}</td>
                             <td>${docsHtml || 'उपलब्ध नहीं'}</td>
-                            <td><button class="dash-action-btn" onclick="downloadCustomerDetailsPDF('${dbKey}')" style="background:#d97706;"><i class="fa-solid fa-file-pdf"></i> PDF डाउनलोड</button></td>
+                            <td><button class="dash-action-btn" onclick="downloadCustomerDetailsPDF('${dbKey}')" style="background:#d97706;"><i class="fa-solid fa-file-pdf"></i> फॉर्म PDF</button></td>
+                            <td>${certPdfHtml}</td>
                             <td><span style="color:${statusColor}; font-weight:bold;">${statusText}</span>${descVal}</td>
                             <td>
                                 <button class="dash-action-btn" onclick="openEditStatusModal('${dbKey}', '${statusText}', '${app.statusDesc || ''}')" style="background:#2563eb;"><i class="fa-solid fa-pen-to-square"></i> एडिट स्टेटस</button><br>
-                                <button class="dash-action-btn" onclick="uploadCertificate('${dbKey}')" style="background:#16a34a;"><i class="fa-solid fa-upload"></i> सर्टिफिकेट अपलोड</button><br>
                                 <button class="dash-action-btn" onclick="deleteApplication('${dbKey}')" style="background:#dc2626;"><i class="fa-solid fa-trash"></i> डिलीट</button>
                             </td>
                         </tr>
@@ -1285,92 +1362,49 @@
                 status: newStatus,
                 statusDesc: (newStatus === 'Return' || newStatus === 'Cancel') ? newDesc : ''
             }).then(() => {
-                alert('फॉर्म का स्टेटस सफलताપूर्वक अपडेट कर दिया गया है!');
+                alert('फॉर्म का स्टेटस सफलतापूर्वक अपडेट कर दिया गया है!');
                 closeEditStatusModal();
                 loadApplicationsToTable();
             }).catch(err => {
-                alert('एरर: ' + err.message);
+                alert('अपडेट करने में त्रुटि: ' + err.message);
             });
         }
 
         function filterTable() {
-            const input = document.getElementById('searchInput');
-            const filter = input.value.toLowerCase();
-            
-            const certTypeSelect = document.getElementById('certTypeFilter');
-            const certTypeFilterValue = certTypeSelect.value;
-            
-            const statusSelect = document.getElementById('statusFilter');
-            const statusFilterValue = statusSelect.value.toLowerCase();
-            
-            const dateSelect = document.getElementById('dateFilter');
-            const dateFilterValue = dateSelect.value;
-            
-            const table = document.getElementById('customerTable');
-            const tr = table.getElementsByTagName('tr');
+            let searchVal = document.getElementById('searchInput').value.toLowerCase();
+            let typeVal = document.getElementById('certTypeFilter').value;
+            let statusVal = document.getElementById('statusFilter').value.toLowerCase();
+            let dateVal = document.getElementById('dateFilter').value;
 
-            for (let i = 1; i < tr.length; i++) {
-                let tdRow = tr[i];
-                if (tdRow) {
-                    let textValue = tdRow.textContent || tdRow.innerText;
-                    let typeCell = tdRow.getAttribute('data-type') || '';
-                    let statusCell = tdRow.getAttribute('data-status') || '';
-                    let dateCell = tdRow.getAttribute('data-date') || '';
+            let rows = document.querySelectorAll('#applicationTableBody tr');
 
-                    let matchesSearch = textValue.toLowerCase().indexOf(filter) > -1;
-                    let matchesCertType = (certTypeFilterValue === "" || typeCell === certTypeFilterValue);
-                    let matchesStatus = (statusFilterValue === "" || statusCell.indexOf(statusFilterValue) > -1);
-                    let matchesDate = (dateFilterValue === "" || dateCell === dateFilterValue);
+            rows.forEach(row => {
+                if (row.cells.length <= 1) return;
+                let text = row.innerText.toLowerCase();
+                let rType = row.getAttribute('data-type');
+                let rStatus = row.getAttribute('data-status');
+                let rDate = row.getAttribute('data-date');
 
-                    if (matchesSearch && matchesCertType && matchesStatus && matchesDate) {
-                        tr[i].style.display = "";
-                    } else {
-                        tr[i].style.display = "none";
-                    }
+                let matchSearch = text.includes(searchVal);
+                let matchType = !typeVal || rType === typeVal;
+                let matchStatus = !statusVal || rStatus === statusVal;
+                let matchDate = !dateVal || rDate === dateVal;
+
+                if (matchSearch && matchType && matchStatus && matchDate) {
+                    row.style.display = "";
+                } else {
+                    row.style.display = "none";
                 }
-            }
+            });
         }
 
         function resetFilters() {
-            document.getElementById('searchInput').value = "";
-            document.getElementById('certTypeFilter').value = "";
-            document.getElementById('statusFilter').value = "";
-            document.getElementById('dateFilter').value = "";
+            document.getElementById('searchInput').value = '';
+            document.getElementById('certTypeFilter').value = '';
+            document.getElementById('statusFilter').value = '';
+            document.getElementById('dateFilter').value = '';
             filterTable();
         }
-
-        function uploadCertificate(dbKey) {
-            let input = document.createElement('input');
-            input.type = 'file';
-            input.accept = 'image/jpeg,image/jpg,image/png,application/pdf';
-            input.onchange = e => {
-                let file = e.target.files[0];
-                if(file) {
-                    let reader = new FileReader();
-                    reader.onload = function(event) {
-                        db.ref('csc_applications/' + dbKey).update({
-                            certData: event.target.result,
-                            status: 'Ready'
-                        }).then(() => {
-                            alert('सर्टिफिकेट सफलतापूर्वक अपलोड हो गया और स्टेटस "Ready" हो गया!');
-                            loadApplicationsToTable();
-                        });
-                    };
-                    reader.readAsDataURL(file);
-                }
-            };
-            input.click();
-        }
-
-        function deleteApplication(dbKey) {
-            if(confirm('क्या आप वाकई इस आवेदन को डिलीट करना चाहते हैं?')) {
-                db.ref('csc_applications/' + dbKey).remove().then(() => {
-                    loadApplicationsToTable();
-                });
-            }
-        }
-
-        function closeCertModal() { document.getElementById('certModal').style.display = 'none'; }
     </script>
 </body>
 </html>
