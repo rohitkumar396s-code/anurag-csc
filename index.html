@@ -188,9 +188,9 @@
                     ऑनलाइन फॉर्म <i class="fa-solid fa-angle-down" style="font-size: 11px;"></i>
                 </a>
                 <div class="dropdown-content">
-                    <a onclick="showSection('income-form')"><i class="fa-solid fa-file-invoice-dollar" style="color:#2563eb; margin-right:8px;"></i> आय प्रमाण पत्र</a>
-                    <a onclick="showSection('caste-form')"><i class="fa-solid fa-id-card" style="color:#16a34a; margin-right:8px;"></i> जाति प्रमाण पत्र</a>
-                    <a onclick="showSection('domicile-form')"><i class="fa-solid fa-house-chimney" style="color:#d97706; margin-right:8px;"></i> निवास प्रमाण पत्र</a>
+                    <a onclick="showSection('formIncome')"><i class="fa-solid fa-file-invoice-dollar" style="color:#2563eb; margin-right:8px;"></i> आय प्रमाण पत्र</a>
+                    <a onclick="showSection('formCaste')"><i class="fa-solid fa-id-card" style="color:#16a34a; margin-right:8px;"></i> जाति प्रमाण पत्र</a>
+                    <a onclick="showSection('formDomicile')"><i class="fa-solid fa-house-chimney" style="color:#d97706; margin-right:8px;"></i> निवास प्रमाण पत्र</a>
                 </div>
             </div>
 
@@ -218,9 +218,9 @@
             <div class="hero-title"><i class="fa-solid fa-laptop-code"></i> प्रमुख डिजिटल एवं जन सेवा केंद्र सेवाएं <i class="fa-solid fa-laptop-code"></i></div>
             
             <div class="cert-row">
-                <a onclick="showSection('income-form')" class="service-btn"><i class="fa-solid fa-file-lines"></i> आय प्रमाण पत्र</a>
-                <a onclick="showSection('caste-form')" class="service-btn"><i class="fa-solid fa-file-lines"></i> जाति प्रमाण पत्र</a>
-                <a onclick="showSection('domicile-form')" class="service-btn"><i class="fa-solid fa-file-lines"></i> निवास प्रमाण पत्र</a>
+                <a onclick="showSection('formIncome')" class="service-btn"><i class="fa-solid fa-file-lines"></i> आय प्रमाण पत्र</a>
+                <a onclick="showSection('formCaste')" class="service-btn"><i class="fa-solid fa-file-lines"></i> जाति प्रमाण पत्र</a>
+                <a onclick="showSection('formDomicile')" class="service-btn"><i class="fa-solid fa-file-lines"></i> निवास प्रमाण पत्र</a>
             </div>
 
             <div class="services-grid">
@@ -270,11 +270,11 @@
     </div>
 
     <!-- 2. आय प्रमाण पत्र फॉर्म -->
-    <div id="income-form" class="page-section">
+    <div id="formIncome" class="page-section">
         <div class="form-container">
             <h2>📄 आय प्रमाण पत्र आवेदन फॉर्म</h2>
-            <form id="formIncome" onsubmit="initiatePaymentAndSubmit(event, 'Income Certificate')">
-                <div class="form-group"><label>आवेदक का पूरा नाम</label><input type="text" id="inc_name" required></div>
+            <form onsubmit="initiatePaymentAndSubmit(event, 'आय प्रमाण पत्र')">
+                <div class="form-group"><label>आवेदक का पूरा नाम</label><input type="text" id="inc_name" required placeholder="नाम दर्ज करें"></div>
                 <div class="form-group"><label>माता का नाम</label><input type="text" id="inc_mother" required></div>
                 <div class="form-group">
                     <label>पिता / पति का चयन करें और नाम दर्ज करें</label>
@@ -297,7 +297,7 @@
                     <div class="form-group"><label>जिला</label><input type="text" id="inc_district" value="Etah" required></div>
                 </div>
                 <div class="row">
-                    <div class="form-group"><label>मोबाइल नंबर</label><input type="tel" id="inc_mobile" pattern="[0-9]{10}" required></div>
+                    <div class="form-group"><label>मोबाइल नंबर</label><input type="tel" id="inc_mobile" pattern="[0-9]{10}" required placeholder="10 अंकों का मोबाइल नंबर"></div>
                     <div class="form-group"><label>वार्षिक आय (₹)</label><input type="number" id="inc_income" required></div>
                 </div>
                 <div class="form-group"><label>व्यवसाय</label><input type="text" id="inc_occ" required></div>
@@ -313,11 +313,11 @@
     </div>
 
     <!-- 3. जाति प्रमाण पत्र फॉर्म -->
-    <div id="caste-form" class="page-section">
+    <div id="formCaste" class="page-section">
         <div class="form-container">
             <h2>📄 जाति प्रमाण पत्र आवेदन फॉर्म</h2>
-            <form id="formCaste" onsubmit="initiatePaymentAndSubmit(event, 'Caste Certificate')">
-                <div class="form-group"><label>आवेदक का पूरा नाम</label><input type="text" id="cas_name" required></div>
+            <form onsubmit="initiatePaymentAndSubmit(event, 'जाति प्रमाण पत्र')">
+                <div class="form-group"><label>आवेदक का पूरा नाम</label><input type="text" id="cas_name" required placeholder="नाम दर्ज करें"></div>
                 <div class="form-group"><label>माता का नाम</label><input type="text" id="cas_mother" required></div>
                 <div class="form-group">
                     <label>पिता / पति</label>
@@ -343,7 +343,7 @@
                     <div class="form-group"><label>तहसील</label><input type="text" id="cas_tahsil" required></div>
                     <div class="form-group"><label>जिला</label><input type="text" id="cas_district" value="Etah" required></div>
                 </div>
-                <div class="form-group"><label>मोबाइल नंबर</label><input type="tel" id="cas_mobile" pattern="[0-9]{10}" required></div>
+                <div class="form-group"><label>मोबाइल नंबर</label><input type="tel" id="cas_mobile" pattern="[0-9]{10}" required placeholder="10 अंकों का मोबाइल नंबर"></div>
                 <div class="row">
                     <div class="form-group"><label>पासपोर्ट फोटो (JPG)</label><input type="file" id="cas_photo" accept="image/jpeg,image/jpg,image/png" required></div>
                     <div class="form-group"><label>आधार कार्ड (JPG)</label><input type="file" id="cas_aadhar" accept="image/jpeg,image/jpg,image/png" required></div>
@@ -356,11 +356,11 @@
     </div>
 
     <!-- 4. निवास प्रमाण पत्र फॉर्म -->
-    <div id="domicile-form" class="page-section">
+    <div id="formDomicile" class="page-section">
         <div class="form-container">
             <h2>📄 निवास प्रमाण पत्र आवेदन फॉर्म</h2>
-            <form id="formDomicile" onsubmit="initiatePaymentAndSubmit(event, 'Domicile Certificate')">
-                <div class="form-group"><label>आवेदक का पूरा नाम</label><input type="text" id="dom_name" required></div>
+            <form onsubmit="initiatePaymentAndSubmit(event, 'निवास प्रमाण पत्र')">
+                <div class="form-group"><label>आवेदक का पूरा नाम</label><input type="text" id="dom_name" required placeholder="नाम दर्ज करें"></div>
                 <div class="form-group"><label>माता का नाम</label><input type="text" id="dom_mother" required></div>
                 <div class="form-group">
                     <label>पिता / पति</label>
@@ -381,7 +381,7 @@
                     <div class="form-group"><label>तहसील</label><input type="text" id="dom_tahsil" required></div>
                     <div class="form-group"><label>जिला</label><input type="text" id="dom_district" value="Etah" required></div>
                 </div>
-                <div class="form-group"><label>मोबाइल नंबर</label><input type="tel" id="dom_mobile" pattern="[0-9]{10}" required></div>
+                <div class="form-group"><label>मोबाइल नंबर</label><input type="tel" id="dom_mobile" pattern="[0-9]{10}" required placeholder="10 अंकों का मोबाइल नंबर"></div>
                 <div class="row">
                     <div class="form-group"><label>पासपोर्ट फोटो (JPG)</label><input type="file" id="dom_photo" accept="image/jpeg,image/jpg,image/png" required></div>
                     <div class="form-group"><label>आधार कार्ड (JPG)</label><input type="file" id="dom_aadhar" accept="image/jpeg,image/jpg,image/png" required></div>
@@ -420,10 +420,27 @@
         setInterval(updateDateTime, 1000);
         updateDateTime();
 
-        // Razorpay Payment Integration Function
+        // Razorpay Payment Integration Function (Updated)
         function initiatePaymentAndSubmit(event, serviceName) {
             event.preventDefault();
             
+            let formElement = event.target;
+            let formId = formElement.closest('div.page-section').id;
+            let customerName = "";
+            let customerMobile = "";
+
+            // फॉर्म के आधार पर सही इनपुट फील्ड से ग्राहक का नाम और मोबाइल नंबर उठाना
+            if (formId === 'formIncome') {
+                customerName = document.getElementById('inc_name').value;
+                customerMobile = document.getElementById('inc_mobile').value;
+            } else if (formId === 'formCaste') {
+                customerName = document.getElementById('cas_name').value;
+                customerMobile = document.getElementById('cas_mobile').value;
+            } else if (formId === 'formDomicile') {
+                customerName = document.getElementById('dom_name').value;
+                customerMobile = document.getElementById('dom_mobile').value;
+            }
+
             var options = {
                 "key": "rzp_test_TdnUjM9qHJaD3Y", // आपकी टेस्ट एपीआई की
                 "amount": 8000, // राशि पैसे में (₹80.00 = 8000 paise)
@@ -433,14 +450,13 @@
                 "image": "https://i.imgur.com/3g7nmJC.png",
                 "handler": function (response){
                     alert("भुगतान सफल रहा! भुगतान आईडी: " + response.razorpay_payment_id);
-                    // यहाँ आप फॉर्म सबमिशन या डेटाबेस सेव करने का कोड लिख सकते हैं
-                    document.getElementById(event.target.id).reset();
+                    formElement.reset();
                     showSection('home');
                 },
                 "prefill": {
-                    "name": "ग्राहक",
-                    "email": "rohitkumar396s@gmail.com",
-                    "contact": "9760623097"
+                    "name": customerName,    // अब यहाँ ग्राहक का खुद का नाम जाएगा
+                    "email": "",             // ईमेल खाली छोड़ा है ताकि ग्राहक पर दबाव न पड़े
+                    "contact": customerMobile // अब यहाँ ग्राहक का खुद का मोबाइल नंबर जाएगा
                 },
                 "notes": {
                     "service": serviceName
