@@ -898,7 +898,7 @@
             });
         }
 
-        // Updated Auto Receipt Modal matching the exact user layout format
+        // Updated Auto Receipt Modal without the requested line
         function showAutoReceiptModal(app) {
             let modalBody = document.getElementById('modalBodyContent');
             document.getElementById('modalTitle').innerHTML = `<i class="fa-solid fa-receipt" style="color: #16a34a;"></i> फॉर्म जमा रसीद (Acknowledgment)`;
@@ -917,8 +917,6 @@
                         <div>${receiptPhotoHtml}</div>
                     </div>
                     <hr style="border: 1px solid #ddd; margin: 10px 0;">
-                    <p style="font-size: 13px; color: #16a34a; font-weight: bold; margin-bottom: 12px; text-align: center;">यह अनुराग सीएससी सेंटर पोर्टल का एक कंप्यूटर-जनित दस्तावेज़ है। इस रसीद के विवरण नीचे दिए गए हैं:</p>
-                    <p style="margin: 6px 0; font-size: 13.5px;"><b>संस्थान:</b> अनुराग सीएससी सेंटर (फरीदपुर, मिरेहाची, एटा)</p>
                     <p style="margin: 6px 0; font-size: 13.5px;"><b>आवेदन संख्या:</b> <span style="color: #dc2626; font-weight: bold;">${app.appId}</span></p>
                     <p style="margin: 6px 0; font-size: 13.5px;"><b>दिनांक एवं समय:</b> ${app.date}</p>
                     <p style="margin: 6px 0; font-size: 13.5px;"><b>सेवा:</b> ${app.type}</p>
