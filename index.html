@@ -320,6 +320,7 @@
                         <input type="text" id="inc_gname" required>
                     </div>
                 </div>
+                <div class="form-group"><label>आधार नंबर (12 अंक)</label><input type="text" id="inc_aadharnumber" pattern="[0-9]{12}" maxlength="12" placeholder="12 अंकों का आधार नंबर दर्ज करें" required></div>
                 <div class="form-group"><label>क्षेत्र (Area Type)</label><select id="inc_area" required><option value="">-- चुनें --</option><option value="Rural">Rural</option><option value="Urban">Urban</option></select></div>
                 <div class="row">
                     <div class="form-group"><label>ग्राम / मोहल्ला</label><input type="text" id="inc_village" required></div>
@@ -369,6 +370,7 @@
                         <input type="text" id="cas_gname" required>
                     </div>
                 </div>
+                <div class="form-group"><label>आधार नंबर (12 अंक)</label><input type="text" id="cas_aadharnumber" pattern="[0-9]{12}" maxlength="12" placeholder="12 अंकों का आधार नंबर दर्ज करें" required></div>
                 <div class="row">
                     <div class="form-group"><label>जाति वर्ग</label><select id="cas_cat" required><option value="">-- वर्ग --</option><option value="General">General</option><option value="OBC">OBC</option><option value="SC">SC</option><option value="ST">ST</option></select></div>
                     <div class="form-group"><label>उपजाति</label><input type="text" id="cas_subcaste" required></div>
@@ -418,6 +420,7 @@
                         <input type="text" id="dom_gname" required>
                     </div>
                 </div>
+                <div class="form-group"><label>आधार नंबर (12 अंक)</label><input type="text" id="dom_aadharnumber" pattern="[0-9]{12}" maxlength="12" placeholder="12 अंकों का आधार नंबर दर्ज करें" required></div>
                 <div class="form-group"><label>क्षेत्र</label><select id="dom_area" required><option value="">-- चुनें --</option><option value="Rural">Rural</option><option value="Urban">Urban</option></select></div>
                 <div class="row">
                     <div class="form-group"><label>ग्राम / मोहल्ला</label><input type="text" id="dom_village" required></div>
@@ -534,6 +537,7 @@
                         <th>प्रमाण पत्र प्रकार</th>
                         <th>आवेदक का नाम</th>
                         <th>मोबाइल नंबर</th>
+                        <th>आधार नंबर</th>
                         <th>दस्तावेज़ (JPG)</th>
                         <th>विवरण PDF</th>
                         <th>स्थिति</th>
@@ -648,6 +652,11 @@
                 return;
             }
 
+            if((actionType === 'submit' || actionType === 'save') && !aadharFile) {
+                alert('कृपया आधार कार्ड (JPG) अपलोड करें!');
+                return;
+            }
+
             processFilesAndExecute(photoFile, aadharFile, (photoData, aadharData) => {
                 formData.photo = photoData;
                 formData.aadhar = aadharData;
@@ -724,7 +733,11 @@
                 let nameField = document.getElementById('inc_name').value.trim();
                 if(!nameField) { alert('कृपया आवेदक का नाम दर्ज करें!'); document.getElementById('inc_name').focus(); return null; }
                 
+                let aadharNumField = document.getElementById('inc_aadharnumber').value.trim();
+                if(!aadharNumField || aadharNumField.length !== 12) { alert('कृपया सही 12 अंकों का आधार नंबर दर्ज करें!'); document.getElementById('inc_aadharnumber').focus(); return null; }
+
                 formData.name = nameField;
+                formData.aadharNumber = aadharNumField;
                 formData.mother = document.getElementById('inc_mother').value;
                 formData.guardianType = document.getElementById('inc_gtype').value;
                 formData.guardianName = document.getElementById('inc_gname').value;
@@ -741,7 +754,11 @@
                 let nameField = document.getElementById('cas_name').value.trim();
                 if(!nameField) { alert('कृपया आवेदक का नाम दर्ज करें!'); document.getElementById('cas_name').focus(); return null; }
 
+                let aadharNumField = document.getElementById('cas_aadharnumber').value.trim();
+                if(!aadharNumField || aadharNumField.length !== 12) { alert('कृपया सही 12 अंकों का आधार नंबर दर्ज करें!'); document.getElementById('cas_aadharnumber').focus(); return null; }
+
                 formData.name = nameField;
+                formData.aadharNumber = aadharNumField;
                 formData.mother = document.getElementById('cas_mother').value;
                 formData.guardianType = document.getElementById('cas_gtype').value;
                 formData.guardianName = document.getElementById('cas_gname').value;
@@ -758,7 +775,11 @@
                 let nameField = document.getElementById('dom_name').value.trim();
                 if(!nameField) { alert('कृपया आवेदक का नाम दर्ज करें!'); document.getElementById('dom_name').focus(); return null; }
 
+                let aadharNumField = document.getElementById('dom_aadharnumber').value.trim();
+                if(!aadharNumField || aadharNumField.length !== 12) { alert('कृपया सही 12 अंकों का आधार नंबर दर्ज करें!'); document.getElementById('dom_aadharnumber').focus(); return null; }
+
                 formData.name = nameField;
+                formData.aadharNumber = aadharNumField;
                 formData.mother = document.getElementById('dom_mother').value;
                 formData.guardianType = document.getElementById('dom_gtype').value;
                 formData.guardianName = document.getElementById('dom_gname').value;
@@ -802,6 +823,7 @@
                 <div style="border: 1px solid #cbd5e1; padding: 15px; border-radius: 8px; background: #f8fafc; font-size: 13.5px;">
                     <p style="margin-bottom: 6px;"><b>प्रमाण पत्र प्रकार:</b> ${app.type}</p>
                     <p style="margin-bottom: 6px;"><b>आवेदक का नाम:</b> ${app.name}</p>
+                    <p style="margin-bottom: 6px;"><b>आधार नंबर:</b> ${app.aadharNumber || 'उपलब्ध नहीं'}</p>
                     <p style="margin-bottom: 6px;"><b>माता का नाम:</b> ${app.mother}</p>
                     <p style="margin-bottom: 6px;"><b>${app.guardianType} का नाम:</b> ${app.guardianName}</p>
                     <p style="margin-bottom: 6px;"><b>गाँव / पता:</b> ${app.village}, पोस्ट: ${app.post}</p>
@@ -851,6 +873,7 @@
                         <tr><td style="border: 1px solid #cbd5e1; padding: 8px 12px; background: #f8fafc; font-weight: bold; width: 38%;">आवेदन संख्या (App ID)</td><td style="border: 1px solid #cbd5e1; padding: 8px 12px; color: #dc2626; font-weight: bold;">${app.appId}</td></tr>
                         <tr><td style="border: 1px solid #cbd5e1; padding: 8px 12px; background: #f8fafc; font-weight: bold;">आवेदन दिनांक एवं समय</td><td style="border: 1px solid #cbd5e1; padding: 8px 12px;">${app.date}</td></tr>
                         <tr><td style="border: 1px solid #cbd5e1; padding: 8px 12px; background: #f8fafc; font-weight: bold;">आवेदक का नाम (Applicant Name)</td><td style="border: 1px solid #cbd5e1; padding: 8px 12px; font-weight: bold;">${app.name}</td></tr>
+                        <tr><td style="border: 1px solid #cbd5e1; padding: 8px 12px; background: #f8fafc; font-weight: bold;">आधार नंबर (Aadhaar Number)</td><td style="border: 1px solid #cbd5e1; padding: 8px 12px; font-weight: bold;">${app.aadharNumber || 'उपलब्ध नहीं'}</td></tr>
                         <tr><td style="border: 1px solid #cbd5e1; padding: 8px 12px; background: #f8fafc; font-weight: bold;">माता का नाम (Mother's Name)</td><td style="border: 1px solid #cbd5e1; padding: 8px 12px;">${app.mother}</td></tr>
                         <tr><td style="border: 1px solid #cbd5e1; padding: 8px 12px; background: #f8fafc; font-weight: bold;">${app.guardianType} का नाम</td><td style="border: 1px solid #cbd5e1; padding: 8px 12px;">${app.guardianName}</td></tr>
                         <tr><td style="border: 1px solid #cbd5e1; padding: 8px 12px; background: #f8fafc; font-weight: bold;">क्षेत्र (Area Type)</td><td style="border: 1px solid #cbd5e1; padding: 8px 12px;">${app.area || 'N/A'}</td></tr>
@@ -898,7 +921,6 @@
             });
         }
 
-        // Updated Auto Receipt Modal without the requested line
         function showAutoReceiptModal(app) {
             let modalBody = document.getElementById('modalBodyContent');
             document.getElementById('modalTitle').innerHTML = `<i class="fa-solid fa-receipt" style="color: #16a34a;"></i> फॉर्म जमा रसीद (Acknowledgment)`;
@@ -921,6 +943,7 @@
                     <p style="margin: 6px 0; font-size: 13.5px;"><b>दिनांक एवं समय:</b> ${app.date}</p>
                     <p style="margin: 6px 0; font-size: 13.5px;"><b>सेवा:</b> ${app.type}</p>
                     <p style="margin: 6px 0; font-size: 13.5px;"><b>आवेदक का नाम:</b> ${app.name}</p>
+                    <p style="margin: 6px 0; font-size: 13.5px;"><b>आधार नंबर:</b> ${app.aadharNumber || 'N/A'}</p>
                     <p style="margin: 6px 0; font-size: 13.5px;"><b>मोबाइल नंबर:</b> ${app.mobile}</p>
                     <p style="margin: 6px 0; font-size: 13.5px;"><b>गाँव / पता:</b> ${app.village}</p>
                     <p style="margin: 6px 0; font-size: 13.5px;"><b>स्थिति:</b> <span style="color: #d97706; font-weight: bold;">${app.status}</span></p>
@@ -1140,13 +1163,13 @@
 
         function loadApplicationsToTable() {
             const tableBody = document.getElementById('applicationTableBody');
-            tableBody.innerHTML = `<tr><td colspan="10" style="text-align: center; color: #718096;">डेटा लोड हो रहा है...</td></tr>`;
+            tableBody.innerHTML = `<tr><td colspan="11" style="text-align: center; color: #718096;">डेटा लोड हो रहा है...</td></tr>`;
             
             db.ref('csc_applications').once('value', (snapshot) => {
                 const data = snapshot.val();
                 tableBody.innerHTML = "";
                 if(!data) {
-                    tableBody.innerHTML = `<tr><td colspan="10" style="text-align: center; color: #718096;">कोई आवेदन नहीं है।</td></tr>`;
+                    tableBody.innerHTML = `<tr><td colspan="11" style="text-align: center; color: #718096;">कोई आवेदन नहीं है।</td></tr>`;
                     return;
                 }
 
@@ -1174,6 +1197,7 @@
                             <td><b>${app.type}</b></td>
                             <td>${app.name}</td>
                             <td>${app.mobile}</td>
+                            <td>${app.aadharNumber || 'N/A'}</td>
                             <td>${docsHtml || 'उपलब्ध नहीं'}</td>
                             <td><button class="dash-action-btn" onclick="downloadCustomerDetailsPDF('${dbKey}')" style="background:#d97706;"><i class="fa-solid fa-file-pdf"></i> PDF डाउनलोड</button></td>
                             <td><span style="color:${statusColor}; font-weight:bold;">${statusText}</span></td>
