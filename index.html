@@ -633,7 +633,6 @@
             }, 100);
         }
 
-        // फोटो और डेटा प्रोसेस करने वाला अपडेटेड फंक्शन
         function handleAction(actionType, certType) {
             let formData = collectFormBaseData(certType);
             if(!formData) return; 
@@ -790,7 +789,6 @@
             });
         }
 
-        // फोटो सहित प्रीव्यू दिखाने के लिए अपडेट किया गया फंक्शन
         function showPreviewModal(app) {
             let modalBody = document.getElementById('modalBodyContent');
             document.getElementById('modalTitle').innerHTML = `<i class="fa-solid fa-eye" style="color: #0284c7;"></i> फॉर्म डेटा एवं फोटो प्रीव्यू`;
@@ -819,6 +817,7 @@
             document.getElementById('certModal').style.display = 'flex';
         }
 
+        // PDF डाउनलोड में फोटो दिखाने के लिए अपडेटेड फंक्शन
         function downloadCustomerDetailsPDF(dbKey) {
             db.ref('csc_applications/' + dbKey).once('value', (snapshot) => {
                 let app = snapshot.val();
@@ -836,10 +835,17 @@
                 printContainer.style.border = '2px solid #1e3a8a';
                 printContainer.style.borderRadius = '8px';
 
+                let photoSectionHtml = app.photo 
+                    ? `<div style="text-align: right; margin-bottom: 10px;"><img src="${app.photo}" style="width: 90px; height: 110px; object-fit: cover; border: 2px solid #1e3a8a; border-radius: 4px;"></div>` 
+                    : '';
+
                 printContainer.innerHTML = `
-                    <div style="text-align: center; border-bottom: 2px solid #2563eb; padding-bottom: 15px; margin-bottom: 20px;">
-                        <h2 style="color: #1e3a8a; margin: 0; font-size: 22px;">अनुराग सीएससी सेंटर</h2>
-                        <p style="color: #64748b; font-size: 12px; margin: 5px 0 0 0;">Faridpur, Post- Mirehachi, Dist- Etah, UP - 207125 | Helpline: 9760623097</p>
+                    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #2563eb; padding-bottom: 15px; margin-bottom: 20px;">
+                        <div>
+                            <h2 style="color: #1e3a8a; margin: 0; font-size: 22px;">अनुराग सीएससी सेंटर</h2>
+                            <p style="color: #64748b; font-size: 11px; margin: 5px 0 0 0;">Faridpur, Post- Mirehachi, Dist- Etah, UP - 207125 | Helpline: 9760623097</p>
+                        </div>
+                        <div>${photoSectionHtml}</div>
                     </div>
                     <h3 style="color: #16a34a; font-size: 16px; margin-bottom: 15px; border-left: 4px solid #16a34a; padding-left: 8px;">आवेदन विवरण (${app.type})</h3>
                     <table style="width: 100%; border-collapse: collapse; font-size: 13.5px;">
@@ -893,14 +899,24 @@
             });
         }
 
+        // रसीद मोडल में फोटो दिखाने के लिए अपडेटेड फंक्शन
         function showAutoReceiptModal(app) {
             let modalBody = document.getElementById('modalBodyContent');
             document.getElementById('modalTitle').innerHTML = `<i class="fa-solid fa-receipt" style="color: #16a34a;"></i> फॉर्म जमा रसीद (Acknowledgment)`;
             
+            let receiptPhotoHtml = app.photo 
+                ? `<div style="text-align: right; margin-bottom: 8px;"><img src="${app.photo}" style="width: 75px; height: 90px; object-fit: cover; border: 2px solid #1e3a8a; border-radius: 4px;"></div>` 
+                : '';
+
             modalBody.innerHTML = `
                 <div id="printableReceipt" style="border: 2px solid #1e3a8a; padding: 20px; border-radius: 8px; text-align: left; background: #fff; color: #333;">
-                    <h3 style="text-align: center; color: #1e3a8a; margin-bottom: 5px;">अनुराग सीएससी सेंटर</h3>
-                    <p style="text-align: center; font-size: 12px; color: #555;">Faridpur, Mirehachi, Etah, UP | Helpline: 9760623097</p>
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <h3 style="color: #1e3a8a; margin-bottom: 2px;">अनुराग सीएससी सेंटर</h3>
+                            <p style="font-size: 11px; color: #555;">Faridpur, Mirehachi, Etah | 9760623097</p>
+                        </div>
+                        <div>${receiptPhotoHtml}</div>
+                    </div>
                     <hr style="border: 1px solid #ddd; margin: 10px 0;">
                     <p style="text-align: center; color: #16a34a; font-weight: bold; margin-bottom: 10px;">✅ आवेदन सफलतापूर्वक जमा हो गया है!</p>
                     <p style="margin: 5px 0;"><b>आवेदन संख्या:</b> <span style="color: #dc2626;">${app.appId}</span></p>
