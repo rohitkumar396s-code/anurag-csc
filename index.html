@@ -15,9 +15,6 @@
     <!-- jsPDF aur html2canvas library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    
-    <!-- Razorpay Checkout Script -->
-    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; scroll-behavior: smooth; }
@@ -280,7 +277,7 @@
             <div id="rate-list" class="section-title">रेट लिस्ट (शुल्क विवरण)</div>
             <table>
                 <tr><th>सेवा का नाम</th><th>निर्धारित शुल्क (₹)</th></tr>
-                <tr><td>आय / जाति / निवास प्रमाण पत्र</td><td>₹ 80 मात्र (ऑनलाइन भुगतान)</td></tr>
+                <tr><td>आय / जाति / निवास प्रमाण पत्र</td><td>₹ 80 मात्र</td></tr>
                 <tr><td>भूलेख नकल निकालना</td><td>₹ 30 - ₹ 50</td></tr>
                 <tr><td>सरकारी फॉर्म ऑनलाइन आवेदन</td><td>₹ 50 - ₹ 100</td></tr>
                 <tr><td>नया पैन कार्ड / संशोधन</td><td>₹ 150 मात्र</td></tr>
@@ -304,7 +301,7 @@
     <div id="income-form" class="page-section">
         <div class="form-container">
             <h2>📄 आय प्रमाण पत्र आवेदन फॉर्म</h2>
-            <form id="formIncome" onsubmit="initiatePaymentAndSubmit(event, 'Income Certificate')">
+            <form id="formIncome" onsubmit="processAndSaveApplication(event, 'Income Certificate')">
                 <div class="form-group"><label>आवेदक का पूरा नाम</label><input type="text" id="inc_name" required></div>
                 <div class="form-group"><label>माता का नाम</label><input type="text" id="inc_mother" required></div>
                 <div class="form-group">
@@ -337,7 +334,7 @@
                     <div class="form-group"><label>आधार कार्ड (JPG)</label><input type="file" id="inc_aadhar" accept="image/jpeg,image/jpg,image/png" required></div>
                 </div>
 
-                <button type="submit" class="submit-btn">💳 ऑनलाइन भुगतान करें (₹80 Pay & Submit)</button>
+                <button type="submit" class="submit-btn">✅ फॉर्म सबमिट करें (Submit Application)</button>
                 <div class="back-link"><a onclick="showSection('home')">← मुख्य पृष्ठ पर वापस जाएं</a></div>
             </form>
         </div>
@@ -347,7 +344,7 @@
     <div id="caste-form" class="page-section">
         <div class="form-container">
             <h2>📄 जाति प्रमाण पत्र आवेदन फॉर्म</h2>
-            <form id="formCaste" onsubmit="initiatePaymentAndSubmit(event, 'Caste Certificate')">
+            <form id="formCaste" onsubmit="processAndSaveApplication(event, 'Caste Certificate')">
                 <div class="form-group"><label>आवेदक का पूरा नाम</label><input type="text" id="cas_name" required></div>
                 <div class="form-group"><label>माता का नाम</label><input type="text" id="cas_mother" required></div>
                 <div class="form-group">
@@ -380,7 +377,7 @@
                     <div class="form-group"><label>आधार कार्ड (JPG)</label><input type="file" id="cas_aadhar" accept="image/jpeg,image/jpg,image/png" required></div>
                 </div>
 
-                <button type="submit" class="submit-btn">💳 ऑनलाइन भुगतान करें (₹80 Pay & Submit)</button>
+                <button type="submit" class="submit-btn">✅ फॉर्म सबमिट करें (Submit Application)</button>
                 <div class="back-link"><a onclick="showSection('home')">← मुख्य पृष्ठ पर वापस जाएं</a></div>
             </form>
         </div>
@@ -390,7 +387,7 @@
     <div id="domicile-form" class="page-section">
         <div class="form-container">
             <h2>📄 निवास प्रमाण पत्र आवेदन फॉर्म</h2>
-            <form id="formDomicile" onsubmit="initiatePaymentAndSubmit(event, 'Domicile Certificate')">
+            <form id="formDomicile" onsubmit="processAndSaveApplication(event, 'Domicile Certificate')">
                 <div class="form-group"><label>आवेदक का पूरा नाम</label><input type="text" id="dom_name" required></div>
                 <div class="form-group"><label>माता का नाम</label><input type="text" id="dom_mother" required></div>
                 <div class="form-group">
@@ -419,7 +416,7 @@
                     <div class="form-group"><label>आधार कार्ड (JPG)</label><input type="file" id="dom_aadhar" accept="image/jpeg,image/jpg,image/png" required></div>
                 </div>
 
-                <button type="submit" class="submit-btn">💳 ऑनलाइन भुगतान करें (₹80 Pay & Submit)</button>
+                <button type="submit" class="submit-btn">✅ फॉर्म सबमिट करें (Submit Application)</button>
                 <div class="back-link"><a onclick="showSection('home')">← मुख्य पृष्ठ पर वापस जाएं</a></div>
             </form>
         </div>
@@ -610,53 +607,9 @@
             }, 100);
         }
 
-        // Razorpay Payment Integration Function (Updated with your Test Key ID)
-        function initiatePaymentAndSubmit(event, certType) {
+        function processAndSaveApplication(event, certType) {
             event.preventDefault();
 
-            let customerName = "";
-            let customerMobile = "";
-
-            if (certType === 'Income Certificate') {
-                customerName = document.getElementById('inc_name').value;
-                customerMobile = document.getElementById('inc_mobile').value;
-            } else if (certType === 'Caste Certificate') {
-                customerName = document.getElementById('cas_name').value;
-                customerMobile = document.getElementById('cas_mobile').value;
-            } else if (certType === 'Domicile Certificate') {
-                customerName = document.getElementById('dom_name').value;
-                customerMobile = document.getElementById('dom_mobile').value;
-            }
-
-            var options = {
-                "key": "rzp_test_TdnUjM9qHJaD3Y", 
-                "amount": 8000, // ₹80 के लिए amount paise में (80 * 100)
-                "currency": "INR",
-                "name": "Anurag CSC Center",
-                "description": certType + " Fee (₹80)",
-                "handler": function (response) {
-                    alert("Payment Successful! Payment ID: " + response.razorpay_payment_id);
-                    processAndSaveApplication(event, certType);
-                },
-                "modal": {
-                    "ondismiss": function() {
-                        alert("Payment cancel ho gaya. Form submit nahi hua.");
-                    }
-                },
-                "prefill": {
-                    "name": customerName,
-                    "contact": customerMobile
-                },
-                "theme": {
-                    "color": "#1e3a8a"
-                }
-            };
-
-            var rzp1 = new Razorpay(options);
-            rzp1.open();
-        }
-
-        function processAndSaveApplication(event, certType) {
             let nowObj = new Date();
             let yyyy = nowObj.getFullYear();
             let mm = String(nowObj.getMonth() + 1).padStart(2, '0');
@@ -837,7 +790,7 @@
                     <h3 style="text-align: center; color: #1e3a8a; margin-bottom: 5px;">अनुराग सीएससी सेंटर</h3>
                     <p style="text-align: center; font-size: 12px; color: #555;">Faridpur, Mirehachi, Etah, UP | Helpline: 9760623097</p>
                     <hr style="border: 1px solid #ddd; margin: 10px 0;">
-                    <p style="text-align: center; color: #16a34a; font-weight: bold; margin-bottom: 10px;">✅ भुगतान (₹80) एवं आवेदन सफलतापूर्व जमा हो गया है!</p>
+                    <p style="text-align: center; color: #16a34a; font-weight: bold; margin-bottom: 10px;">✅ आवेदन सफलतापूर्वक जमा हो गया है!</p>
                     <p style="margin: 5px 0;"><b>आवेदन संख्या:</b> <span style="color: #dc2626;">${app.appId}</span></p>
                     <p style="margin: 5px 0;"><b>दिनांक एवं समय:</b> ${app.date}</p>
                     <p style="margin: 5px 0;"><b>सेवा:</b> ${app.type}</p>
