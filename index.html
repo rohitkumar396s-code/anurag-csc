@@ -125,7 +125,6 @@
         .guardian-row select { flex: 0 0 32%; }
         .guardian-row input { flex: 1; }
 
-        /* अलग-अलग बटन्स के लिए स्टाइलिंग समूह */
         .form-action-group { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 20px; }
         .btn-save { background: #d97706; color: white; padding: 12px; border: none; border-radius: 8px; font-size: 15px; font-weight: bold; cursor: pointer; transition: 0.2s; }
         .btn-save:hover { background: #b45309; }
@@ -344,7 +343,6 @@
                     <div class="form-group"><label>आधार कार्ड (JPG)</label><input type="file" id="inc_aadhar" accept="image/jpeg,image/jpg,image/png" required></div>
                 </div>
 
-                <!-- अलग-अलग Save, Preview, Edit, Submit बटन्स -->
                 <div class="form-action-group">
                     <button type="button" class="btn-save" onclick="handleAction('save', 'Income Certificate')"><i class="fa-solid fa-floppy-disk"></i> ड्राफ्ट सेव करें (Save)</button>
                     <button type="button" class="btn-preview" onclick="handleAction('preview', 'Income Certificate')"><i class="fa-solid fa-eye"></i> प्रीव्यू देखें (Preview)</button>
@@ -493,7 +491,6 @@
             </div>
         </div>
 
-        <!-- फ़िल्टर और सर्च बार -->
         <div style="background: #f1f5f9; padding: 15px; border-radius: 8px; margin-bottom: 20px; display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
             <input 
                 type="text" 
@@ -583,7 +580,6 @@
             measurementId: "G-EMVQVQR1J2"
         };
 
-        // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
@@ -637,25 +633,79 @@
             }, 100);
         }
 
-        // नया एक्शन हैंडलर: Save, Preview, Edit, Submit के लिए अलग कार्यप्रणाली
+        // फोटो और डेटा प्रोसेस करने वाला अपडेटेड फंक्शन
         function handleAction(actionType, certType) {
-            let formData = collectFormData(certType);
-            if(!formData) return; // अगर जरूरी फील्ड खाली हैं तो रोकें
+            let formData = collectFormBaseData(certType);
+            if(!formData) return; 
 
-            if(actionType === 'save') {
-                formData.status = 'Draft (Saved)';
-                saveDataToFirebase(formData, "फॉर्म का डेटा ड्राफ्ट के रूप में सफलतापूर्वक सेव हो गया है!");
-            } else if(actionType === 'preview') {
-                showPreviewModal(formData);
-            } else if(actionType === 'edit') {
-                alert("फॉर्म एडिट मोड में है। आप डेटा में सुधार करके दोबारा सेव या सबमिट कर सकते हैं।");
-            } else if(actionType === 'submit') {
-                formData.status = 'Pending';
-                saveDataToFirebase(formData, null, true); // सबमिट होने पर रसीद दिखाएं
+            let photoInputId = certType === 'Income Certificate' ? 'inc_photo' : (certType === 'Caste Certificate' ? 'cas_photo' : 'dom_photo');
+            let aadharInputId = certType === 'Income Certificate' ? 'inc_aadhar' : (certType === 'Caste Certificate' ? 'cas_aadhar' : 'dom_aadhar');
+
+            let photoFile = document.getElementById(photoInputId).files[0];
+            let aadharFile = document.getElementById(aadharInputId).files[0];
+
+            if((actionType === 'submit' || actionType === 'save') && !photoFile) {
+                alert('कृपया पासपोर्ट फोटो अपलोड करें!');
+                return;
+            }
+
+            processFilesAndExecute(photoFile, aadharFile, (photoData, aadharData) => {
+                formData.photo = photoData;
+                formData.aadhar = aadharData;
+
+                if(actionType === 'save') {
+                    formData.status = 'Draft (Saved)';
+                    saveDataToFirebase(formData, "फॉर्म का डेटा ड्राफ्ट के रूप में सफलतापूर्वक सेव हो गया है!");
+                } else if(actionType === 'preview') {
+                    showPreviewModal(formData);
+                } else if(actionType === 'edit') {
+                    alert("फॉर्म एडिट मोड में है। आप डेटा में सुधार करके दोबारा सेव या सबमिट कर सकते हैं।");
+                } else if(actionType === 'submit') {
+                    formData.status = 'Pending';
+                    saveDataToFirebase(formData, null, true); 
+                }
+            });
+        }
+
+        function processFilesAndExecute(photoFile, aadharFile, callback) {
+            let photoResult = null;
+            let aadharResult = null;
+            let pending = 0;
+
+            function checkDone() {
+                if (pending === 0) {
+                    callback(photoResult, aadharResult);
+                }
+            }
+
+            if (photoFile) {
+                pending++;
+                let reader = new FileReader();
+                reader.onload = function(e) {
+                    photoResult = e.target.result;
+                    pending--;
+                    checkDone();
+                };
+                reader.readAsDataURL(photoFile);
+            }
+
+            if (aadharFile) {
+                pending++;
+                let reader = new FileReader();
+                reader.onload = function(e) {
+                    aadharResult = e.target.result;
+                    pending--;
+                    checkDone();
+                };
+                reader.readAsDataURL(aadharFile);
+            }
+
+            if (pending === 0) {
+                callback(null, null);
             }
         }
 
-        function collectFormData(certType) {
+        function collectFormBaseData(certType) {
             let nowObj = new Date();
             let yyyy = nowObj.getFullYear();
             let mm = String(nowObj.getMonth() + 1).padStart(2, '0');
@@ -670,8 +720,6 @@
                 status: 'Pending',
                 certData: null, photo: null, aadhar: null
             };
-
-            let photoInput, aadharInput;
 
             if(certType === 'Income Certificate') {
                 let nameField = document.getElementById('inc_name').value.trim();
@@ -690,8 +738,6 @@
                 formData.district = document.getElementById('inc_district').value;
                 formData.mobile = document.getElementById('inc_mobile').value;
                 formData.incomeOrDetails = 'Annual Income: Rs. ' + document.getElementById('inc_income').value + ' | Occupation: ' + document.getElementById('inc_occ').value;
-                photoInput = document.getElementById('inc_photo').files[0];
-                aadharInput = document.getElementById('inc_aadhar').files[0];
             } else if(certType === 'Caste Certificate') {
                 let nameField = document.getElementById('cas_name').value.trim();
                 if(!nameField) { alert('कृपया आवेदक का नाम दर्ज करें!'); document.getElementById('cas_name').focus(); return null; }
@@ -709,8 +755,6 @@
                 formData.district = document.getElementById('cas_district').value;
                 formData.mobile = document.getElementById('cas_mobile').value;
                 formData.incomeOrDetails = 'Category: ' + document.getElementById('cas_cat').value + ' | Sub-Caste: ' + document.getElementById('cas_subcaste').value;
-                photoInput = document.getElementById('cas_photo').files[0];
-                aadharInput = document.getElementById('cas_aadhar').files[0];
             } else if(certType === 'Domicile Certificate') {
                 let nameField = document.getElementById('dom_name').value.trim();
                 if(!nameField) { alert('कृपया आवेदक का नाम दर्ज करें!'); document.getElementById('dom_name').focus(); return null; }
@@ -728,8 +772,6 @@
                 formData.district = document.getElementById('dom_district').value;
                 formData.mobile = document.getElementById('dom_mobile').value;
                 formData.incomeOrDetails = 'Domicile Certificate Application';
-                photoInput = document.getElementById('dom_photo').files[0];
-                aadharInput = document.getElementById('dom_aadhar').files[0];
             }
 
             return formData;
@@ -748,25 +790,31 @@
             });
         }
 
+        // फोटो सहित प्रीव्यू दिखाने के लिए अपडेट किया गया फंक्शन
         function showPreviewModal(app) {
             let modalBody = document.getElementById('modalBodyContent');
-            document.getElementById('modalTitle').innerHTML = `<i class="fa-solid fa-eye" style="color: #0284c7;"></i> फॉर्म डेटा प्रीव्यू (Preview)`;
+            document.getElementById('modalTitle').innerHTML = `<i class="fa-solid fa-eye" style="color: #0284c7;"></i> फॉर्म डेटा एवं फोटो प्रीव्यू`;
             
+            let photoHtml = app.photo 
+                ? `<div style="text-align: center; margin-bottom: 15px;"><img src="${app.photo}" alt="Passport Photo" style="width: 110px; height: 130px; object-fit: cover; border-radius: 6px; border: 3px solid #1e3a8a; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"></div>`
+                : `<p style="color: #dc2626; text-align: center; font-size: 13px; margin-bottom: 15px;">⚠️ फोटो अपलोड नहीं की गई है</p>`;
+
             modalBody.innerHTML = `
+                ${photoHtml}
                 <div style="border: 1px solid #cbd5e1; padding: 15px; border-radius: 8px; background: #f8fafc; font-size: 13.5px;">
-                    <p><b>प्रमाण पत्र प्रकार:</b> ${app.type}</p>
-                    <p><b>आवेदक का नाम:</b> ${app.name}</p>
-                    <p><b>माता का नाम:</b> ${app.mother}</p>
-                    <p><b>${app.guardianType} का नाम:</b> ${app.guardianName}</p>
-                    <p><b>गाँव / पता:</b> ${app.village}, पोस्ट: ${app.post}</p>
-                    <p><b>तहसील / जिला:</b> ${app.tahsil}, ${app.district}</p>
-                    <p><b>मोबाइल नंबर:</b> ${app.mobile}</p>
-                    <p><b>अन्य विवरण:</b> ${app.incomeOrDetails}</p>
+                    <p style="margin-bottom: 6px;"><b>प्रमाण पत्र प्रकार:</b> ${app.type}</p>
+                    <p style="margin-bottom: 6px;"><b>आवेदक का नाम:</b> ${app.name}</p>
+                    <p style="margin-bottom: 6px;"><b>माता का नाम:</b> ${app.mother}</p>
+                    <p style="margin-bottom: 6px;"><b>${app.guardianType} का नाम:</b> ${app.guardianName}</p>
+                    <p style="margin-bottom: 6px;"><b>गाँव / पता:</b> ${app.village}, पोस्ट: ${app.post}</p>
+                    <p style="margin-bottom: 6px;"><b>तहसील / जिला:</b> ${app.tahsil}, ${app.district}</p>
+                    <p style="margin-bottom: 6px;"><b>मोबाइल नंबर:</b> ${app.mobile}</p>
+                    <p style="margin-bottom: 0;"><b>अन्य विवरण:</b> ${app.incomeOrDetails}</p>
                 </div>
             `;
 
             document.getElementById('modalActionArea').innerHTML = `
-                <button onclick="closeCertModal()" style="background: #64748b; color: white; border: none; padding: 8px 15px; border-radius: 6px; font-weight: bold; cursor: pointer;">बंद करें</button>
+                <button onclick="closeCertModal()" style="background: #64748b; color: white; border: none; padding: 8px 15px; border-radius: 6px; font-weight: bold; cursor: pointer; width: 100%;">बंद करें</button>
             `;
             document.getElementById('certModal').style.display = 'flex';
         }
