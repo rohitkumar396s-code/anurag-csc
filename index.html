@@ -125,11 +125,20 @@
         .guardian-row select { flex: 0 0 32%; }
         .guardian-row input { flex: 1; }
 
-        .submit-btn {
-            width: 100%; background: linear-gradient(135deg, #2f855a 0%, #276749 100%); color: white; padding: 14px;
-            border: none; border-radius: 8px; font-size: 18px; font-weight: bold; cursor: pointer; transition: all 0.3s ease; margin-top: 15px; box-shadow: 0 4px 12px rgba(47, 133, 90, 0.2);
-        }
-        .submit-btn:hover { background: linear-gradient(135deg, #276749 0%, #22543d 100%); transform: translateY(-1px); }
+        /* अलग-अलग बटन्स के लिए स्टाइलिंग समूह */
+        .form-action-group { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 20px; }
+        .btn-save { background: #d97706; color: white; padding: 12px; border: none; border-radius: 8px; font-size: 15px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+        .btn-save:hover { background: #b45309; }
+        
+        .btn-preview { background: #0284c7; color: white; padding: 12px; border: none; border-radius: 8px; font-size: 15px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+        .btn-preview:hover { background: #0369a1; }
+
+        .btn-edit { background: #64748b; color: white; padding: 12px; border: none; border-radius: 8px; font-size: 15px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+        .btn-edit:hover { background: #475569; }
+
+        .btn-submit { background: #16a34a; color: white; padding: 12px; border: none; border-radius: 8px; font-size: 15px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+        .btn-submit:hover { background: #15803d; }
+
         .back-link { text-align: center; margin-top: 25px; }
         .back-link a { color: #3182ce; text-decoration: none; font-weight: 600; font-size: 15px; cursor: pointer; }
         .back-link a:hover { text-decoration: underline; }
@@ -169,6 +178,7 @@
             .nav-links { width: 100%; justify-content: flex-start; flex-wrap: wrap; }
             .row, .guardian-row { flex-direction: column; gap: 22px; }
             .guardian-row select { flex: none; }
+            .form-action-group { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -301,7 +311,7 @@
     <div id="income-form" class="page-section">
         <div class="form-container">
             <h2>📄 आय प्रमाण पत्र आवेदन फॉर्म</h2>
-            <form id="formIncome" onsubmit="processAndSaveApplication(event, 'Income Certificate')">
+            <form id="formIncome">
                 <div class="form-group"><label>आवेदक का पूरा नाम</label><input type="text" id="inc_name" required></div>
                 <div class="form-group"><label>माता का नाम</label><input type="text" id="inc_mother" required></div>
                 <div class="form-group">
@@ -334,7 +344,14 @@
                     <div class="form-group"><label>आधार कार्ड (JPG)</label><input type="file" id="inc_aadhar" accept="image/jpeg,image/jpg,image/png" required></div>
                 </div>
 
-                <button type="submit" class="submit-btn">✅ फॉर्म सबमिट करें (Submit Application)</button>
+                <!-- अलग-अलग Save, Preview, Edit, Submit बटन्स -->
+                <div class="form-action-group">
+                    <button type="button" class="btn-save" onclick="handleAction('save', 'Income Certificate')"><i class="fa-solid fa-floppy-disk"></i> ड्राफ्ट सेव करें (Save)</button>
+                    <button type="button" class="btn-preview" onclick="handleAction('preview', 'Income Certificate')"><i class="fa-solid fa-eye"></i> प्रीव्यू देखें (Preview)</button>
+                    <button type="button" class="btn-edit" onclick="handleAction('edit', 'Income Certificate')"><i class="fa-solid fa-pen-to-square"></i> एडिट / सुधार (Edit)</button>
+                    <button type="button" class="btn-submit" onclick="handleAction('submit', 'Income Certificate')"><i class="fa-solid fa-circle-check"></i> फाइनल सबमिट (Submit)</button>
+                </div>
+
                 <div class="back-link"><a onclick="showSection('home')">← मुख्य पृष्ठ पर वापस जाएं</a></div>
             </form>
         </div>
@@ -344,7 +361,7 @@
     <div id="caste-form" class="page-section">
         <div class="form-container">
             <h2>📄 जाति प्रमाण पत्र आवेदन फॉर्म</h2>
-            <form id="formCaste" onsubmit="processAndSaveApplication(event, 'Caste Certificate')">
+            <form id="formCaste">
                 <div class="form-group"><label>आवेदक का पूरा नाम</label><input type="text" id="cas_name" required></div>
                 <div class="form-group"><label>माता का नाम</label><input type="text" id="cas_mother" required></div>
                 <div class="form-group">
@@ -377,7 +394,13 @@
                     <div class="form-group"><label>आधार कार्ड (JPG)</label><input type="file" id="cas_aadhar" accept="image/jpeg,image/jpg,image/png" required></div>
                 </div>
 
-                <button type="submit" class="submit-btn">✅ फॉर्म सबमिट करें (Submit Application)</button>
+                <div class="form-action-group">
+                    <button type="button" class="btn-save" onclick="handleAction('save', 'Caste Certificate')"><i class="fa-solid fa-floppy-disk"></i> ड्राफ्ट सेव करें (Save)</button>
+                    <button type="button" class="btn-preview" onclick="handleAction('preview', 'Caste Certificate')"><i class="fa-solid fa-eye"></i> प्रीव्यू देखें (Preview)</button>
+                    <button type="button" class="btn-edit" onclick="handleAction('edit', 'Caste Certificate')"><i class="fa-solid fa-pen-to-square"></i> एडिट / सुधार (Edit)</button>
+                    <button type="button" class="btn-submit" onclick="handleAction('submit', 'Caste Certificate')"><i class="fa-solid fa-circle-check"></i> फाइनल सबमिट (Submit)</button>
+                </div>
+
                 <div class="back-link"><a onclick="showSection('home')">← मुख्य पृष्ठ पर वापस जाएं</a></div>
             </form>
         </div>
@@ -387,7 +410,7 @@
     <div id="domicile-form" class="page-section">
         <div class="form-container">
             <h2>📄 निवास प्रमाण पत्र आवेदन फॉर्म</h2>
-            <form id="formDomicile" onsubmit="processAndSaveApplication(event, 'Domicile Certificate')">
+            <form id="formDomicile">
                 <div class="form-group"><label>आवेदक का पूरा नाम</label><input type="text" id="dom_name" required></div>
                 <div class="form-group"><label>माता का नाम</label><input type="text" id="dom_mother" required></div>
                 <div class="form-group">
@@ -416,7 +439,13 @@
                     <div class="form-group"><label>आधार कार्ड (JPG)</label><input type="file" id="dom_aadhar" accept="image/jpeg,image/jpg,image/png" required></div>
                 </div>
 
-                <button type="submit" class="submit-btn">✅ फॉर्म सबमिट करें (Submit Application)</button>
+                <div class="form-action-group">
+                    <button type="button" class="btn-save" onclick="handleAction('save', 'Domicile Certificate')"><i class="fa-solid fa-floppy-disk"></i> ड्राफ्ट सेव करें (Save)</button>
+                    <button type="button" class="btn-preview" onclick="handleAction('preview', 'Domicile Certificate')"><i class="fa-solid fa-eye"></i> प्रीव्यू देखें (Preview)</button>
+                    <button type="button" class="btn-edit" onclick="handleAction('edit', 'Domicile Certificate')"><i class="fa-solid fa-pen-to-square"></i> एडिट / सुधार (Edit)</button>
+                    <button type="button" class="btn-submit" onclick="handleAction('submit', 'Domicile Certificate')"><i class="fa-solid fa-circle-check"></i> फाइनल सबमिट (Submit)</button>
+                </div>
+
                 <div class="back-link"><a onclick="showSection('home')">← मुख्य पृष्ठ पर वापस जाएं</a></div>
             </form>
         </div>
@@ -485,6 +514,7 @@
                 <option value="">सभी स्टेटस (All Status)</option>
                 <option value="pending">Pending</option>
                 <option value="ready">Ready</option>
+                <option value="draft">Draft (Saved)</option>
             </select>
 
             <input 
@@ -607,9 +637,25 @@
             }, 100);
         }
 
-        function processAndSaveApplication(event, certType) {
-            event.preventDefault();
+        // नया एक्शन हैंडलर: Save, Preview, Edit, Submit के लिए अलग कार्यप्रणाली
+        function handleAction(actionType, certType) {
+            let formData = collectFormData(certType);
+            if(!formData) return; // अगर जरूरी फील्ड खाली हैं तो रोकें
 
+            if(actionType === 'save') {
+                formData.status = 'Draft (Saved)';
+                saveDataToFirebase(formData, "फॉर्म का डेटा ड्राफ्ट के रूप में सफलतापूर्वक सेव हो गया है!");
+            } else if(actionType === 'preview') {
+                showPreviewModal(formData);
+            } else if(actionType === 'edit') {
+                alert("फॉर्म एडिट मोड में है। आप डेटा में सुधार करके दोबारा सेव या सबमिट कर सकते हैं।");
+            } else if(actionType === 'submit') {
+                formData.status = 'Pending';
+                saveDataToFirebase(formData, null, true); // सबमिट होने पर रसीद दिखाएं
+            }
+        }
+
+        function collectFormData(certType) {
             let nowObj = new Date();
             let yyyy = nowObj.getFullYear();
             let mm = String(nowObj.getMonth() + 1).padStart(2, '0');
@@ -626,10 +672,12 @@
             };
 
             let photoInput, aadharInput;
-            let currentFormElement;
 
             if(certType === 'Income Certificate') {
-                formData.name = document.getElementById('inc_name').value;
+                let nameField = document.getElementById('inc_name').value.trim();
+                if(!nameField) { alert('कृपया आवेदक का नाम दर्ज करें!'); document.getElementById('inc_name').focus(); return null; }
+                
+                formData.name = nameField;
                 formData.mother = document.getElementById('inc_mother').value;
                 formData.guardianType = document.getElementById('inc_gtype').value;
                 formData.guardianName = document.getElementById('inc_gname').value;
@@ -644,9 +692,11 @@
                 formData.incomeOrDetails = 'Annual Income: Rs. ' + document.getElementById('inc_income').value + ' | Occupation: ' + document.getElementById('inc_occ').value;
                 photoInput = document.getElementById('inc_photo').files[0];
                 aadharInput = document.getElementById('inc_aadhar').files[0];
-                currentFormElement = document.getElementById('formIncome');
             } else if(certType === 'Caste Certificate') {
-                formData.name = document.getElementById('cas_name').value;
+                let nameField = document.getElementById('cas_name').value.trim();
+                if(!nameField) { alert('कृपया आवेदक का नाम दर्ज करें!'); document.getElementById('cas_name').focus(); return null; }
+
+                formData.name = nameField;
                 formData.mother = document.getElementById('cas_mother').value;
                 formData.guardianType = document.getElementById('cas_gtype').value;
                 formData.guardianName = document.getElementById('cas_gname').value;
@@ -661,9 +711,11 @@
                 formData.incomeOrDetails = 'Category: ' + document.getElementById('cas_cat').value + ' | Sub-Caste: ' + document.getElementById('cas_subcaste').value;
                 photoInput = document.getElementById('cas_photo').files[0];
                 aadharInput = document.getElementById('cas_aadhar').files[0];
-                currentFormElement = document.getElementById('formCaste');
             } else if(certType === 'Domicile Certificate') {
-                formData.name = document.getElementById('dom_name').value;
+                let nameField = document.getElementById('dom_name').value.trim();
+                if(!nameField) { alert('कृपया आवेदक का नाम दर्ज करें!'); document.getElementById('dom_name').focus(); return null; }
+
+                formData.name = nameField;
                 formData.mother = document.getElementById('dom_mother').value;
                 formData.guardianType = document.getElementById('dom_gtype').value;
                 formData.guardianName = document.getElementById('dom_gname').value;
@@ -678,33 +730,45 @@
                 formData.incomeOrDetails = 'Domicile Certificate Application';
                 photoInput = document.getElementById('dom_photo').files[0];
                 aadharInput = document.getElementById('dom_aadhar').files[0];
-                currentFormElement = document.getElementById('formDomicile');
             }
 
-            let readerCount = 0;
-            let totalReaders = (photoInput ? 1 : 0) + (aadharInput ? 1 : 0);
+            return formData;
+        }
 
-            function saveAndFinish() {
-                db.ref('csc_applications').push(formData).then(() => {
+        function saveDataToFirebase(formData, successMessage, showReceipt = false) {
+            db.ref('csc_applications').push(formData).then(() => {
+                if(successMessage) {
+                    alert(successMessage);
+                }
+                if(showReceipt) {
                     showAutoReceiptModal(formData);
-                    if(currentFormElement) currentFormElement.reset();
-                }).catch((error) => {
-                    alert("डाटा ऑनलाइन सेव करने में त्रुटि: " + error.message);
-                });
-            }
+                }
+            }).catch((error) => {
+                alert("डाटा सेव करने में त्रुटि: " + error.message);
+            });
+        }
 
-            if(totalReaders === 0) { saveAndFinish(); return; }
+        function showPreviewModal(app) {
+            let modalBody = document.getElementById('modalBodyContent');
+            document.getElementById('modalTitle').innerHTML = `<i class="fa-solid fa-eye" style="color: #0284c7;"></i> फॉर्म डेटा प्रीव्यू (Preview)`;
+            
+            modalBody.innerHTML = `
+                <div style="border: 1px solid #cbd5e1; padding: 15px; border-radius: 8px; background: #f8fafc; font-size: 13.5px;">
+                    <p><b>प्रमाण पत्र प्रकार:</b> ${app.type}</p>
+                    <p><b>आवेदक का नाम:</b> ${app.name}</p>
+                    <p><b>माता का नाम:</b> ${app.mother}</p>
+                    <p><b>${app.guardianType} का नाम:</b> ${app.guardianName}</p>
+                    <p><b>गाँव / पता:</b> ${app.village}, पोस्ट: ${app.post}</p>
+                    <p><b>तहसील / जिला:</b> ${app.tahsil}, ${app.district}</p>
+                    <p><b>मोबाइल नंबर:</b> ${app.mobile}</p>
+                    <p><b>अन्य विवरण:</b> ${app.incomeOrDetails}</p>
+                </div>
+            `;
 
-            if(photoInput) {
-                let reader = new FileReader();
-                reader.onload = function(e) { formData.photo = e.target.result; readerCount++; if(readerCount === totalReaders) saveAndFinish(); };
-                reader.readAsDataURL(photoInput);
-            }
-            if(aadharInput) {
-                let reader = new FileReader();
-                reader.onload = function(e) { formData.aadhar = e.target.result; readerCount++; if(readerCount === totalReaders) saveAndFinish(); };
-                reader.readAsDataURL(aadharInput);
-            }
+            document.getElementById('modalActionArea').innerHTML = `
+                <button onclick="closeCertModal()" style="background: #64748b; color: white; border: none; padding: 8px 15px; border-radius: 6px; font-weight: bold; cursor: pointer;">बंद करें</button>
+            `;
+            document.getElementById('certModal').style.display = 'flex';
         }
 
         function downloadCustomerDetailsPDF(dbKey) {
@@ -804,8 +868,8 @@
             `;
 
             document.getElementById('modalActionArea').innerHTML = `
-                <button onclick="printReceipt()" style="background: #2563eb; color: white; border: none; padding: 8px 15px; border-radius: 6px; font-weight: 600; cursor: pointer;"><i class="fa-solid fa-print"></i> रसीद प्रिंट करें</button>
-                <button onclick="closeCertModal(); showSection('home');" style="background: #16a34a; color: white; border: none; padding: 8px 15px; border-radius: 6px; font-weight: 600; cursor: pointer; margin-left: 5px;"><i class="fa-solid fa-house"></i> होम पर जाएं</button>
+                <button onclick="printReceipt()" style="background: #2563eb; color: white; border: none; padding: 8px 15px; border-radius: 6px; font-weight: bold; cursor: pointer;"><i class="fa-solid fa-print"></i> रसीद प्रिंट करें</button>
+                <button onclick="closeCertModal(); showSection('home');" style="background: #16a34a; color: white; border: none; padding: 8px 15px; border-radius: 6px; font-weight: bold; cursor: pointer; margin-left: 5px;"><i class="fa-solid fa-house"></i> होम पर जाएं</button>
             `;
             document.getElementById('certModal').style.display = 'flex';
         }
@@ -992,7 +1056,7 @@
                             <p><b>आवेदन संख्या:</b> <span style="color:#dc2626;">${foundApp.appId}</span></p>
                             <p><b>नाम:</b> ${foundApp.name}</p>
                             <p><b>सेवा:</b> ${foundApp.type}</p>
-                            <p style="color: #d97706; margin-top: 5px;"><b>स्थिति:</b> आपका आवेदन अभी प्रक्रिया में है (Pending).</p>
+                            <p style="color: #d97706; margin-top: 5px;"><b>स्थिति:</b> ${foundApp.status}</p>
                         </div>
                     `;
                     return;
@@ -1030,7 +1094,7 @@
                 applications.forEach((app, index) => {
                     let dbKey = keys[index];
                     let statusText = app.status || 'Pending';
-                    let statusColor = statusText.includes('Ready') ? 'green' : '#d97706';
+                    let statusColor = statusText.includes('Ready') ? 'green' : (statusText.includes('Draft') ? '#d97706' : '#2563eb');
                     let appDate = app.date || 'उपलब्ध नहीं';
                     let rawDateVal = app.rawDate || '';
                     let certTypeVal = app.type || '';
