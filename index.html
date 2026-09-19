@@ -114,11 +114,11 @@
         .form-container h2 { text-align: center; color: #1a365d; margin-bottom: 30px; font-size: 26px; border-bottom: 2px solid #e2e8f0; padding-bottom: 15px; }
         .form-group { margin-bottom: 22px; }
         label { display: block; margin-bottom: 8px; font-weight: 600; color: #2d3748; font-size: 15px; }
-        input[type="text"], input[type="number"], input[type="tel"], input[type="file"], select, input[type="password"], input[type="date"] {
+        input[type="text"], input[type="number"], input[type="tel"], input[type="file"], select, input[type="password"], input[type="date"], textarea {
             width: 100%; padding: 12px 16px; border: 1.5px solid #cbd5e0; border-radius: 8px; font-size: 15px; box-sizing: border-box; background-color: #f8fafc; transition: all 0.3s ease; outline: none;
         }
         input[type="file"] { padding: 9px; background-color: #fff; }
-        input:focus, select:focus { border-color: #3182ce; background-color: #fff; box-shadow: 0 0 0 4px rgba(49, 130, 206, 0.15); }
+        input:focus, select:focus, textarea:focus { border-color: #3182ce; background-color: #fff; box-shadow: 0 0 0 4px rgba(49, 130, 206, 0.15); }
         .row { display: flex; gap: 15px; }
         .row .form-group { flex: 1; }
         .guardian-row { display: flex; gap: 12px; }
@@ -155,7 +155,7 @@
         .forgot-pass-link { display: block; text-align: right; margin-top: 8px; font-size: 13px; color: #2563eb; text-decoration: none; cursor: pointer; font-weight: 500; }
         .forgot-pass-link:hover { text-decoration: underline; }
 
-        #officer-dashboard { max-width: 1350px; margin: 30px auto; background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        #officer-dashboard { max-width: 1400px; margin: 30px auto; background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
         .dash-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 2px solid #e2e8f0; padding-bottom: 15px; flex-wrap: wrap; gap: 15px; }
         .dash-top-btns { display: flex; gap: 10px; align-items: center; }
         
@@ -513,7 +513,12 @@
             <select id="statusFilter" onchange="filterTable()" style="padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; background: #fff; font-size: 14px;">
                 <option value="">सभी स्टेटस (All Status)</option>
                 <option value="pending">Pending</option>
+                <option value="accept">Accept</option>
                 <option value="ready">Ready</option>
+                <option value="aggre-sit">Aggre-Sit</option>
+                <option value="complete">Complete</option>
+                <option value="return">Return</option>
+                <option value="cancel">Cancel</option>
                 <option value="draft">Draft (Saved)</option>
             </select>
 
@@ -540,7 +545,7 @@
                         <th>आधार नंबर</th>
                         <th>दस्तावेज़ (JPG)</th>
                         <th>विवरण PDF</th>
-                        <th>स्थिति</th>
+                        <th>स्थिति एवं कारण</th>
                         <th>कार्रवाई</th>
                     </tr>
                 </thead>
@@ -556,6 +561,34 @@
             <h3 style="color: #1e3a8a; margin-bottom: 10px;" id="modalTitle"><i class="fa-solid fa-file-shield"></i> प्रीव्यू</h3>
             <div class="modal-body" id="modalBodyContent"></div>
             <div style="margin-top: 15px;" id="modalActionArea"></div>
+        </div>
+    </div>
+
+    <!-- स्टेटस एडिट मॉडल -->
+    <div id="editStatusModal" class="modal-overlay">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeEditStatusModal()">×</button>
+            <h3 style="color: #1e3a8a; margin-bottom: 15px;"><i class="fa-solid fa-pen-to-square"></i> फॉर्म स्टेटस एडिट करें</h3>
+            <div class="modal-body" style="text-align: left;">
+                <input type="hidden" id="edit_db_key">
+                <div class="form-group">
+                    <label>नया स्टेटस चुनें</label>
+                    <select id="edit_status_select" onchange="toggleDescriptionBox()" style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; background: #fff;">
+                        <option value="Pending">Pending</option>
+                        <option value="Accept">Accept</option>
+                        <option value="Ready">Ready</option>
+                        <option value="Aggre-Sit">Aggre-Sit</option>
+                        <option value="Complete">Complete</option>
+                        <option value="Return">Return</option>
+                        <option value="Cancel">Cancel</option>
+                    </select>
+                </div>
+                <div class="form-group" id="descriptionGroup" style="display: none;">
+                    <label id="descLabel">डिसक्रिप्शन / कारण (Description)</label>
+                    <textarea id="edit_status_desc" rows="3" placeholder="Return या Cancel का कारण यहाँ लिखें..." style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-family: 'Poppins', sans-serif;"></textarea>
+                </div>
+                <button onclick="saveUpdatedStatus()" style="width: 100%; background: #16a34a; color: white; padding: 11px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 10px;">अपडेट सेव करें</button>
+            </div>
         </div>
     </div>
 
@@ -726,6 +759,7 @@
                 date: nowObj.toLocaleString('en-IN'),
                 rawDate: rawDateString,
                 status: 'Pending',
+                statusDesc: '',
                 certData: null, photo: null, aadhar: null
             };
 
@@ -885,7 +919,7 @@
                         <tr><td style="border: 1px solid #cbd5e1; padding: 8px 12px; background: #f8fafc; font-weight: bold;">जिला (District)</td><td style="border: 1px solid #cbd5e1; padding: 8px 12px;">${app.district}</td></tr>
                         <tr><td style="border: 1px solid #cbd5e1; padding: 8px 12px; background: #f8fafc; font-weight: bold;">मोबाइल नंबर (Mobile)</td><td style="border: 1px solid #cbd5e1; padding: 8px 12px;">${app.mobile}</td></tr>
                         <tr><td style="border: 1px solid #cbd5e1; padding: 8px 12px; background: #f8fafc; font-weight: bold;">अन्य विवरण (Details)</td><td style="border: 1px solid #cbd5e1; padding: 8px 12px;">${app.incomeOrDetails}</td></tr>
-                        <tr><td style="border: 1px solid #cbd5e1; padding: 8px 12px; background: #f8fafc; font-weight: bold;">वर्तमान स्थिति (Status)</td><td style="border: 1px solid #cbd5e1; padding: 8px 12px; font-weight: bold; color: #16a34a;">${app.status}</td></tr>
+                        <tr><td style="border: 1px solid #cbd5e1; padding: 8px 12px; background: #f8fafc; font-weight: bold;">वर्तमान स्थिति (Status)</td><td style="border: 1px solid #cbd5e1; padding: 8px 12px; font-weight: bold; color: #16a34a;">${app.status} ${app.statusDesc ? '('+app.statusDesc+')' : ''}</td></tr>
                     </table>
                     <p style="text-align: center; font-size: 11px; color: #64748b; margin-top: 25px;">यह अनुराग सीएससी सेंटर पोर्टल से कंप्यूटर जनित दस्तावेज़ है।</p>
                 `;
@@ -1135,13 +1169,15 @@
                     return;
                 }
 
+                let descText = foundApp.statusDesc ? `<br><small style="color:#555;">कारण: ${foundApp.statusDesc}</small>` : '';
+
                 if(foundApp.status !== 'Ready' || !foundApp.certData) {
                     resultArea.innerHTML = `
                         <div style="background: #fff; padding: 15px; border-radius: 8px; border: 1px solid #fef08a; display: inline-block; text-align: left; width: 100%; max-width: 450px;">
                             <p><b>आवेदन संख्या:</b> <span style="color:#dc2626;">${foundApp.appId}</span></p>
                             <p><b>नाम:</b> ${foundApp.name}</p>
                             <p><b>सेवा:</b> ${foundApp.type}</p>
-                            <p style="color: #d97706; margin-top: 5px;"><b>स्थिति:</b> ${foundApp.status}</p>
+                            <p style="color: #d97706; margin-top: 5px;"><b>स्थिति:</b> ${foundApp.status} ${descText}</p>
                         </div>
                     `;
                     return;
@@ -1179,10 +1215,11 @@
                 applications.forEach((app, index) => {
                     let dbKey = keys[index];
                     let statusText = app.status || 'Pending';
-                    let statusColor = statusText.includes('Ready') ? 'green' : (statusText.includes('Draft') ? '#d97706' : '#2563eb');
+                    let statusColor = statusText.includes('Ready') || statusText.includes('Complete') ? 'green' : (statusText.includes('Return') || statusText.includes('Cancel') ? '#dc2626' : '#2563eb');
                     let appDate = app.date || 'उपलब्ध नहीं';
                     let rawDateVal = app.rawDate || '';
                     let certTypeVal = app.type || '';
+                    let descVal = app.statusDesc ? `<br><small style="color:#d97706; font-weight:600;">कारण: ${app.statusDesc}</small>` : '';
                     
                     let docsHtml = `
                         ${app.photo ? `<a href="${app.photo}" target="_blank" download="${app.appId}_Photo.jpg" class="dash-action-btn" style="background:#0284c7;"><i class="fa-solid fa-image"></i> फोटो (JPG)</a>` : ''}
@@ -1200,14 +1237,59 @@
                             <td>${app.aadharNumber || 'N/A'}</td>
                             <td>${docsHtml || 'उपलब्ध नहीं'}</td>
                             <td><button class="dash-action-btn" onclick="downloadCustomerDetailsPDF('${dbKey}')" style="background:#d97706;"><i class="fa-solid fa-file-pdf"></i> PDF डाउनलोड</button></td>
-                            <td><span style="color:${statusColor}; font-weight:bold;">${statusText}</span></td>
+                            <td><span style="color:${statusColor}; font-weight:bold;">${statusText}</span>${descVal}</td>
                             <td>
-                                <button class="dash-action-btn" onclick="uploadCertificate('${dbKey}')" style="background:#16a34a;"><i class="fa-solid fa-upload"></i> सर्टिफिकेट अपलोड</button>
+                                <button class="dash-action-btn" onclick="openEditStatusModal('${dbKey}', '${statusText}', '${app.statusDesc || ''}')" style="background:#2563eb;"><i class="fa-solid fa-pen-to-square"></i> एडिट स्टेटस</button><br>
+                                <button class="dash-action-btn" onclick="uploadCertificate('${dbKey}')" style="background:#16a34a;"><i class="fa-solid fa-upload"></i> सर्टिफिकेट अपलोड</button><br>
                                 <button class="dash-action-btn" onclick="deleteApplication('${dbKey}')" style="background:#dc2626;"><i class="fa-solid fa-trash"></i> डिलीट</button>
                             </td>
                         </tr>
                     `;
                 });
+            });
+        }
+
+        function openEditStatusModal(dbKey, currentStatus, currentDesc) {
+            document.getElementById('edit_db_key').value = dbKey;
+            document.getElementById('edit_status_select').value = currentStatus;
+            document.getElementById('edit_status_desc').value = currentDesc;
+            toggleDescriptionBox();
+            document.getElementById('editStatusModal').style.display = 'flex';
+        }
+
+        function closeEditStatusModal() {
+            document.getElementById('editStatusModal').style.display = 'none';
+        }
+
+        function toggleDescriptionBox() {
+            let status = document.getElementById('edit_status_select').value;
+            let descGroup = document.getElementById('descriptionGroup');
+            if (status === 'Return' || status === 'Cancel') {
+                descGroup.style.display = 'block';
+            } else {
+                descGroup.style.display = 'none';
+            }
+        }
+
+        function saveUpdatedStatus() {
+            let dbKey = document.getElementById('edit_db_key').value;
+            let newStatus = document.getElementById('edit_status_select').value;
+            let newDesc = document.getElementById('edit_status_desc').value.trim();
+
+            if ((newStatus === 'Return' || newStatus === 'Cancel') && !newDesc) {
+                alert('कृपया Return या Cancel का कारण (Description) जरूर लिखें!');
+                return;
+            }
+
+            db.ref('csc_applications/' + dbKey).update({
+                status: newStatus,
+                statusDesc: (newStatus === 'Return' || newStatus === 'Cancel') ? newDesc : ''
+            }).then(() => {
+                alert('फॉर्म का स्टेटस सफलताપूर्वक अपडेट कर दिया गया है!');
+                closeEditStatusModal();
+                loadApplicationsToTable();
+            }).catch(err => {
+                alert('एरर: ' + err.message);
             });
         }
 
@@ -1270,7 +1352,7 @@
                             certData: event.target.result,
                             status: 'Ready'
                         }).then(() => {
-                            alert('सर्टिफिकेट सफलतापूर्वक अपलोड हो गया और स्टेटस "तैयार" हो गया!');
+                            alert('सर्टिफिकेट सफलतापूर्वक अपलोड हो गया और स्टेटस "Ready" हो गया!');
                             loadApplicationsToTable();
                         });
                     };
