@@ -128,7 +128,7 @@
     </div>
 
     <script>
-        // Firebase Configuration (Yahan apni firebase details verify kar lein)
+        // Firebase Configuration
         const firebaseConfig = {
             apiKey: "YOUR_API_KEY",
             authDomain: "YOUR_AUTH_DOMAIN",
@@ -144,7 +144,7 @@
         let pendingFormData = null;
 
         function submitApplication(event, certType) {
-            event.preventDefault();
+            event.preventDefault(); // फॉर्म को डायरेक्ट सबमिट होने से रोकें
             
             let nowObj = new Date();
             let yyyy = nowObj.getFullYear();
@@ -152,65 +152,29 @@
             let dd = String(nowObj.getDate()).padStart(2, '0');
             let rawDateString = `${yyyy}-${mm}-${dd}`;
 
+            // फॉर्म डेटा को अस्थायी रूप से सेव करें
             pendingFormData = {
                 appId: 'CSC' + Math.floor(100000 + Math.random() * 900000),
                 type: certType,
                 date: nowObj.toLocaleString('en-IN'),
                 rawDate: rawDateString,
                 status: 'Pending',
-                certData: null, photo: null, aadhar: null
+                name: document.getElementById('inc_name').value,
+                mobile: document.getElementById('inc_mobile').value,
+                incomeOrDetails: 'Annual Income: Rs. ' + document.getElementById('inc_income').value + ' | Occupation: ' + document.getElementById('inc_occ').value
             };
 
-            let photoInput, aadharInput;
-            if(certType === 'Income Certificate') {
-                pendingFormData.name = document.getElementById('inc_name').value;
-                pendingFormData.mother = document.getElementById('inc_mother').value;
-                pendingFormData.guardianType = document.getElementById('inc_gtype').value;
-                pendingFormData.guardianName = document.getElementById('inc_gname').value;
-                pendingFormData.area = document.getElementById('inc_area').value;
-                pendingFormData.village = document.getElementById('inc_village').value;
-                pendingFormData.post = document.getElementById('inc_post').value;
-                pendingFormData.thana = document.getElementById('inc_thana').value;
-                pendingFormData.block = document.getElementById('inc_block').value;
-                pendingFormData.tahsil = document.getElementById('inc_tahsil').value;
-                pendingFormData.district = document.getElementById('inc_district').value;
-                pendingFormData.mobile = document.getElementById('inc_mobile').value;
-                pendingFormData.incomeOrDetails = 'Annual Income: Rs. ' + document.getElementById('inc_income').value + ' | Occupation: ' + document.getElementById('inc_occ').value;
-                photoInput = document.getElementById('inc_photo').files[0];
-                aadharInput = document.getElementById('inc_aadhar').files[0];
-            }
-
-            let readerCount = 0;
-            let totalReaders = (photoInput ? 1 : 0) + (aadharInput ? 1 : 0);
-
-            function checkAndShowModal() {
-                if(readerCount === totalReaders) {
-                    document.getElementById('paymentModal').style.display = 'flex';
-                }
-            }
-
-            if(totalReaders === 0) {
-                document.getElementById('paymentModal').style.display = 'flex';
-                return;
-            }
-
-            if(photoInput) {
-                let reader = new FileReader();
-                reader.onload = function(e) { pendingFormData.photo = e.target.result; readerCount++; checkAndShowModal(); };
-                reader.readAsDataURL(photoInput);
-            }
-            if(aadharInput) {
-                let reader = new FileReader();
-                reader.onload = function(e) { pendingFormData.aadhar = e.target.result; readerCount++; checkAndShowModal(); };
-                reader.readAsDataURL(aadharInput);
-            }
+            // तुरंत पेमेंट मॉडल (QR Code Popup) खोलें
+            document.getElementById('paymentModal').style.display = 'flex';
         }
 
         function confirmPaymentAndSubmit() {
             closePaymentModal();
             
+            if (!pendingFormData) return;
+
             db.ref('csc_applications').push(pendingFormData).then(() => {
-                alert("फॉर्म सफलतापूर्वक सबमिट हो गया और डेटाबेस में सेव हो गया! Application ID: " + pendingFormData.appId);
+                alert("भुगतान सफल! फॉर्म सफलतापूर्वक सबमिट हो गया। Application ID: " + pendingFormData.appId);
                 document.querySelectorAll('form').forEach(f => f.reset());
                 pendingFormData = null;
             }).catch((error) => {
