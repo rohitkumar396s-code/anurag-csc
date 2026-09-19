@@ -337,13 +337,6 @@
                     <div class="form-group"><label>आधार कार्ड (JPG)</label><input type="file" id="inc_aadhar" accept="image/jpeg,image/jpg,image/png" required></div>
                 </div>
 
-                <!-- QR Code Display Section -->
-                <div class="text-center my-3 p-3 border rounded bg-light" style="text-align: center; border: 1px solid #cbd5e1; border-radius: 8px; padding: 15px; margin: 20px 0;">
-                    <p class="text-muted mb-2" style="font-size: 13px; color: #64748b; margin-bottom: 8px;">या सीधे इस QR Code को स्कैन करके ₹80 का भुगतान करें:</p>
-                    <img src="QrCode.jpeg.png" alt="Anurag CSC Center QR Code" style="max-width: 150px; border: 1px solid #ddd; border-radius: 6px;">
-                    <p style="color: #1e3a8a; font-weight: bold; font-size: 12px; margin-top: 5px;">ROHITASH KUMAR</p>
-                </div>
-
                 <button type="submit" class="submit-btn">💳 ऑनलाइन भुगतान करें (₹80 Pay & Submit)</button>
                 <div class="back-link"><a onclick="showSection('home')">← मुख्य पृष्ठ पर वापस जाएं</a></div>
             </form>
@@ -387,13 +380,6 @@
                     <div class="form-group"><label>आधार कार्ड (JPG)</label><input type="file" id="cas_aadhar" accept="image/jpeg,image/jpg,image/png" required></div>
                 </div>
 
-                <!-- QR Code Display Section -->
-                <div class="text-center my-3 p-3 border rounded bg-light" style="text-align: center; border: 1px solid #cbd5e1; border-radius: 8px; padding: 15px; margin: 20px 0;">
-                    <p class="text-muted mb-2" style="font-size: 13px; color: #64748b; margin-bottom: 8px;">या सीधे इस QR Code को स्कैन करके ₹80 का भुगतान करें:</p>
-                    <img src="QrCode.jpeg.png" alt="Anurag CSC Center QR Code" style="max-width: 150px; border: 1px solid #ddd; border-radius: 6px;">
-                    <p style="color: #1e3a8a; font-weight: bold; font-size: 12px; margin-top: 5px;">ROHITASH KUMAR</p>
-                </div>
-
                 <button type="submit" class="submit-btn">💳 ऑनलाइन भुगतान करें (₹80 Pay & Submit)</button>
                 <div class="back-link"><a onclick="showSection('home')">← मुख्य पृष्ठ पर वापस जाएं</a></div>
             </form>
@@ -431,13 +417,6 @@
                 <div class="row">
                     <div class="form-group"><label>पासपोर्ट फोटो (JPG)</label><input type="file" id="dom_photo" accept="image/jpeg,image/jpg,image/png" required></div>
                     <div class="form-group"><label>आधार कार्ड (JPG)</label><input type="file" id="dom_aadhar" accept="image/jpeg,image/jpg,image/png" required></div>
-                </div>
-
-                <!-- QR Code Display Section -->
-                <div class="text-center my-3 p-3 border rounded bg-light" style="text-align: center; border: 1px solid #cbd5e1; border-radius: 8px; padding: 15px; margin: 20px 0;">
-                    <p class="text-muted mb-2" style="font-size: 13px; color: #64748b; margin-bottom: 8px;">या सीधे इस QR Code को स्कैन करके ₹80 का भुगतान करें:</p>
-                    <img src="QrCode.jpeg.png" alt="Anurag CSC Center QR Code" style="max-width: 150px; border: 1px solid #ddd; border-radius: 6px;">
-                    <p style="color: #1e3a8a; font-weight: bold; font-size: 12px; margin-top: 5px;">ROHITASH KUMAR</p>
                 </div>
 
                 <button type="submit" class="submit-btn">💳 ऑनलाइन भुगतान करें (₹80 Pay & Submit)</button>
@@ -561,7 +540,7 @@
     </div>
 
     <footer>
-        <p>© 2026 अनुराग सीएससी सेंटर - सर्वाधिकार सुरक्षित | डिजाइन एवं संचालित: रोहिताश कुमार[cite: 2]</p>
+        <p>© 2026 अनुराग सीएससी सेंटर - सर्वाधिकार सुरक्षित | डिजाइन एवं संचालित: रोहिताश कुमार</p>
     </footer>
 
     <script>
@@ -631,7 +610,7 @@
             }, 100);
         }
 
-        // Razorpay Payment Integration Function
+        // Razorpay Payment Integration Function (Updated with your Test Key ID)
         function initiatePaymentAndSubmit(event, certType) {
             event.preventDefault();
 
@@ -650,14 +629,13 @@
             }
 
             var options = {
-                "key": "YOUR_RAZORPAY_KEY_ID", // <-- Yahan apni real Razorpay Key ID dalein
-                "amount": 8000, // ₹80 ke liye amount paise mein (80 * 100)
+                "key": "rzp_test_TdnUjM9qHJaD3Y", 
+                "amount": 8000, // ₹80 के लिए amount paise में (80 * 100)
                 "currency": "INR",
                 "name": "Anurag CSC Center",
                 "description": certType + " Fee (₹80)",
                 "handler": function (response) {
                     alert("Payment Successful! Payment ID: " + response.razorpay_payment_id);
-                    // Payment safal hone par actual form submission process chalega
                     processAndSaveApplication(event, certType);
                 },
                 "modal": {
