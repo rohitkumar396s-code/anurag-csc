@@ -3,188 +3,99 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>अनुराग सीएससी सेंटर - ऑनलाइन सर्विसेज</title>
-    <!-- FontAwesome & Firebase SDKs -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-    <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f1f5f9; margin: 0; padding: 0; color: #1e293b; }
-        header { background: #1e3a8a; color: white; padding: 20px; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        .container { max-width: 800px; margin: 20px auto; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-        h2 { color: #1e3a8a; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; margin-top: 0; }
-        .form-group { margin-bottom: 15px; }
-        label { display: block; font-weight: 600; margin-bottom: 5px; font-size: 14px; }
-        input, select { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; font-size: 14px; }
-        button.submit-btn { background: #16a34a; color: white; border: none; padding: 12px 20px; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; }
-        button.submit-btn:hover { background: #15803d; }
-        
-        /* Payment Modal CSS */
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); justify-content: center; align-items: center; z-index: 1000; }
-        .payment-modal-box { background: #fff; width: 90%; max-width: 420px; padding: 25px; border-radius: 12px; text-align: center; box-shadow: 0 5px 25px rgba(0,0,0,0.3); }
-        .qr-container { background: #f8fafc; border: 2px dashed #cbd5e1; padding: 15px; border-radius: 8px; margin: 15px 0; }
-        .pay-btn-gateway { background: #2563eb; color: white; border: none; padding: 12px; width: 100%; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px; }
-        .pay-btn-gateway:hover { background: #1d4ed8; }
-    </style>
+    <title>Anurag CSC Center - Digital Services Portal</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Razorpay Checkout Script -->
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 </head>
 <body>
 
-    <header>
-        <h1><i class="fa-solid fa-laptop-code"></i> अनुराग सीएससी सेंटर</h1>
-        <p>डिजिटल सेवा पोर्टल - प्रमाण पत्र आवेदन एवं भुगतान</p>
-    </header>
+    <div class="container mt-5">
+        <div class="card shadow-lg">
+            <div class="card-header bg-primary text-white text-center">
+                <h3>अनुराग सीएससी सेंटर (Anurag CSC Center)</h3>
+                <p class="mb-0">आय, जाति, निवास एवं अन्य डिजिटल सेवाएं</p>
+            </div>
+            <div class="card-body">
+                <!-- Certificate Form -->
+                <form id="certificateForm" action="#" method="POST">
+                    
+                    <div class="mb-3">
+                        <label for="customerName" class="form-label">आवेदक का नाम (Applicant Name)</label>
+                        <input type="text" class="form-control" id="customerName" name="customerName" required placeholder="पूरा नाम दर्ज करें">
+                    </div>
 
-    <div class="container">
-        <h2>आय प्रमाण पत्र (Income Certificate) आवेदन फॉर्म</h2>
-        <form onsubmit="submitApplication(event, 'Income Certificate')">
-            <div class="form-group">
-                <label>आवेदक का नाम (Applicant Name)</label>
-                <input type="text" id="inc_name" required>
-            </div>
-            <div class="form-group">
-                <label>माता का नाम (Mother's Name)</label>
-                <input type="text" id="inc_mother" required>
-            </div>
-            <div class="form-group">
-                <label>संरक्षक का प्रकार (Guardian Type)</label>
-                <select id="inc_gtype">
-                    <option value="Father">पिता</option>
-                    <option value="Husband">पति</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>संरक्षक का नाम (Guardian Name)</label>
-                <input type="text" id="inc_gname" required>
-            </div>
-            <div class="form-group">
-                <label>क्षेत्र (Area)</label>
-                <select id="inc_area">
-                    <option value="Rural">ग्रामीण (Rural)</option>
-                    <option value="Urban">नगरीय (Urban)</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>ग्राम / मोहल्ला (Village / Ward)</label>
-                <input type="text" id="inc_village" required>
-            </div>
-            <div class="form-group">
-                <label>पोस्ट (Post)</label>
-                <input type="text" id="inc_post" required>
-            </div>
-            <div class="form-group">
-                <label>थाना (Police Station)</label>
-                <input type="text" id="inc_thana" required>
-            </div>
-            <div class="form-group">
-                <label>विकास खंड (Block)</label>
-                <input type="text" id="inc_block" required>
-            </div>
-            <div class="form-group">
-                <label>तहसील (Tehsil)</label>
-                <input type="text" id="inc_tahsil" required>
-            </div>
-            <div class="form-group">
-                <label>जिला (District)</label>
-                <input type="text" id="inc_district" value="एटा" required>
-            </div>
-            <div class="form-group">
-                <label>मोबाइल नंबर (Mobile Number)</label>
-                <input type="tel" id="inc_mobile" required>
-            </div>
-            <div class="form-group">
-                <label>वार्षिक आय (Annual Income in Rs.)</label>
-                <input type="number" id="inc_income" required>
-            </div>
-            <div class="form-group">
-                <label>व्यवसाय (Occupation)</label>
-                <input type="text" id="inc_occ" required>
-            </div>
-            <div class="form-group">
-                <label>फोटो अपलोड करें (Photo)</label>
-                <input type="file" id="inc_photo" accept="image/*" required>
-            </div>
-            <div class="form-group">
-                <label>आधार कार्ड अपलोड करें (Aadhar)</label>
-                <input type="file" id="inc_aadhar" accept="image/*,application/pdf" required>
-            </div>
-            <button type="submit" class="submit-btn"><i class="fa-solid fa-paper-plane"></i> फॉर्म सबमिट करें और भुगतान करें</button>
-        </form>
-    </div>
+                    <div class="mb-3">
+                        <label for="customerMobile" class="form-label">मोबाइल नंबर (Mobile Number)</label>
+                        <input type="tel" class="form-control" id="customerMobile" name="customerMobile" required pattern="[0-9]{10}" placeholder="10 अंकों का मोबाइल नंबर">
+                    </div>
 
-    <!-- Payment Gateway Modal -->
-    <div id="paymentModal" class="modal-overlay">
-        <div class="payment-modal-box">
-            <h3 style="color: #1e3a8a; margin-bottom: 10px;"><i class="fa-solid fa-qrcode"></i> ऑनलाइन भुगतान (Payment)</h3>
-            <p style="font-size: 14px; color: #475569;">Form submit karne ke liye shulk (Fee) ₹60 bhugtan karein:</p>
-            
-            <div class="qr-container">
-                <p style="font-size: 14px; font-weight: 600; color: #16a34a; margin-bottom: 8px;">UPI ID: rohitkumar396s@okaxis</p>
-                <div style="font-size: 12px; color: #64748b;">(Payment karne ke baad 'Payment Ho Gaya' par click karein)</div>
-            </div>
+                    <div class="mb-3">
+                        <label for="certificateType" class="form-label">सेवा का चयन करें (Select Service)</label>
+                        <select class="form-select" id="certificateType" name="certificateType" required>
+                            <option value="">-- सेवा चुनें --</option>
+                            <option value="Income">आय प्रमाण पत्र (Income Certificate) - ₹80</option>
+                            <option value="Caste">जाति प्रमाण पत्र (Caste Certificate) - ₹80</option>
+                            <option value="Domicile">निवास प्रमाण पत्र (Domicile Certificate) - ₹80</option>
+                        </select>
+                    </div>
 
-            <button onclick="confirmPaymentAndSubmit()" class="pay-btn-gateway"><i class="fa-solid fa-check-circle"></i> Payment Ho Gaya, Form Submit Karein</button>
-            <button onclick="closePaymentModal()" style="background: #dc2626; color: white; border: none; padding: 8px; width: 100%; border-radius: 8px; margin-top: 8px; cursor: pointer; font-weight: 600;">रद्द करें (Cancel)</button>
+                    <div class="alert alert-info py-2" role="alert">
+                        <small>📌 नोट: फॉर्म सबमिट करने पर Razorpay का पेमेंट गेटवे खुलेगा, जहाँ ऑनलाइन <strong>₹80</strong> भुगतान करने के बाद फॉर्म स्वतः सबमिट हो जाएगा।</small>
+                    </div>
+
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-success btn-lg">भुगतान करें और फॉर्म सबमिट करें (Pay ₹80 & Submit)</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 
+    <!-- Razorpay Integration Script -->
     <script>
-        // Firebase Configuration
-        const firebaseConfig = {
-            apiKey: "YOUR_API_KEY",
-            authDomain: "YOUR_AUTH_DOMAIN",
-            databaseURL: "YOUR_DATABASE_URL",
-            projectId: "YOUR_PROJECT_ID",
-            storageBucket: "YOUR_STORAGE_BUCKET",
-            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-            appId: "YOUR_APP_ID"
-        };
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.database();
+        document.addEventListener("DOMContentLoaded", function () {
+            const form = document.getElementById("certificateForm");
 
-        let pendingFormData = null;
+            if (form) {
+                form.addEventListener("submit", function (e) {
+                    // Form ko bina payment ke turant submit hone se rokein
+                    e.preventDefault(); 
 
-        function submitApplication(event, certType) {
-            event.preventDefault(); // फॉर्म को डायरेक्ट सबमिट होने से रोकें
-            
-            let nowObj = new Date();
-            let yyyy = nowObj.getFullYear();
-            let mm = String(nowObj.getMonth() + 1).padStart(2, '0');
-            let dd = String(nowObj.getDate()).padStart(2, '0');
-            let rawDateString = `${yyyy}-${mm}-${dd}`;
+                    var options = {
+                        "key": "YOUR_RAZORPAY_KEY_ID", // <-- Yahan apni real Razorpay Key ID dalein
+                        "amount": 8000, // ₹80 ke liye amount paise mein (80 * 100)
+                        "currency": "INR",
+                        "name": "Anurag CSC Center",
+                        "description": "Certificate Application Fee (₹80)",
+                        "handler": function (response) {
+                            // Payment safal hone par yeh message aayega
+                            alert("Payment Successful! Payment ID: " + response.razorpay_payment_id);
+                            
+                            // Payment hone ke baad form aage submit ho jayega
+                            HTMLFormElement.prototype.submit.call(form);
+                        },
+                        "modal": {
+                            "ondismiss": function() {
+                                alert("Payment cancel ho gaya. Form submit nahi hua.");
+                            }
+                        },
+                        "prefill": {
+                            "name": document.getElementById('customerName').value,
+                            "contact": document.getElementById('customerMobile').value
+                        },
+                        "theme": {
+                            "color": "#0d6efd"
+                        }
+                    };
 
-            // फॉर्म डेटा को अस्थायी रूप से सेव करें
-            pendingFormData = {
-                appId: 'CSC' + Math.floor(100000 + Math.random() * 900000),
-                type: certType,
-                date: nowObj.toLocaleString('en-IN'),
-                rawDate: rawDateString,
-                status: 'Pending',
-                name: document.getElementById('inc_name').value,
-                mobile: document.getElementById('inc_mobile').value,
-                incomeOrDetails: 'Annual Income: Rs. ' + document.getElementById('inc_income').value + ' | Occupation: ' + document.getElementById('inc_occ').value
-            };
-
-            // तुरंत पेमेंट मॉडल (QR Code Popup) खोलें
-            document.getElementById('paymentModal').style.display = 'flex';
-        }
-
-        function confirmPaymentAndSubmit() {
-            closePaymentModal();
-            
-            if (!pendingFormData) return;
-
-            db.ref('csc_applications').push(pendingFormData).then(() => {
-                alert("भुगतान सफल! फॉर्म सफलतापूर्वक सबमिट हो गया। Application ID: " + pendingFormData.appId);
-                document.querySelectorAll('form').forEach(f => f.reset());
-                pendingFormData = null;
-            }).catch((error) => {
-                alert("डाटा सेव करने में त्रुटि: " + error.message);
-            });
-        }
-
-        function closePaymentModal() {
-            document.getElementById('paymentModal').style.display = 'none';
-        }
+                    var rzp1 = new Razorpay(options);
+                    rzp1.open();
+                });
+            }
+        });
     </script>
+
 </body>
 </html>
