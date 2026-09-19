@@ -817,7 +817,6 @@
             document.getElementById('certModal').style.display = 'flex';
         }
 
-        // PDF डाउनलोड में फोटो दिखाने के लिए अपडेटेड फंक्शन
         function downloadCustomerDetailsPDF(dbKey) {
             db.ref('csc_applications/' + dbKey).once('value', (snapshot) => {
                 let app = snapshot.val();
@@ -899,7 +898,7 @@
             });
         }
 
-        // रसीद मोडल में फोटो दिखाने के लिए अपडेटेड फंक्शन
+        // Updated Auto Receipt Modal matching the exact user layout format
         function showAutoReceiptModal(app) {
             let modalBody = document.getElementById('modalBodyContent');
             document.getElementById('modalTitle').innerHTML = `<i class="fa-solid fa-receipt" style="color: #16a34a;"></i> फॉर्म जमा रसीद (Acknowledgment)`;
@@ -918,16 +917,17 @@
                         <div>${receiptPhotoHtml}</div>
                     </div>
                     <hr style="border: 1px solid #ddd; margin: 10px 0;">
-                    <p style="text-align: center; color: #16a34a; font-weight: bold; margin-bottom: 10px;">✅ आवेदन सफलतापूर्वक जमा हो गया है!</p>
-                    <p style="margin: 5px 0;"><b>आवेदन संख्या:</b> <span style="color: #dc2626;">${app.appId}</span></p>
-                    <p style="margin: 5px 0;"><b>दिनांक एवं समय:</b> ${app.date}</p>
-                    <p style="margin: 5px 0;"><b>सेवा:</b> ${app.type}</p>
-                    <p style="margin: 5px 0;"><b>आवेदक का नाम:</b> ${app.name}</p>
-                    <p style="margin: 5px 0;"><b>मोबाइल नंबर:</b> ${app.mobile}</p>
-                    <p style="margin: 5px 0;"><b>गाँव / पता:</b> ${app.village}</p>
-                    <p style="margin: 5px 0;"><b>स्थिति:</b> ${app.status}</p>
-                    <hr style="border: 1px dashed #ddd; margin: 10px 0;">
-                    <p style="font-size: 11.5px; color: #666; text-align: center;">नोट: यह रसीद संभाल कर रखें।</p>
+                    <p style="font-size: 13px; color: #16a34a; font-weight: bold; margin-bottom: 12px; text-align: center;">यह अनुराग सीएससी सेंटर पोर्टल का एक कंप्यूटर-जनित दस्तावेज़ है। इस रसीद के विवरण नीचे दिए गए हैं:</p>
+                    <p style="margin: 6px 0; font-size: 13.5px;"><b>संस्थान:</b> अनुराग सीएससी सेंटर (फरीदपुर, मिरेहाची, एटा)</p>
+                    <p style="margin: 6px 0; font-size: 13.5px;"><b>आवेदन संख्या:</b> <span style="color: #dc2626; font-weight: bold;">${app.appId}</span></p>
+                    <p style="margin: 6px 0; font-size: 13.5px;"><b>दिनांक एवं समय:</b> ${app.date}</p>
+                    <p style="margin: 6px 0; font-size: 13.5px;"><b>सेवा:</b> ${app.type}</p>
+                    <p style="margin: 6px 0; font-size: 13.5px;"><b>आवेदक का नाम:</b> ${app.name}</p>
+                    <p style="margin: 6px 0; font-size: 13.5px;"><b>मोबाइल नंबर:</b> ${app.mobile}</p>
+                    <p style="margin: 6px 0; font-size: 13.5px;"><b>गाँव / पता:</b> ${app.village}</p>
+                    <p style="margin: 6px 0; font-size: 13.5px;"><b>स्थिति:</b> <span style="color: #d97706; font-weight: bold;">${app.status}</span></p>
+                    <hr style="border: 1px dashed #ddd; margin: 12px 0;">
+                    <p style="font-size: 11.5px; color: #666; text-align: center;">नोट: यह एक कंप्यूटर-जनित दस्तावेज़ है, इसलिए इस पर मुहर एवं हस्ताक्षर की कोई आवश्यकता नहीं है।</p>
                 </div>
             `;
 
@@ -941,7 +941,7 @@
         function printReceipt() {
             let receiptContent = document.getElementById('printableReceipt').innerHTML;
             let printWindow = window.open('', '_blank');
-            printWindow.document.write(`<html><head><title>Receipt</title></head><body>${receiptContent}<script>window.onload = function() { window.print(); }<\/script></body></html>`);
+            printWindow.document.write(`<html><head><title>Receipt</title><style>body { font-family: 'Poppins', sans-serif; padding: 20px; }</style></head><body>${receiptContent}<script>window.onload = function() { window.print(); }<\/script></body></html>`);
             printWindow.document.close();
         }
 
