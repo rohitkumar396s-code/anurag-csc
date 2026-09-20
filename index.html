@@ -1070,144 +1070,60 @@
 
         function verifyMasterPinAndSendOtp() {
             let pin = document.getElementById('fp_master_pin').value.trim();
-            let securePin = "1996";
-
-            if(pin !== securePin) {
-                alert("अमान्य मास्टर पिन! सुरक्षा कारणों से ओटीपी नहीं भेजा जा सकता।");
-                return;
+            if(pin === "5094") {
+                generatedOtp = Math.floor(1000 + Math.random() * 9000).toString();
+                alert("आपके पंजीकृत मोबाइल नंबर पर ओटीपी भेजा गया है। (डेमो ओटीपी: " + generatedOtp + ")");
+                
+                let modalBody = document.getElementById('passModalBodyContent');
+                modalBody.innerHTML = `
+                    <p style="font-size: 13.5px; color: #166534; margin-bottom: 15px;">✓ ओटीपी सफलतापूर्वक भेजा गया!</p>
+                    <div class="form-group"><label>4 अंकों का ओटीपी दर्ज करें</label><input type="text" id="fp_otp" maxlength="4"></div>
+                    <div class="form-group"><label>नया पासवर्ड दर्ज करें</label><input type="password" id="fp_new_pass"></div>
+                    <button onclick="verifyOtpAndResetPassword()" style="width: 100%; background: #16a34a; color: white; padding: 11px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;">पासवर्ड बदलें</button>
+                `;
+            } else {
+                alert("गलत मास्टर पिन! कृपया सही पिन दर्ज करें।");
             }
-
-            generatedOtp = Math.floor(1000 + Math.random() * 9000).toString();
-            console.log("Secure System OTP:", generatedOtp);
-
-            let modalBody = document.getElementById('passModalBodyContent');
-            modalBody.innerHTML = `
-                <p style="color: #16a34a; font-size: 13.5px; margin-bottom: 12px;">✅ गुप्त ओटीपी आपके रजिस्टर्ड मोबाइल नंबर पर भेज दिया गया है। (F12 > Console में चेक करें)</p>
-                <div class="form-group">
-                    <label>मोबाइल पर प्राप्त 4-अंकों का ओटीपी दर्ज करें</label>
-                    <input type="text" id="fp_otp" placeholder="OTP दर्ज करें" maxlength="4">
-                </div>
-                <div class="form-group">
-                    <label>नया पासवर्ड बनाएं</label>
-                    <input type="password" id="fp_new_pass" placeholder="नया पासवर्ड">
-                </div>
-                <button onclick="verifyAndResetPassword()" style="width: 100%; background: #16a34a; color: white; padding: 11px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;">पासवर्ड सुरक्षित रूप से बदलें</button>
-            `;
         }
 
-        function verifyAndResetPassword() {
-            let otpInput = document.getElementById('fp_otp').value.trim();
+        function verifyOtpAndResetPassword() {
+            let enteredOtp = document.getElementById('fp_otp').value.trim();
             let newPass = document.getElementById('fp_new_pass').value.trim();
 
-            if(otpInput !== generatedOtp) {
-                alert("गलत ओटीपी (Invalid OTP)!");
-                return;
+            if(enteredOtp === generatedOtp && newPass.length >= 6) {
+                localStorage.setItem('admin_current_password', newPass);
+                closePasswordModal();
+                document.getElementById('successAlert').innerText = "पासवर्ड सफलतापूर्वक बदल गया है! नए पासवर्ड से लॉगिन करें।";
+                document.getElementById('successAlert').style.display = "block";
+            } else {
+                alert("गलत ओटीपी या नया पासवर्ड बहुत छोटा है (कम से कम 6 अक्षर होने चाहिए)!");
             }
-            if(!newPass || newPass.length < 6) {
-                alert("नया पासवर्ड कम से कम 6 अक्षरों का होना चाहिए!");
-                return;
-            }
-
-            localStorage.setItem('admin_current_password', newPass);
-            closePasswordModal();
-            document.getElementById('successAlert').style.display = "block";
-        }
-
-        function openUploadCertModal() {
-            document.getElementById('up_app_id').value = '';
-            document.getElementById('up_cert_pdf').value = '';
-            document.getElementById('uploadCertModal').style.display = 'flex';
-        }
-
-        function closeUploadCertModal() {
-            document.getElementById('uploadCertModal').style.display = 'none';
-        }
-
-        function uploadCustomerCertificatePDF() {
-            let targetAppId = document.getElementById('up_app_id').value.trim().toUpperCase();
-            let pdfFile = document.getElementById('up_cert_pdf').files[0];
-
-            if(!targetAppId) {
-                alert('कृपया आवेदन संख्या (App ID) दर्ज करें!');
-                return;
-            }
-            if(!pdfFile) {
-                alert('कृपया सर्टिफिकेट की PDF फ़ाइल चुनें!');
-                return;
-            }
-
-            let reader = new FileReader();
-            reader.onload = function(e) {
-                let base64Pdf = e.target.result;
-
-                db.ref('csc_applications').once('value', (snapshot) => {
-                    let data = snapshot.val();
-                    if(!data) {
-                        alert('डेटाबेस में कोई रिकॉर्ड नहीं मिला!');
-                        return;
-                    }
-
-                    let foundKey = null;
-                    for(let key in data) {
-                        if(data[key].appId && data[key].appId.toUpperCase() === targetAppId) {
-                            foundKey = key;
-                            break;
-                        }
-                    }
-
-                    if(!foundKey) {
-                        alert('यह आवेदन संख्या (App ID) डेटाबेस में नहीं मिली!');
-                        return;
-                    }
-
-                    db.ref('csc_applications/' + foundKey).update({
-                        certPdf: base64Pdf,
-                        status: 'Ready'
-                    }).then(() => {
-                        alert('सर्टिफिकेट PDF सफलतापूर्वक अपलोड हो गया है और स्टेटस "Ready" कर दिया गया है!');
-                        closeUploadCertModal();
-                        loadApplicationsToTable();
-                    }).catch(err => {
-                        alert('अपलोड करने में त्रुटि: ' + err.message);
-                    });
-                });
-            };
-            reader.readAsDataURL(pdfFile);
         }
 
         function openChangePasswordModal() {
             let modalBody = document.getElementById('passModalBodyContent');
-            document.getElementById('passModalTitle').innerHTML = `<i class="fa-solid fa-key"></i> पासवर्ड बदलें (Change Password)`;
+            document.getElementById('passModalTitle').innerHTML = `<i class="fa-solid fa-key"></i> एडमिन पासवर्ड बदलें`;
             
             modalBody.innerHTML = `
-                <div class="form-group">
-                    <label>पुराना पासवर्ड</label>
-                    <input type="password" id="cp_old" placeholder="वर्तमान पासवर्ड">
-                </div>
-                <div class="form-group">
-                    <label>नया पासवर्ड</label>
-                    <input type="password" id="cp_new" placeholder="नया पासवर्ड">
-                </div>
-                <div class="form-group">
-                    <label>नया पासवर्ड पुनः दर्ज करें</label>
-                    <input type="password" id="cp_confirm" placeholder="कन्फर्म पासवर्ड">
-                </div>
-                <button onclick="executePasswordChange()" style="width: 100%; background: #d97706; color: white; padding: 10px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;">पासवर्ड अपडेट करें</button>
+                <div class="form-group"><label>वर्तमान पासवर्ड</label><input type="password" id="cp_old"></div>
+                <div class="form-group"><label>नया पासवर्ड</label><input type="password" id="cp_new"></div>
+                <div class="form-group"><label>नया पासवर्ड पुनः दर्ज करें</label><input type="password" id="cp_confirm"></div>
+                <button onclick="updateAdminPasswordDirect()" style="width: 100%; background: #d97706; color: white; padding: 11px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;">पासवर्ड अपडेट करें</button>
             `;
             document.getElementById('passwordModal').style.display = 'flex';
         }
 
-        function executePasswordChange() {
+        function updateAdminPasswordDirect() {
             let oldP = document.getElementById('cp_old').value.trim();
             let newP = document.getElementById('cp_new').value.trim();
             let confP = document.getElementById('cp_confirm').value.trim();
 
             if(oldP !== getAdminPassword()) {
-                alert("पुराना पासवर्ड गलत है!");
+                alert("वर्तमान पासवर्ड गलत है!");
                 return;
             }
-            if(!newP || newP !== confP) {
-                alert("नया पासवर्ड और कन्फर्म पासवर्ड मेल नहीं खा रहे हैं!");
+            if(newP !== confP || newP.length < 6) {
+                alert("नया पासवर्ड मेल नहीं खाता या 6 अक्षरों से कम है!");
                 return;
             }
 
@@ -1216,114 +1132,121 @@
             alert("पासवर्ड सफलतापूर्वक बदल दिया गया है!");
         }
 
-        function closePasswordModal() {
-            document.getElementById('passwordModal').style.display = 'none';
-        }
-
         function logoutAdmin() {
             localStorage.removeItem('admin_logged_in');
             showSection('home');
         }
 
-        function searchCustomerCertificate() {
-            let query = document.getElementById('search_input').value.trim().toUpperCase();
-            let resultArea = document.getElementById('searchResultArea');
-            if(!query) { alert('कृपया 10 अंकों का मोबाइल नंबर या आवेदन संख्या दर्ज करें!'); return; }
+        function closeCertModal() { document.getElementById('certModal').style.display = 'none'; }
+        function closeUploadCertModal() { document.getElementById('uploadCertModal').style.display = 'none'; }
+        function openUploadCertModal() { document.getElementById('uploadCertModal').style.display = 'flex'; }
+        function closePasswordModal() { document.getElementById('passwordModal').style.display = 'none'; }
+        function closeEditStatusModal() { document.getElementById('editStatusModal').style.display = 'none'; }
 
-            resultArea.innerHTML = `<p style="color: #2563eb; font-weight: 600;">खोजा जा रहा है...</p>`;
+        // --- DASHBOARD TABLE & DELETE FIX ---
+        let allApplicationsData = [];
 
-            db.ref('csc_applications').once('value', (snapshot) => {
-                let data = snapshot.val();
-                if(!data) {
-                    resultArea.innerHTML = `<p style="color: #dc2626; font-weight: 600;">इस नंबर या आवेदन संख्या से कोई रिकॉर्ड नहीं मिला है।</p>`;
-                    return;
-                }
+        function loadApplicationsToTable() {
+            let tbody = document.getElementById('applicationTableBody');
+            tbody.innerHTML = `<tr><td colspan="12" style="text-align:center; padding: 20px; color: #64748b;">डेटा लोड हो रहा है...</td></tr>`;
 
-                let foundApp = null;
-                for(let key in data) {
-                    let app = data[key];
-                    if(app.mobile === query || (app.appId && app.appId.toUpperCase() === query)) {
-                        foundApp = app;
-                        break;
-                    }
-                }
+            db.ref('csc_applications').on('value', (snapshot) => {
+                allApplicationsData = [];
+                snapshot.forEach((childSnapshot) => {
+                    let key = childSnapshot.key;
+                    let val = childSnapshot.val();
+                    val.dbKey = key;
+                    allApplicationsData.push(val);
+                });
 
-                if(!foundApp) {
-                    resultArea.innerHTML = `<p style="color: #dc2626; font-weight: 600;">इस नंबर या आवेदन संख्या से कोई रिकॉर्ड नहीं मिला है।</p>`;
-                    return;
-                }
-
-                let descText = foundApp.statusDesc ? `<br><small style="color:#555;">कारण: ${foundApp.statusDesc}</small>` : '';
-                let certDownloadBtn = foundApp.certPdf 
-                    ? `<br><a href="${foundApp.certPdf}" download="${foundApp.appId}_Certificate.pdf" style="display: inline-block; margin-top: 10px; background: #16a34a; color: white; padding: 8px 15px; border-radius: 6px; text-decoration: none; font-weight: bold; font-size: 13.5px;"><i class="fa-solid fa-file-pdf"></i> सर्टिफिकेट PDF डाउनलोड करें</a>`
-                    : `<br><p style="color: #d97706; font-size: 13px; margin-top: 8px;">⏳ सर्टिफिकेट अभी तैयार नहीं हुआ है या अपलोड नहीं किया गया है।</p>`;
-
-                resultArea.innerHTML = `
-                    <div style="background: #fff; padding: 15px; border-radius: 8px; border: 1px solid #cbd5e1; display: inline-block; text-align: left; width: 100%; max-width: 450px;">
-                        <p><b>आवेदन संख्या:</b> <span style="color:#dc2626;">${foundApp.appId}</span></p>
-                        <p><b>नाम:</b> ${foundApp.name}</p>
-                        <p><b>सेवा:</b> ${foundApp.type}</p>
-                        <p style="color: #d97706; margin-top: 5px;"><b>स्थिति:</b> ${foundApp.status} ${descText}</p>
-                        ${certDownloadBtn}
-                    </div>
-                `;
+                renderTable(allApplicationsData);
             });
         }
 
-        function loadApplicationsToTable() {
-            const tableBody = document.getElementById('applicationTableBody');
-            tableBody.innerHTML = `<tr><td colspan="12" style="text-align: center; color: #718096;">डेटा लोड हो रहा है...</td></tr>`;
-            
-            db.ref('csc_applications').once('value', (snapshot) => {
-                const data = snapshot.val();
-                tableBody.innerHTML = "";
-                if(!data) {
-                    tableBody.innerHTML = `<tr><td colspan="12" style="text-align: center; color: #718096;">कोई आवेदन नहीं है।</td></tr>`;
-                    return;
-                }
+        function renderTable(dataList) {
+            let tbody = document.getElementById('applicationTableBody');
+            tbody.innerHTML = "";
 
-                let keys = Object.keys(data);
-                let applications = Object.values(data);
+            if(dataList.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="12" style="text-align:center; padding: 20px; color: #64748b;">कोई आवेदन उपलब्ध नहीं है।</td></tr>`;
+                return;
+            }
 
-                applications.forEach((app, index) => {
-                    let dbKey = keys[index];
-                    let statusText = app.status || 'Pending';
-                    let statusColor = statusText.includes('Ready') || statusText.includes('Complete') ? 'green' : (statusText.includes('Return') || statusText.includes('Cancel') ? '#dc2626' : '#2563eb');
-                    let appDate = app.date || 'उपलब्ध नहीं';
-                    let rawDateVal = app.rawDate || '';
-                    let certTypeVal = app.type || '';
-                    let descVal = app.statusDesc ? `<br><small style="color:#d97706; font-weight:600;">कारण: ${app.statusDesc}</small>` : '';
-                    
-                    let docsHtml = `
-                        ${app.photo ? `<a href="${app.photo}" target="_blank" download="${app.appId}_Photo.jpg" class="dash-action-btn" style="background:#0284c7;"><i class="fa-solid fa-image"></i> फोटो (JPG)</a>` : ''}
-                        ${app.aadhar ? `<a href="${app.aadhar}" target="_blank" download="${app.appId}_Aadhar.jpg" class="dash-action-btn" style="background:#7c3aed;"><i class="fa-solid fa-id-card"></i> आधार (JPG)</a>` : ''}
-                    `;
+            // Reverse order taaki naye forms sabse upar dikhein
+            dataList.slice().reverse().forEach((app, index) => {
+                let tr = document.createElement('tr');
+                
+                let photoBadge = app.photo ? `<a href="${app.photo}" target="_blank" class="dash-action-btn" style="background:#0284c7;"><i class="fa-solid fa-image"></i> फोटो</a>` : '<span style="color:#94a3b8;">निशान नहीं</span>';
+                let aadharBadge = app.aadhar ? `<a href="${app.aadhar}" target="_blank" class="dash-action-btn" style="background:#0284c7;"><i class="fa-solid id-card"></i> आधार</a>` : '';
+                
+                let certPdfBadge = app.certPdf 
+                    ? `<a href="${app.certPdf}" target="_blank" class="dash-action-btn" style="background:#16a34a;"><i class="fa-solid fa-file-pdf"></i> सर्टिफिकेट</a>` 
+                    : `<span style="color:#d97706; font-size:11.5px; font-weight:600;">अपलोड बाकी</span>`;
 
-                    let certPdfHtml = app.certPdf 
-                        ? `<a href="${app.certPdf}" download="${app.appId}_Certificate.pdf" class="dash-action-btn" style="background:#16a34a;"><i class="fa-solid fa-file-pdf"></i> सर्टिफिकेट PDF</a>` 
-                        : `<span style="color:#718096; font-size:12px;">अपलोड नहीं</span>`;
-
-                    tableBody.innerHTML += `
-                        <tr data-type="${certTypeVal}" data-status="${statusText.toLowerCase()}" data-date="${rawDateVal}">
-                            <td>${index + 1}</td>
-                            <td><b>${app.appId}</b></td>
-                            <td style="font-size: 12px; white-space: nowrap;">${appDate}</td>
-                            <td><b>${app.type}</b></td>
-                            <td>${app.name}</td>
-                            <td>${app.mobile}</td>
-                            <td>${app.aadharNumber || 'N/A'}</td>
-                            <td>${docsHtml || 'उपलब्ध नहीं'}</td>
-                            <td><button class="dash-action-btn" onclick="downloadCustomerDetailsPDF('${dbKey}')" style="background:#d97706;"><i class="fa-solid fa-file-pdf"></i> फॉर्म PDF</button></td>
-                            <td>${certPdfHtml}</td>
-                            <td><span style="color:${statusColor}; font-weight:bold;">${statusText}</span>${descVal}</td>
-                            <td>
-                                <button class="dash-action-btn" onclick="openEditStatusModal('${dbKey}', '${statusText}', '${app.statusDesc || ''}')" style="background:#2563eb;"><i class="fa-solid fa-pen-to-square"></i> एडिट स्टेटस</button><br>
-                                <button class="dash-action-btn" onclick="deleteApplication('${dbKey}')" style="background:#dc2626;"><i class="fa-solid fa-trash"></i> डिलीट</button>
-                            </td>
-                        </tr>
-                    `;
-                });
+                tr.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td style="font-weight: bold; color: #1e3a8a;">${app.appId}</td>
+                    <td style="font-size: 11.5px; white-space: nowrap;">${app.date}</td>
+                    <td>${app.type}</td>
+                    <td style="font-weight: 600;">${app.name}</td>
+                    <td>${app.mobile}</td>
+                    <td>${app.aadharNumber || 'N/A'}</td>
+                    <td style="white-space: nowrap;">${photoBadge} ${aadharBadge}</td>
+                    <td><button onclick="downloadCustomerDetailsPDF('${app.dbKey}')" class="dash-action-btn" style="background: #475569;"><i class="fa-solid fa-download"></i> PDF</button></td>
+                    <td>${certPdfBadge}</td>
+                    <td>
+                        <span style="display:inline-block; padding: 3px 8px; border-radius: 4px; font-size: 11.5px; font-weight: bold; background: #e2e8f0; color: #1e293b;">${app.status}</span>
+                        ${app.statusDesc ? `<br><small style="color:#dc2626;">${app.statusDesc}</small>` : ''}
+                    </td>
+                    <td style="white-space: nowrap;">
+                        <button onclick="openEditStatusModal('${app.dbKey}', '${app.status}', '${app.statusDesc || ''}')" class="dash-action-btn" style="background: #d97706;" title="स्टेटस एडिट करें"><i class="fa-solid fa-pen-to-square"></i> स्टेटस</button>
+                        <button onclick="deleteApplication('${app.dbKey}', '${app.appId}')" class="dash-action-btn" style="background: #dc2626;" title="रिकॉर्ड डिलीट करें"><i class="fa-solid fa-trash"></i> डिलीट</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
             });
+        }
+
+        // --- DELETE APPLICATION FUNCTION (FIXED) ---
+        function deleteApplication(dbKey, appId) {
+            if (confirm(`क्या आप वाकई आवेदन संख्या [ ${appId} ] को हटाना चाहते हैं? यह कार्रवाई वापस नहीं ली जा सकती।`)) {
+                db.ref('csc_applications/' + dbKey).remove()
+                    .then(() => {
+                        alert("आवेदन सफलतापूर्वक डिलीट कर दिया गया है।");
+                    })
+                    .catch((error) => {
+                        alert("डिलीट करने में त्रुटि हुई: " + error.message);
+                    });
+            }
+        }
+
+        function filterTable() {
+            let searchText = document.getElementById('searchInput').value.toLowerCase();
+            let typeFilter = document.getElementById('certTypeFilter').value;
+            let statusFilter = document.getElementById('statusFilter').value.toLowerCase();
+            let dateFilter = document.getElementById('dateFilter').value;
+
+            let filtered = allApplicationsData.filter(app => {
+                let matchSearch = (app.name && app.name.toLowerCase().includes(searchText)) || 
+                                  (app.mobile && app.mobile.includes(searchText)) || 
+                                  (app.appId && app.appId.toLowerCase().includes(searchText));
+                
+                let matchType = typeFilter === "" || app.type === typeFilter;
+                let matchStatus = statusFilter === "" || (app.status && app.status.toLowerCase().includes(statusFilter));
+                let matchDate = dateFilter === "" || app.rawDate === dateFilter;
+
+                return matchSearch && matchType && matchStatus && matchDate;
+            });
+
+            renderTable(filtered);
+        }
+
+        function resetFilters() {
+            document.getElementById('searchInput').value = "";
+            document.getElementById('certTypeFilter').value = "";
+            document.getElementById('statusFilter').value = "";
+            document.getElementById('dateFilter').value = "";
+            renderTable(allApplicationsData);
         }
 
         function openEditStatusModal(dbKey, currentStatus, currentDesc) {
@@ -1334,15 +1257,14 @@
             document.getElementById('editStatusModal').style.display = 'flex';
         }
 
-        function closeEditStatusModal() {
-            document.getElementById('editStatusModal').style.display = 'none';
-        }
-
         function toggleDescriptionBox() {
-            let status = document.getElementById('edit_status_select').value;
+            let statusVal = document.getElementById('edit_status_select').value;
             let descGroup = document.getElementById('descriptionGroup');
-            if (status === 'Return' || status === 'Cancel') {
+            let descLabel = document.getElementById('descLabel');
+
+            if(statusVal === 'Return' || statusVal === 'Cancel') {
                 descGroup.style.display = 'block';
+                descLabel.innerText = statusVal + ' का कारण (Description)';
             } else {
                 descGroup.style.display = 'none';
             }
@@ -1353,57 +1275,95 @@
             let newStatus = document.getElementById('edit_status_select').value;
             let newDesc = document.getElementById('edit_status_desc').value.trim();
 
-            if ((newStatus === 'Return' || newStatus === 'Cancel') && !newDesc) {
-                alert('कृपया Return या Cancel का कारण (Description) जरूर लिखें!');
-                return;
-            }
-
             db.ref('csc_applications/' + dbKey).update({
                 status: newStatus,
                 statusDesc: (newStatus === 'Return' || newStatus === 'Cancel') ? newDesc : ''
             }).then(() => {
-                alert('फॉर्म का स्टेटस सफलतापूर्वक अपडेट कर दिया गया है!');
                 closeEditStatusModal();
-                loadApplicationsToTable();
+                alert("फॉर्म का स्टेटस सफलताપूर्वक अपडेट हो गया है!");
             }).catch(err => {
-                alert('अपडेट करने में त्रुटि: ' + err.message);
+                alert("अपडेट करने में त्रुटि: " + err.message);
             });
         }
 
-        function filterTable() {
-            let searchVal = document.getElementById('searchInput').value.toLowerCase();
-            let typeVal = document.getElementById('certTypeFilter').value;
-            let statusVal = document.getElementById('statusFilter').value.toLowerCase();
-            let dateVal = document.getElementById('dateFilter').value;
+        function uploadCustomerCertificatePDF() {
+            let appIdInput = document.getElementById('up_app_id').value.trim();
+            let fileInput = document.getElementById('up_cert_pdf').files[0];
 
-            let rows = document.querySelectorAll('#applicationTableBody tr');
+            if(!appIdInput || !fileInput) {
+                alert("कृपया आवेदन संख्या (App ID) और PDF फाइल दोनों दर्ज करें!");
+                return;
+            }
 
-            rows.forEach(row => {
-                if (row.cells.length <= 1) return;
-                let text = row.innerText.toLowerCase();
-                let rType = row.getAttribute('data-type');
-                let rStatus = row.getAttribute('data-status');
-                let rDate = row.getAttribute('data-date');
+            let reader = new FileReader();
+            reader.onload = function(e) {
+                let pdfBase64 = e.target.result;
 
-                let matchSearch = text.includes(searchVal);
-                let matchType = !typeVal || rType === typeVal;
-                let matchStatus = !statusVal || rStatus === statusVal;
-                let matchDate = !dateVal || rDate === dateVal;
+                db.ref('csc_applications').orderByChild('appId').equalTo(appIdInput).once('value', (snapshot) => {
+                    if(!snapshot.exists()) {
+                        alert("इस आवेदन संख्या (App ID) का कोई रिकॉर्ड नहीं मिला!");
+                        return;
+                    }
 
-                if (matchSearch && matchType && matchStatus && matchDate) {
-                    row.style.display = "";
-                } else {
-                    row.style.display = "none";
+                    snapshot.forEach((childSnapshot) => {
+                        let key = childSnapshot.key;
+                        db.ref('csc_applications/' + key).update({
+                            certPdf: pdfBase64,
+                            status: 'Complete'
+                        }).then(() => {
+                            closeUploadCertModal();
+                            alert("सर्टिफिकेट PDF सफलतापूर्वक अपलोड और सेव कर दिया गया है!");
+                        });
+                    });
+                });
+            };
+            reader.readAsDataURL(fileInput);
+        }
+
+        function searchCustomerCertificate() {
+            let query = document.getElementById('search_input').value.trim();
+            let resultArea = document.getElementById('searchResultArea');
+
+            if(!query) {
+                resultArea.innerHTML = `<p style="color: #dc2626; font-size: 13.5px;">⚠️ कृपया मोबाइल नंबर या आवेदन संख्या दर्ज करें!</p>`;
+                return;
+            }
+
+            resultArea.innerHTML = `<p style="color: #2563eb; font-size: 13.5px;">खोज जारी है...</p>`;
+
+            db.ref('csc_applications').once('value', (snapshot) => {
+                let foundList = [];
+                snapshot.forEach((childSnapshot) => {
+                    let val = childSnapshot.val();
+                    if(val.mobile === query || val.appId === query) {
+                        foundList.push(val);
+                    }
+                });
+
+                if(foundList.length === 0) {
+                    resultArea.innerHTML = `<p style="color: #dc2626; font-size: 13.5px;">❌ इस नंबर या आवेदन संख्या से कोई रिकॉर्ड नहीं मिला।</p>`;
+                    return;
                 }
-            });
-        }
 
-        function resetFilters() {
-            document.getElementById('searchInput').value = '';
-            document.getElementById('certTypeFilter').value = '';
-            document.getElementById('statusFilter').value = '';
-            document.getElementById('dateFilter').value = '';
-            filterTable();
+                let htmlContent = `<div style="text-align: left; display: flex; flex-direction: column; gap: 10px;">`;
+                foundList.forEach(app => {
+                    let pdfDownloadBtn = app.certPdf 
+                        ? `<a href="${app.certPdf}" target="_blank" class="dash-action-btn" style="background:#16a34a; padding: 8px 12px;"><i class="fa-solid fa-file-pdf"></i> अपना सर्टिफिकेट डाउनलोड करें</a>`
+                        : `<span style="color: #d97706; font-weight: 600; font-size: 13px;">⚠️ सर्टिफिकेट अभी तैयार नहीं हुआ है (Status: ${app.status})</span>`;
+
+                    htmlContent += `
+                        <div style="background: #ffffff; border: 1px solid #cbd5e1; padding: 15px; border-radius: 8px;">
+                            <p style="margin-bottom: 4px; font-size: 14px;"><b>आवेदन संख्या:</b> <span style="color:#dc2626; font-weight:bold;">${app.appId}</span></p>
+                            <p style="margin-bottom: 4px; font-size: 13.5px;"><b>प्रमाण पत्र प्रकार:</b> ${app.type}</p>
+                            <p style="margin-bottom: 4px; font-size: 13.5px;"><b>आवेदक का नाम:</b> ${app.name}</p>
+                            <p style="margin-bottom: 4px; font-size: 13.5px;"><b>स्थिति:</b> <span style="color:#16a34a; font-weight:bold;">${app.status}</span> ${app.statusDesc ? '('+app.statusDesc+')' : ''}</p>
+                            <div style="margin-top: 10px;">${pdfDownloadBtn}</div>
+                        </div>
+                    `;
+                });
+                htmlContent += `</div>`;
+                resultArea.innerHTML = htmlContent;
+            });
         }
     </script>
 </body>
