@@ -656,11 +656,66 @@
             return localStorage.getItem('admin_current_password') || "Anu@5094";
         }
 
+        // --- 5 MINUTES INACTIVITY & ALL-DEVICES LOGOUT FEATURE ---
+        const INACTIVITY_LIMIT = 5 * 60 * 1000; // 5 Minutes
+        let inactivityTimer;
+
+        function resetInactivityTimer() {
+            clearTimeout(inactivityTimer);
+            if (localStorage.getItem('admin_logged_in') === 'true') {
+                localStorage.setItem('admin_last_active', Date.now().toString());
+                inactivityTimer = setTimeout(() => {
+                    performAutoLogout("5 minute tak koi activity na hone ke karan aapko automatic logout kar diya gaya hai.");
+                }, INACTIVITY_LIMIT);
+            }
+        }
+
+        window.onload = function() {
+            const activityEvents = ['mousemove', 'keydown', 'click', 'scroll', 'touchstart'];
+            activityEvents.forEach(event => {
+                window.addEventListener(event, resetInactivityTimer, true);
+            });
+            resetInactivityTimer();
+        };
+
+        function performAutoLogout(reason) {
+            localStorage.removeItem('admin_logged_in');
+            localStorage.setItem('admin_logout_signal', Date.now().toString()); // Syncs logout to all open tabs/devices
+            alert(reason);
+            showSection('adhikari-login');
+            resetLoginForm();
+        }
+
+        // Cross-tab / Multi-device synchronization listener
+        window.addEventListener('storage', function(e) {
+            if (e.key === 'admin_logout_signal') {
+                if (localStorage.getItem('admin_logged_in') === 'true') {
+                    localStorage.removeItem('admin_logged_in');
+                    alert("Suraksha ke karan admin session dusre device ya tab se logout kar diya gaya hai.");
+                    showSection('adhikari-login');
+                    resetLoginForm();
+                }
+            }
+        });
+
+        // Background check every 10 seconds for 5-min hard expiration
+        setInterval(() => {
+            if (localStorage.getItem('admin_logged_in') === 'true') {
+                let lastActive = parseInt(localStorage.getItem('admin_last_active') || Date.now());
+                if (Date.now() - lastActive >= INACTIVITY_LIMIT) {
+                    performAutoLogout("5 minute ka session samapt ho chuka hai.");
+                }
+            }
+        }, 10000);
+        // ---------------------------------------------------------
+
         function showSection(sectionId) {
             if (sectionId === 'officer-dashboard') {
                 let isLoggedIn = localStorage.getItem('admin_logged_in');
                 if (isLoggedIn !== 'true') {
                     sectionId = 'adhikari-login';
+                } else {
+                    resetInactivityTimer();
                 }
             }
 
@@ -1038,6 +1093,7 @@
             if (enteredUser === "rohit396s" && enteredPass === actualPass) {
                 document.getElementById('errorAlert').style.display = "none";
                 localStorage.setItem('admin_logged_in', 'true');
+                localStorage.setItem('admin_last_active', Date.now().toString());
                 showSection('officer-dashboard');
             } else {
                 document.getElementById('errorAlert').innerText = "गलत यूज़रनेम या पासवर्ड!";
@@ -1134,6 +1190,7 @@
 
         function logoutAdmin() {
             localStorage.removeItem('admin_logged_in');
+            localStorage.setItem('admin_logout_signal', Date.now().toString());
             showSection('home');
         }
 
@@ -1172,7 +1229,6 @@
                 return;
             }
 
-            // Reverse order taaki naye forms sabse upar dikhein
             dataList.slice().reverse().forEach((app, index) => {
                 let tr = document.createElement('tr');
                 
@@ -1207,7 +1263,6 @@
             });
         }
 
-        // --- DELETE APPLICATION FUNCTION (FIXED) ---
         function deleteApplication(dbKey, appId) {
             if (confirm(`क्या आप वाकई आवेदन संख्या [ ${appId} ] को हटाना चाहते हैं? यह कार्रवाई वापस नहीं ली जा सकती।`)) {
                 db.ref('csc_applications/' + dbKey).remove()
@@ -1280,7 +1335,7 @@
                 statusDesc: (newStatus === 'Return' || newStatus === 'Cancel') ? newDesc : ''
             }).then(() => {
                 closeEditStatusModal();
-                alert("फॉर्म का स्टेटस सफलताપूर्वक अपडेट हो गया है!");
+                alert("फॉर्म का स्टेटस सफलतापूर्वक अपडेट हो गया है!");
             }).catch(err => {
                 alert("अपडेट करने में त्रुटि: " + err.message);
             });
