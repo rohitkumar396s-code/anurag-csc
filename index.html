@@ -645,8 +645,8 @@
         const db = firebase.database();
         // IMPORTANT: replace with the UID of your admin user from Firebase Authentication > Users.
         // UID is an identifier, not a password. Real authorization is enforced by Firebase Rules.
-        const ADMIN_UID = "REPLACE_WITH_YOUR_FIREBASE_AUTH_ADMIN_UID";
-        const isAdmin = () => !!(auth.currentUser && ADMIN_UID !== "REPLACE_WITH_YOUR_FIREBASE_AUTH_ADMIN_UID" && auth.currentUser.uid === ADMIN_UID);
+        const ADMIN_UID = "IDRGhOnIaTNLGVAFbYGXxjK7HQ92";
+        const isAdmin = () => !!(auth.currentUser && ADMIN_UID !== "IDRGhOnIaTNLGVAFbYGXxjK7HQ92" && auth.currentUser.uid === ADMIN_UID);
         auth.setPersistence(firebase.auth.Auth.Persistence.SESSION).catch(console.error);
         auth.onAuthStateChanged(user => {
             if (user && isAdmin()) {
@@ -1041,7 +1041,7 @@
             const password = document.getElementById('password').value;
             const error = document.getElementById('errorAlert');
             if (!email || !password) { error.innerText = "ईमेल और पासवर्ड दर्ज करें।"; error.style.display = "block"; return; }
-            if (ADMIN_UID === "REPLACE_WITH_YOUR_FIREBASE_AUTH_ADMIN_UID") {
+            if (ADMIN_UID === "IDRGhOnIaTNLGVAFbYGXxjK7HQ92") {
                 error.innerText = "पहले HTML में Firebase Authentication का Admin UID सेट करें।"; error.style.display = "block"; return;
             }
             try {
@@ -1270,51 +1270,8 @@
         function searchCustomerCertificate() {
             const resultArea = document.getElementById('searchResultArea');
             resultArea.textContent = "ग्राहक खोज अस्थायी रूप से बंद है। मोबाइल नंबर से सार्वजनिक खोज करने पर निजी आवेदन डेटा उजागर हो सकता है। केंद्र से संपर्क करें।";
-            return;
-            let query = document.getElementById('search_input').value.trim();
-            let resultArea = document.getElementById('searchResultArea');
-
-            if(!query) {
-                resultArea.innerHTML = `<p style="color: #dc2626; font-size: 13.5px;">⚠️ कृपया मोबाइल नंबर या आवेदन संख्या दर्ज करें!</p>`;
-                return;
-            }
-
-            resultArea.innerHTML = `<p style="color: #2563eb; font-size: 13.5px;">खोज जारी है...</p>`;
-
-            db.ref('csc_applications').once('value', (snapshot) => {
-                let foundList = [];
-                snapshot.forEach((childSnapshot) => {
-                    let val = childSnapshot.val();
-                    if(val.mobile === query || val.appId === query) {
-                        foundList.push(val);
-                    }
-                });
-
-                if(foundList.length === 0) {
-                    resultArea.innerHTML = `<p style="color: #dc2626; font-size: 13.5px;">❌ इस नंबर या आवेदन संख्या से कोई रिकॉर्ड नहीं मिला।</p>`;
-                    return;
-                }
-
-                let htmlContent = `<div style="text-align: left; display: flex; flex-direction: column; gap: 10px;">`;
-                foundList.forEach(app => {
-                    let pdfDownloadBtn = app.certPdf 
-                        ? `<a href="${app.certPdf}" target="_blank" rel="noopener noreferrer" class="dash-action-btn" style="background:#16a34a; padding: 8px 12px;"><i class="fa-solid fa-file-pdf"></i> अपना सर्टिफिकेट डाउनलोड करें</a>`
-                        : `<span style="color: #d97706; font-weight: 600; font-size: 13px;">⚠️ सर्टिफिकेट अभी तैयार नहीं हुआ है (Status: ${app.status})</span>`;
-
-                    htmlContent += `
-                        <div style="background: #ffffff; border: 1px solid #cbd5e1; padding: 15px; border-radius: 8px;">
-                            <p style="margin-bottom: 4px; font-size: 14px;"><b>आवेदन संख्या:</b> <span style="color:#dc2626; font-weight:bold;">${app.appId}</span></p>
-                            <p style="margin-bottom: 4px; font-size: 13.5px;"><b>प्रमाण पत्र प्रकार:</b> ${app.type}</p>
-                            <p style="margin-bottom: 4px; font-size: 13.5px;"><b>आवेदक का नाम:</b> ${app.name}</p>
-                            <p style="margin-bottom: 4px; font-size: 13.5px;"><b>स्थिति:</b> <span style="color:#16a34a; font-weight:bold;">${app.status}</span> ${app.statusDesc ? '('+app.statusDesc+')' : ''}</p>
-                            <div style="margin-top: 10px;">${pdfDownloadBtn}</div>
-                        </div>
-                    `;
-                });
-                htmlContent += `</div>`;
-                resultArea.innerHTML = htmlContent;
-            });
         }
+
     </script>
 </body>
 </html>
