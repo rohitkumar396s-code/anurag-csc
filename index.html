@@ -9,7 +9,8 @@
     
     <!-- Firebase App (Core SDK) -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <!-- Firebase Realtime Database SDK -->
+    <!-- Firebase Authentication + Realtime Database SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 
     <!-- jsPDF aur html2canvas library -->
@@ -234,8 +235,8 @@
             <a onclick="showSection('home')" class="simple-link">रेट लिस्ट</a>
             <a onclick="scrollToSearchBox()" class="receipt-nav-btn"><i class="fas fa-print"></i> रसीद प्रिंट करें</a>
 
-            <a href="https://edistrict.up.gov.in/" target="_blank" class="edistrict-btn"><i class="fa-solid fa-user-shield"></i> ई-डिस्ट्रिक्ट लॉगिन</a>
-            <a href="https://digitalseva.csc.gov.in/" target="_blank" class="csc-login-btn"><i class="fa-solid fa-right-to-bracket"></i> डिजिटल सेवा लॉगिन</a>
+            <a href="https://edistrict.up.gov.in/" target="_blank" rel="noopener noreferrer" class="edistrict-btn"><i class="fa-solid fa-user-shield"></i> ई-डिस्ट्रिक्ट लॉगिन</a>
+            <a href="https://digitalseva.csc.gov.in/" target="_blank" rel="noopener noreferrer" class="csc-login-btn"><i class="fa-solid fa-right-to-bracket"></i> डिजिटल सेवा लॉगिन</a>
             <a onclick="handleOfficerNavClick()" class="officer-btn"><i class="fa-solid fa-user-shield"></i> एडमिन लॉगिन</a>
             <a href="tel:9760623097" class="login-btn"><i class="fa-solid fa-headset"></i> सहायता</a>
         </div>
@@ -262,11 +263,11 @@
             </div>
 
             <div class="services-grid">
-                <a href="https://upbhulekh.gov.in/" target="_blank" class="service-btn"><i class="fa-solid fa-map-location-dot"></i> भूलेख (खसरा / खतौनी)</a>
-                <a href="https://sarkariresult.com" target="_blank" class="service-btn"><i class="fa-solid fa-briefcase"></i> Sarkari Result</a>
-                <a href="https://upfr.agristack.gov.in/farmer-registry-up/#/" target="_blank" class="service-btn"><i class="fa-solid fa-tractor"></i> फार्मर रजिस्ट्री</a>
-                <a href="https://unifiedportal-mem.epfindia.gov.in/" target="_blank" class="service-btn"><i class="fa-solid fa-file-invoice-dollar"></i> पीएफ / EPFO</a>
-                <a href="https://uidai.gov.in/hi" target="_blank" class="service-btn"><i class="fa-solid fa-address-card"></i> आधार कार्ड अपडेट</a>
+                <a href="https://upbhulekh.gov.in/" target="_blank" rel="noopener noreferrer" class="service-btn"><i class="fa-solid fa-map-location-dot"></i> भूलेख (खसरा / खतौनी)</a>
+                <a href="https://sarkariresult.com" target="_blank" rel="noopener noreferrer" class="service-btn"><i class="fa-solid fa-briefcase"></i> Sarkari Result</a>
+                <a href="https://upfr.agristack.gov.in/farmer-registry-up/#/" target="_blank" rel="noopener noreferrer" class="service-btn"><i class="fa-solid fa-tractor"></i> फार्मर रजिस्ट्री</a>
+                <a href="https://unifiedportal-mem.epfindia.gov.in/" target="_blank" rel="noopener noreferrer" class="service-btn"><i class="fa-solid fa-file-invoice-dollar"></i> पीएफ / EPFO</a>
+                <a href="https://uidai.gov.in/hi" target="_blank" rel="noopener noreferrer" class="service-btn"><i class="fa-solid fa-address-card"></i> आधार कार्ड अपडेट</a>
                 <a href="#" class="service-btn"><i class="fa-solid fa-utensils"></i> नया राशन कार्ड</a>
                 <a href="#" class="service-btn"><i class="fa-solid fa-id-card"></i> नया पैन कार्ड</a>
                 <a href="#" class="service-btn"><i class="fa-solid fa-train"></i> रेल / बस टिकट</a>
@@ -301,7 +302,7 @@
                 <p><b>ईमेल आईडी:</b> rohitkumar396s@gmail.com</p>
                 <div class="action-btns">
                     <a href="tel:9760623097" class="btn-call"><i class="fa-solid fa-phone-volume"></i> तुरंत कॉल करें</a>
-                    <a href="https://wa.me/919760623097" class="btn-wa" target="_blank"><i class="fa-brands fa-whatsapp"></i> WhatsApp चैट</a>
+                    <a href="https://wa.me/919760623097" class="btn-wa" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-whatsapp"></i> WhatsApp चैट</a>
                 </div>
             </div>
         </div>
@@ -472,11 +473,11 @@
                 </div>
                 <div class="form-group">
                     <label>User Name <span style="color:red;">*</span></label>
-                    <input type="text" id="username" placeholder="Username" required>
+                    <input type="email" id="username" autocomplete="username" placeholder="Username" required>
                 </div>
                 <div class="form-group">
                     <label>Password <span style="color:red;">*</span></label>
-                    <input type="password" id="password" placeholder="Password" required>
+                    <input type="password" id="password" autocomplete="current-password" placeholder="Password" required>
                     <a class="forgot-pass-link" onclick="openForgotPasswordModal()">पासवर्ड भूल गए? (Forgot Password)</a>
                 </div>
                 <button type="submit" class="login-submit-btn">Login</button>
@@ -640,7 +641,21 @@
         };
 
         firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
         const db = firebase.database();
+        // IMPORTANT: replace with the UID of your admin user from Firebase Authentication > Users.
+        // UID is an identifier, not a password. Real authorization is enforced by Firebase Rules.
+        const ADMIN_UID = "REPLACE_WITH_YOUR_FIREBASE_AUTH_ADMIN_UID";
+        const isAdmin = () => !!(auth.currentUser && ADMIN_UID !== "REPLACE_WITH_YOUR_FIREBASE_AUTH_ADMIN_UID" && auth.currentUser.uid === ADMIN_UID);
+        auth.setPersistence(firebase.auth.Auth.Persistence.SESSION).catch(console.error);
+        auth.onAuthStateChanged(user => {
+            if (user && isAdmin()) {
+                resetInactivityTimer();
+            } else {
+                clearTimeout(inactivityTimer);
+                if (user && !isAdmin()) auth.signOut();
+            }
+        });
 
         function updateDateTime() {
             const now = new Date();
@@ -650,92 +665,31 @@
         updateDateTime();
         setInterval(updateDateTime, 1000);
 
-        let generatedOtp = "";
-
-        function getAdminPassword() {
-            return localStorage.getItem('admin_current_password') || "Anu@5094";
-        }
-
-        // --- 5 MINUTES INACTIVITY & ALL-DEVICES LOGOUT FEATURE ---
-        const INACTIVITY_LIMIT = 5 * 60 * 1000; // 5 Minutes
+        // Client-side inactivity UX only; Firebase Auth and Database Rules enforce access.
+        const INACTIVITY_LIMIT = 5 * 60 * 1000;
         let inactivityTimer;
-
         function resetInactivityTimer() {
             clearTimeout(inactivityTimer);
-            if (localStorage.getItem('admin_logged_in') === 'true') {
-                localStorage.setItem('admin_last_active', Date.now().toString());
-                inactivityTimer = setTimeout(() => {
-                    performAutoLogout("5 minute tak koi activity na hone ke karan aapko automatic logout kar diya gaya hai.");
-                }, INACTIVITY_LIMIT);
-            }
+            if (isAdmin()) inactivityTimer = setTimeout(() => auth.signOut().finally(() => {
+                alert("सुरक्षा के लिए 5 मिनट निष्क्रिय रहने पर लॉगआउट किया गया।");
+                showSection('adhikari-login'); resetLoginForm();
+            }), INACTIVITY_LIMIT);
         }
-
-        window.onload = function() {
-            const activityEvents = ['mousemove', 'keydown', 'click', 'scroll', 'touchstart'];
-            activityEvents.forEach(event => {
-                window.addEventListener(event, resetInactivityTimer, true);
-            });
-            resetInactivityTimer();
-        };
-
-        function performAutoLogout(reason) {
-            localStorage.removeItem('admin_logged_in');
-            localStorage.setItem('admin_logout_signal', Date.now().toString()); // Syncs logout to all open tabs/devices
-            alert(reason);
-            showSection('adhikari-login');
-            resetLoginForm();
-        }
-
-        // Cross-tab / Multi-device synchronization listener
-        window.addEventListener('storage', function(e) {
-            if (e.key === 'admin_logout_signal') {
-                if (localStorage.getItem('admin_logged_in') === 'true') {
-                    localStorage.removeItem('admin_logged_in');
-                    alert("Suraksha ke karan admin session dusre device ya tab se logout kar diya gaya hai.");
-                    showSection('adhikari-login');
-                    resetLoginForm();
-                }
-            }
-        });
-
-        // Background check every 10 seconds for 5-min hard expiration
-        setInterval(() => {
-            if (localStorage.getItem('admin_logged_in') === 'true') {
-                let lastActive = parseInt(localStorage.getItem('admin_last_active') || Date.now());
-                if (Date.now() - lastActive >= INACTIVITY_LIMIT) {
-                    performAutoLogout("5 minute ka session samapt ho chuka hai.");
-                }
-            }
-        }, 10000);
-        // ---------------------------------------------------------
+        window.addEventListener('mousemove', resetInactivityTimer, true);
+        window.addEventListener('keydown', resetInactivityTimer, true);
+        window.addEventListener('click', resetInactivityTimer, true);
 
         function showSection(sectionId) {
-            if (sectionId === 'officer-dashboard') {
-                let isLoggedIn = localStorage.getItem('admin_logged_in');
-                if (isLoggedIn !== 'true') {
-                    sectionId = 'adhikari-login';
-                } else {
-                    resetInactivityTimer();
-                }
-            }
-
+            if (sectionId === 'officer-dashboard' && !isAdmin()) sectionId = 'adhikari-login';
             document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('active'));
-            document.getElementById(sectionId).classList.add('active');
+            const target = document.getElementById(sectionId);
+            if (target) target.classList.add('active');
             window.scrollTo(0, 0);
-
-            if(sectionId === 'officer-dashboard') { 
-                loadApplicationsToTable(); 
-            }
+            if (sectionId === 'officer-dashboard' && isAdmin()) loadApplicationsToTable();
         }
-
         function handleOfficerNavClick() {
-            let isLoggedIn = localStorage.getItem('admin_logged_in');
-            if (isLoggedIn === 'true') {
-                showSection('officer-dashboard');
-            } else {
-                showSection('adhikari-login');
-                resetLoginForm();
-            }
+            if (isAdmin()) showSection('officer-dashboard');
+            else { showSection('adhikari-login'); resetLoginForm(); }
         }
 
         function scrollToSearchBox() {
@@ -909,6 +863,9 @@
         }
 
         function saveDataToFirebase(formData, successMessage, showReceipt = false) {
+            // Public direct writes containing Aadhaar/documents are disabled on Spark for privacy.
+            alert("सुरक्षा के लिए ऑनलाइन आवेदन/दस्तावेज़ अपलोड अस्थायी रूप से बंद हैं। कृपया केंद्र से संपर्क करें।");
+            return;
             db.ref('csc_applications').push(formData).then(() => {
                 if(successMessage) {
                     alert(successMessage);
@@ -951,6 +908,7 @@
         }
 
         function downloadCustomerDetailsPDF(dbKey) {
+            if (!isAdmin()) { alert("केवल अधिकृत Admin यह कार्य कर सकता है।"); return; }
             db.ref('csc_applications/' + dbKey).once('value', (snapshot) => {
                 let app = snapshot.val();
                 if(!app) { alert('Record not found!'); return; }
@@ -1077,27 +1035,26 @@
             printWindow.document.close();
         }
 
-        function handleLogin(event) {
+        async function handleLogin(event) {
             event.preventDefault();
-            let loginType = document.getElementById('login_type').value;
-            let enteredUser = document.getElementById('username').value.trim();
-            let enteredPass = document.getElementById('password').value.trim();
-            let actualPass = getAdminPassword();
-
-            if (!loginType) {
-                document.getElementById('errorAlert').innerText = "कृपया Login Type चुनें!";
-                document.getElementById('errorAlert').style.display = "block";
-                return;
+            const email = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+            const error = document.getElementById('errorAlert');
+            if (!email || !password) { error.innerText = "ईमेल और पासवर्ड दर्ज करें।"; error.style.display = "block"; return; }
+            if (ADMIN_UID === "REPLACE_WITH_YOUR_FIREBASE_AUTH_ADMIN_UID") {
+                error.innerText = "पहले HTML में Firebase Authentication का Admin UID सेट करें।"; error.style.display = "block"; return;
             }
-
-            if (enteredUser === "rohit396s" && enteredPass === actualPass) {
-                document.getElementById('errorAlert').style.display = "none";
-                localStorage.setItem('admin_logged_in', 'true');
-                localStorage.setItem('admin_last_active', Date.now().toString());
+            try {
+                const cred = await auth.signInWithEmailAndPassword(email, password);
+                if (cred.user.uid !== ADMIN_UID) {
+                    await auth.signOut();
+                    throw new Error("यह अकाउंट अधिकृत Admin नहीं है।");
+                }
+                error.style.display = "none";
                 showSection('officer-dashboard');
-            } else {
-                document.getElementById('errorAlert').innerText = "गलत यूज़रनेम या पासवर्ड!";
-                document.getElementById('errorAlert').style.display = "block";
+            } catch (e) {
+                error.innerText = "लॉगिन असफल: " + (e.code === 'auth/invalid-credential' ? "ईमेल या पासवर्ड गलत है।" : e.message);
+                error.style.display = "block";
             }
         }
 
@@ -1110,89 +1067,20 @@
         }
 
         function openForgotPasswordModal() {
-            let modalBody = document.getElementById('passModalBodyContent');
-            document.getElementById('passModalTitle').innerHTML = `<i class="fa-solid fa-shield-halved"></i> सुरक्षित पासवर्ड रीसेट`;
-            
-            modalBody.innerHTML = `
-                <p style="font-size: 13.5px; color: #475569; margin-bottom: 15px;">पंजीकृत मोबाइल नंबर (******3097) पर सुरक्षित ओटीपी भेजने के लिए अपना गुप्त मास्टर पिन (Master PIN) दर्ज करें:</p>
-                <div class="form-group">
-                    <label>मास्टर सुरक्षा पिन (Master PIN)</label>
-                    <input type="password" id="fp_master_pin" placeholder="गुप्त पिन दर्ज करें">
-                </div>
-                <button onclick="verifyMasterPinAndSendOtp()" style="width: 100%; background: #2563eb; color: white; padding: 11px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;">ओटीपी भेजें</button>
-            `;
-            document.getElementById('passwordModal').style.display = 'flex';
+            const email = document.getElementById('username').value.trim();
+            if (!email) { alert("पहले Admin का पंजीकृत ईमेल यूज़रनेम में दर्ज करें।"); return; }
+            auth.sendPasswordResetEmail(email).then(() => alert("यदि यह ईमेल पंजीकृत है, तो पासवर्ड रीसेट लिंक भेज दिया गया है।"))
+              .catch(() => alert("पासवर्ड रीसेट ईमेल भेजा नहीं जा सका। Firebase Authentication सेटिंग जाँचें।"));
         }
-
-        function verifyMasterPinAndSendOtp() {
-            let pin = document.getElementById('fp_master_pin').value.trim();
-            if(pin === "5094") {
-                generatedOtp = Math.floor(1000 + Math.random() * 9000).toString();
-                alert("आपके पंजीकृत मोबाइल नंबर पर ओटीपी भेजा गया है। (डेमो ओटीपी: " + generatedOtp + ")");
-                
-                let modalBody = document.getElementById('passModalBodyContent');
-                modalBody.innerHTML = `
-                    <p style="font-size: 13.5px; color: #166534; margin-bottom: 15px;">✓ ओटीपी सफलतापूर्वक भेजा गया!</p>
-                    <div class="form-group"><label>4 अंकों का ओटीपी दर्ज करें</label><input type="text" id="fp_otp" maxlength="4"></div>
-                    <div class="form-group"><label>नया पासवर्ड दर्ज करें</label><input type="password" id="fp_new_pass"></div>
-                    <button onclick="verifyOtpAndResetPassword()" style="width: 100%; background: #16a34a; color: white; padding: 11px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;">पासवर्ड बदलें</button>
-                `;
-            } else {
-                alert("गलत मास्टर पिन! कृपया सही पिन दर्ज करें।");
-            }
-        }
-
-        function verifyOtpAndResetPassword() {
-            let enteredOtp = document.getElementById('fp_otp').value.trim();
-            let newPass = document.getElementById('fp_new_pass').value.trim();
-
-            if(enteredOtp === generatedOtp && newPass.length >= 6) {
-                localStorage.setItem('admin_current_password', newPass);
-                closePasswordModal();
-                document.getElementById('successAlert').innerText = "पासवर्ड सफलतापूर्वक बदल गया है! नए पासवर्ड से लॉगिन करें।";
-                document.getElementById('successAlert').style.display = "block";
-            } else {
-                alert("गलत ओटीपी या नया पासवर्ड बहुत छोटा है (कम से कम 6 अक्षर होने चाहिए)!");
-            }
-        }
-
+        function verifyMasterPinAndSendOtp() { alert("डेमो OTP/PIN हटाया गया है। पासवर्ड रीसेट के लिए Firebase का ईमेल रीसेट उपयोग करें।"); }
+        function verifyOtpAndResetPassword() { alert("डेमो OTP/PIN हटाया गया है। पासवर्ड रीसेट के लिए Firebase का ईमेल रीसेट उपयोग करें।"); }
         function openChangePasswordModal() {
-            let modalBody = document.getElementById('passModalBodyContent');
-            document.getElementById('passModalTitle').innerHTML = `<i class="fa-solid fa-key"></i> एडमिन पासवर्ड बदलें`;
-            
-            modalBody.innerHTML = `
-                <div class="form-group"><label>वर्तमान पासवर्ड</label><input type="password" id="cp_old"></div>
-                <div class="form-group"><label>नया पासवर्ड</label><input type="password" id="cp_new"></div>
-                <div class="form-group"><label>नया पासवर्ड पुनः दर्ज करें</label><input type="password" id="cp_confirm"></div>
-                <button onclick="updateAdminPasswordDirect()" style="width: 100%; background: #d97706; color: white; padding: 11px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;">पासवर्ड अपडेट करें</button>
-            `;
-            document.getElementById('passwordModal').style.display = 'flex';
+            const user = auth.currentUser;
+            if (!isAdmin() || !user || !user.email) { alert("पहले Admin के रूप में लॉगिन करें।"); return; }
+            auth.sendPasswordResetEmail(user.email).then(() => alert("पासवर्ड बदलने का सुरक्षित लिंक आपके Admin ईमेल पर भेजा गया है।"))
+              .catch(() => alert("रीसेट लिंक भेजने में समस्या हुई।"));
         }
-
-        function updateAdminPasswordDirect() {
-            let oldP = document.getElementById('cp_old').value.trim();
-            let newP = document.getElementById('cp_new').value.trim();
-            let confP = document.getElementById('cp_confirm').value.trim();
-
-            if(oldP !== getAdminPassword()) {
-                alert("वर्तमान पासवर्ड गलत है!");
-                return;
-            }
-            if(newP !== confP || newP.length < 6) {
-                alert("नया पासवर्ड मेल नहीं खाता या 6 अक्षरों से कम है!");
-                return;
-            }
-
-            localStorage.setItem('admin_current_password', newP);
-            closePasswordModal();
-            alert("पासवर्ड सफलतापूर्वक बदल दिया गया है!");
-        }
-
-        function logoutAdmin() {
-            localStorage.removeItem('admin_logged_in');
-            localStorage.setItem('admin_logout_signal', Date.now().toString());
-            showSection('home');
-        }
+        function updateAdminPasswordDirect() { alert("पासवर्ड केवल Firebase Authentication के सुरक्षित रीसेट लिंक से बदलें।"); }
 
         function closeCertModal() { document.getElementById('certModal').style.display = 'none'; }
         function closeUploadCertModal() { document.getElementById('uploadCertModal').style.display = 'none'; }
@@ -1204,9 +1092,11 @@
         let allApplicationsData = [];
 
         function loadApplicationsToTable() {
+            if (!isAdmin()) { showSection('adhikari-login'); return; }
             let tbody = document.getElementById('applicationTableBody');
             tbody.innerHTML = `<tr><td colspan="12" style="text-align:center; padding: 20px; color: #64748b;">डेटा लोड हो रहा है...</td></tr>`;
 
+            db.ref('csc_applications').off('value');
             db.ref('csc_applications').on('value', (snapshot) => {
                 allApplicationsData = [];
                 snapshot.forEach((childSnapshot) => {
@@ -1232,11 +1122,11 @@
             dataList.slice().reverse().forEach((app, index) => {
                 let tr = document.createElement('tr');
                 
-                let photoBadge = app.photo ? `<a href="${app.photo}" target="_blank" class="dash-action-btn" style="background:#0284c7;"><i class="fa-solid fa-image"></i> फोटो</a>` : '<span style="color:#94a3b8;">निशान नहीं</span>';
-                let aadharBadge = app.aadhar ? `<a href="${app.aadhar}" target="_blank" class="dash-action-btn" style="background:#0284c7;"><i class="fa-solid id-card"></i> आधार</a>` : '';
+                let photoBadge = app.photo ? `<a href="${app.photo}" target="_blank" rel="noopener noreferrer" class="dash-action-btn" style="background:#0284c7;"><i class="fa-solid fa-image"></i> फोटो</a>` : '<span style="color:#94a3b8;">निशान नहीं</span>';
+                let aadharBadge = app.aadhar ? `<a href="${app.aadhar}" target="_blank" rel="noopener noreferrer" class="dash-action-btn" style="background:#0284c7;"><i class="fa-solid id-card"></i> आधार</a>` : '';
                 
                 let certPdfBadge = app.certPdf 
-                    ? `<a href="${app.certPdf}" target="_blank" class="dash-action-btn" style="background:#16a34a;"><i class="fa-solid fa-file-pdf"></i> सर्टिफिकेट</a>` 
+                    ? `<a href="${app.certPdf}" target="_blank" rel="noopener noreferrer" class="dash-action-btn" style="background:#16a34a;"><i class="fa-solid fa-file-pdf"></i> सर्टिफिकेट</a>` 
                     : `<span style="color:#d97706; font-size:11.5px; font-weight:600;">अपलोड बाकी</span>`;
 
                 tr.innerHTML = `
@@ -1264,6 +1154,7 @@
         }
 
         function deleteApplication(dbKey, appId) {
+            if (!isAdmin()) { alert("केवल अधिकृत Admin यह कार्य कर सकता है।"); return; }
             if (confirm(`क्या आप वाकई आवेदन संख्या [ ${appId} ] को हटाना चाहते हैं? यह कार्रवाई वापस नहीं ली जा सकती।`)) {
                 db.ref('csc_applications/' + dbKey).remove()
                     .then(() => {
@@ -1305,6 +1196,7 @@
         }
 
         function openEditStatusModal(dbKey, currentStatus, currentDesc) {
+            if (!isAdmin()) { alert("केवल अधिकृत Admin यह कार्य कर सकता है।"); return; }
             document.getElementById('edit_db_key').value = dbKey;
             document.getElementById('edit_status_select').value = currentStatus;
             document.getElementById('edit_status_desc').value = currentDesc;
@@ -1376,6 +1268,9 @@
         }
 
         function searchCustomerCertificate() {
+            const resultArea = document.getElementById('searchResultArea');
+            resultArea.textContent = "ग्राहक खोज अस्थायी रूप से बंद है। मोबाइल नंबर से सार्वजनिक खोज करने पर निजी आवेदन डेटा उजागर हो सकता है। केंद्र से संपर्क करें।";
+            return;
             let query = document.getElementById('search_input').value.trim();
             let resultArea = document.getElementById('searchResultArea');
 
@@ -1403,7 +1298,7 @@
                 let htmlContent = `<div style="text-align: left; display: flex; flex-direction: column; gap: 10px;">`;
                 foundList.forEach(app => {
                     let pdfDownloadBtn = app.certPdf 
-                        ? `<a href="${app.certPdf}" target="_blank" class="dash-action-btn" style="background:#16a34a; padding: 8px 12px;"><i class="fa-solid fa-file-pdf"></i> अपना सर्टिफिकेट डाउनलोड करें</a>`
+                        ? `<a href="${app.certPdf}" target="_blank" rel="noopener noreferrer" class="dash-action-btn" style="background:#16a34a; padding: 8px 12px;"><i class="fa-solid fa-file-pdf"></i> अपना सर्टिफिकेट डाउनलोड करें</a>`
                         : `<span style="color: #d97706; font-weight: 600; font-size: 13px;">⚠️ सर्टिफिकेट अभी तैयार नहीं हुआ है (Status: ${app.status})</span>`;
 
                     htmlContent += `
