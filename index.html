@@ -12,6 +12,8 @@
     <!-- Firebase Authentication + Realtime Database SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    <!-- Firebase App Check (bot/abuse protection) -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-check-compat.js"></script>
 
     <!-- jsPDF aur html2canvas library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -69,6 +71,19 @@
         
         .receipt-nav-btn { background: #ff5722; color: white !important; padding: 7px 12px; border-radius: 20px; font-weight: 600; font-size: 12.5px; box-shadow: 0 2px 4px rgba(255, 87, 34, 0.3); display: inline-flex; align-items: center; gap: 5px; text-decoration: none; white-space: nowrap; cursor: pointer; transition: 0.3s; }
         .receipt-nav-btn:hover { background: #e64a19; color: white !important; }
+
+        .quick-action-row { display: flex; gap: 15px; flex-wrap: wrap; justify-content: center; width: 100%; max-width: 1000px; }
+        .status-check-btn, .cert-verify-btn {
+            color: white !important; padding: 13px 28px; border-radius: 30px; font-weight: 600; font-size: 15px;
+            display: inline-flex; align-items: center; gap: 9px; text-decoration: none; cursor: pointer;
+            border: none; transition: 0.3s ease; white-space: nowrap;
+        }
+        .status-check-btn { background: linear-gradient(135deg, #db2777, #9d174d); box-shadow: 0 4px 10px rgba(157, 23, 77, 0.35); }
+        .status-check-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 14px rgba(157, 23, 77, 0.45); }
+        .cert-verify-btn { background: linear-gradient(135deg, #fb923c, #ea580c); box-shadow: 0 4px 10px rgba(234, 88, 12, 0.35); }
+        .cert-verify-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 14px rgba(234, 88, 12, 0.45); }
+        .cert-download-btn { background: linear-gradient(135deg, #16a34a, #15803d); box-shadow: 0 4px 10px rgba(21, 128, 61, 0.35); }
+        .cert-download-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 14px rgba(21, 128, 61, 0.45); }
 
         .login-btn { background: #f59e0b; color: white !important; padding: 7px 12px; border-radius: 20px; font-weight: 600; font-size: 12.5px; box-shadow: 0 2px 4px rgba(245, 158, 11, 0.3); display: inline-flex; align-items: center; gap: 5px; text-decoration: none; white-space: nowrap; cursor: pointer; }
         .officer-btn { background: #1e3a8a; color: white !important; padding: 7px 12px; border-radius: 20px; font-weight: 600; font-size: 12.5px; box-shadow: 0 2px 4px rgba(30, 58, 138, 0.3); display: inline-flex; align-items: center; gap: 5px; text-decoration: none; white-space: nowrap; cursor: pointer; }
@@ -142,6 +157,29 @@
         .back-link { text-align: center; margin-top: 25px; }
         .back-link a { color: #3182ce; text-decoration: none; font-weight: 600; font-size: 15px; cursor: pointer; }
         .back-link a:hover { text-decoration: underline; }
+
+        /* ---- सरकारी e-District शैली आवेदन फॉर्म ---- */
+        .govform-container { max-width: 820px; margin: 30px auto; background: #ffffff; border: 1px solid #94a3b8; box-shadow: 0 2px 10px rgba(0,0,0,0.08); }
+        .govform-title-bar { background: linear-gradient(180deg, #e2e8f0, #cbd5e1); color: #1e293b; text-align: center; font-weight: 700; font-size: 16px; padding: 10px; border-bottom: 1px solid #94a3b8; }
+        .govform-notice { background: #fff7ed; color: #b91c1c; font-size: 12.5px; font-weight: 600; padding: 8px 14px; border-bottom: 1px solid #fca5a5; }
+        .govform-table { width: 100%; border-collapse: collapse; }
+        .govform-table td { border: 1px solid #cbd5e1; padding: 8px 12px; font-size: 13.5px; vertical-align: middle; }
+        .govform-section-title td { background: #cbd5e1; font-weight: 700; color: #1e293b; font-size: 13.5px; padding: 7px 12px; }
+        .govform-label { background: #f1f5f9; font-weight: 600; color: #334155; width: 36%; }
+        .govform-value input[type="text"], .govform-value input[type="tel"], .govform-value input[type="file"], .govform-value select {
+            width: 100%; padding: 6px 8px; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 13.5px; background: #fff; box-sizing: border-box;
+        }
+        .govform-value .guardian-row { display: flex; gap: 8px; }
+        .govform-value .guardian-row select { flex: 0 0 34%; }
+        .govform-value .guardian-row input { flex: 1; }
+        .govform-actions-bar { background: #e2e8f0; padding: 14px; border-top: 1px solid #94a3b8; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+        .govform-actions-bar button { padding: 8px 16px; border: 1px solid #94a3b8; border-radius: 4px; background: #f8fafc; color: #1e293b; font-size: 13px; font-weight: 600; cursor: pointer; transition: 0.2s; }
+        .govform-actions-bar button:hover { background: #1e3a8a; color: #fff; border-color: #1e3a8a; }
+        .govform-footnote { text-align: center; font-size: 11.5px; color: #64748b; padding: 8px 14px 14px; }
+        .govform-back-link { text-align: center; padding: 12px; border-top: 1px solid #e2e8f0; }
+        .govform-back-link a { color: #3182ce; text-decoration: none; font-weight: 600; font-size: 13.5px; cursor: pointer; }
+        .govform-back-link a:hover { text-decoration: underline; }
+        @media (max-width: 600px) { .govform-label { width: 42%; } .govform-table td { font-size: 12.5px; padding: 6px 8px; } }
 
         .login-card { max-width: 450px; background: #ffffff; padding: 30px; border-radius: 10px; margin: 40px auto; box-shadow: 0 4px 20px rgba(0,0,0,0.1); border: 1px solid #e2e8f0; }
         .login-nav-tabs { display: flex; gap: 10px; margin-bottom: 25px; border-bottom: 1px solid #e2e8f0; padding-bottom: 15px; }
@@ -255,7 +293,13 @@
 
         <div class="hero-section">
             <div class="hero-title"><i class="fa-solid fa-laptop-code"></i> प्रमुख डिजिटल एवं जन सेवा केंद्र सेवाएं <i class="fa-solid fa-laptop-code"></i></div>
-            
+
+            <div class="quick-action-row">
+                <a onclick="openStatusCheckModal()" class="status-check-btn"><i class="fa-solid fa-ticket"></i> आवेदन की स्थिति</a>
+                <a onclick="openDownloadCertModal()" class="cert-download-btn"><i class="fa-solid fa-download"></i> प्रमाण पत्र डाउनलोड करें</a>
+                <a onclick="openVerifyCertModal()" class="cert-verify-btn"><i class="fa-solid fa-circle-check"></i> प्रमाण पत्र का सत्यापन</a>
+            </div>
+
             <div class="cert-row">
                 <a onclick="showSection('income-form')" class="service-btn"><i class="fa-solid fa-file-lines"></i> आय प्रमाण पत्र</a>
                 <a onclick="showSection('caste-form')" class="service-btn"><i class="fa-solid fa-file-lines"></i> जाति प्रमाण पत्र</a>
@@ -275,16 +319,6 @@
         </div>
 
         <div class="container">
-            <div id="search-box-section" style="background: #f0fdf4; border: 2px dashed #16a34a; padding: 25px; border-radius: 12px; margin-bottom: 30px; text-align: center;">
-                <h3 style="color: #166534; margin-bottom: 10px;"><i class="fa-solid fa-receipt"></i> अपनी रसीद या सर्टिफिकेट खोजें</h3>
-                <p style="color: #475569; font-size: 14px; margin-bottom: 15px;">10 अंकों का मोबाइल नंबर या आवेदन संख्या (जैसे: CSC289744) नीचे दर्ज करें:</p>
-                <div style="display: flex; gap: 10px; max-width: 420px; margin: 0 auto; justify-content: center; flex-wrap: wrap;">
-                    <input type="text" id="search_input" placeholder="मोबाइल नंबर या आवेदन संख्या (CSC...)" style="flex: 1; min-width: 230px; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px;">
-                    <button onclick="searchCustomerCertificate()" style="background: #16a34a; color: white; border: none; padding: 10px 20px; border-radius: 6px; font-weight: bold; cursor: pointer;"><i class="fa-solid fa-magnifying-glass"></i> खोजें</button>
-                </div>
-                <div id="searchResultArea" style="margin-top: 20px;"></div>
-            </div>
-
             <div id="rate-list" class="section-title">रेट लिस्ट (शुल्क विवरण)</div>
             <table>
                 <tr><th>सेवा का नाम</th><th>निर्धारित शुल्क (₹)</th></tr>
@@ -295,7 +329,7 @@
             </table>
 
             <div class="section-title">संचालक एवं संपर्क विवरण</div>
-            <div class="contact-box">
+            <div class="contact-box" id="contact-box-section">
                 <p><b>संचालक:</b> रोहिताश कुमार</p>
                 <p><b>पता:</b> Faridpur, Post- Mirehachi, Dist- Etah, UP - 207125</p>
                 <p><b>मोबाइल नंबर:</b> 9760623097</p>
@@ -310,146 +344,154 @@
 
     <!-- 2. आय प्रमाण पत्र फॉर्म -->
     <div id="income-form" class="page-section">
-        <div class="form-container">
-            <h2>📄 आय प्रमाण पत्र आवेदन फॉर्म</h2>
+        <div class="govform-container">
+            <div class="govform-title-bar">आय प्रमाण-पत्र हेतु आवेदन-पत्र</div>
+            <div class="govform-notice"><i class="fa-solid fa-circle-info"></i> कृपया नीचे दिया गया संपूर्ण विवरण सही-सही भरें, गलत विवरण पर आवेदन निरस्त हो सकता है।</div>
+
             <form id="formIncome">
-                <div class="form-group"><label>आवेदक का पूरा नाम</label><input type="text" id="inc_name" required></div>
-                <div class="form-group"><label>माता का नाम</label><input type="text" id="inc_mother" required></div>
-                <div class="form-group">
-                    <label>पिता / पति का चयन करें और नाम दर्ज करें</label>
-                    <div class="guardian-row">
-                        <select id="inc_gtype"><option value="Father">Father</option><option value="Husband">Husband</option></select>
-                        <input type="text" id="inc_gname" required>
-                    </div>
-                </div>
-                <div class="form-group"><label>आधार नंबर (12 अंक)</label><input type="text" id="inc_aadharnumber" pattern="[0-9]{12}" maxlength="12" placeholder="12 अंकों का आधार नंबर दर्ज करें" required></div>
-                <div class="form-group"><label>क्षेत्र (Area Type)</label><select id="inc_area" required><option value="">-- चुनें --</option><option value="Rural">Rural</option><option value="Urban">Urban</option></select></div>
-                <div class="row">
-                    <div class="form-group"><label>ग्राम / मोहल्ला</label><input type="text" id="inc_village" required></div>
-                    <div class="form-group"><label>पोस्ट ऑफिस</label><input type="text" id="inc_post" required></div>
-                </div>
-                <div class="row">
-                    <div class="form-group"><label>थाना</label><input type="text" id="inc_thana" required></div>
-                    <div class="form-group"><label>ब्लॉक</label><input type="text" id="inc_block" required></div>
-                </div>
-                <div class="row">
-                    <div class="form-group"><label>तहसील</label><input type="text" id="inc_tahsil" required></div>
-                    <div class="form-group"><label>जिला</label><input type="text" id="inc_district" value="Etah" required></div>
-                </div>
-                <div class="row">
-                    <div class="form-group"><label>मोबाइल नंबर</label><input type="tel" id="inc_mobile" pattern="[0-9]{10}" required></div>
-                    <div class="form-group"><label>वार्षिक आय (₹)</label><input type="number" id="inc_income" required></div>
-                </div>
-                <div class="form-group"><label>व्यवसाय</label><input type="text" id="inc_occ" required></div>
-                <div class="row">
-                    <div class="form-group"><label>पासपोर्ट फोटो (JPG)</label><input type="file" id="inc_photo" accept="image/jpeg,image/jpg,image/png" required></div>
-                    <div class="form-group"><label>आधार कार्ड (JPG)</label><input type="file" id="inc_aadhar" accept="image/jpeg,image/jpg,image/png" required></div>
-                </div>
+                <table class="govform-table">
+                    <tr class="govform-section-title"><td colspan="2">आवेदक का विवरण</td></tr>
+                    <tr><td class="govform-label">आवेदक का पूरा नाम</td><td class="govform-value"><input type="text" id="inc_name" required></td></tr>
+                    <tr><td class="govform-label">पिता / पति का नाम</td><td class="govform-value">
+                        <div class="guardian-row">
+                            <select id="inc_gtype"><option value="Father">Father</option><option value="Husband">Husband</option></select>
+                            <input type="text" id="inc_gname" required>
+                        </div>
+                    </td></tr>
+                    <tr><td class="govform-label">माता का नाम</td><td class="govform-value"><input type="text" id="inc_mother" required></td></tr>
+                    <tr><td class="govform-label">आधार नंबर (12 अंक)</td><td class="govform-value"><input type="text" id="inc_aadharnumber" pattern="[0-9]{12}" maxlength="12" placeholder="12 अंकों का आधार नंबर दर्ज करें" required></td></tr>
 
-                <div class="form-action-group">
-                    <button type="button" class="btn-save" onclick="handleAction('save', 'Income Certificate')"><i class="fa-solid fa-floppy-disk"></i> ड्राफ्ट सेव करें (Save)</button>
-                    <button type="button" class="btn-preview" onclick="handleAction('preview', 'Income Certificate')"><i class="fa-solid fa-eye"></i> प्रीव्यू देखें (Preview)</button>
-                    <button type="button" class="btn-edit" onclick="handleAction('edit', 'Income Certificate')"><i class="fa-solid fa-pen-to-square"></i> एडिट / सुधार (Edit)</button>
-                    <button type="button" class="btn-submit" onclick="handleAction('submit', 'Income Certificate')"><i class="fa-solid fa-circle-check"></i> फाइनल सबमिट (Submit)</button>
-                </div>
+                    <tr class="govform-section-title"><td colspan="2">स्थायी पता</td></tr>
+                    <tr><td class="govform-label">क्षेत्र</td><td class="govform-value">
+                        <select id="inc_area" required><option value="">-- चुनें --</option><option value="Rural">Rural</option><option value="Urban">Urban</option></select>
+                    </td></tr>
+                    <tr><td class="govform-label">ग्राम / मोहल्ला</td><td class="govform-value"><input type="text" id="inc_village" required></td></tr>
+                    <tr><td class="govform-label">पोस्ट ऑफिस</td><td class="govform-value"><input type="text" id="inc_post" required></td></tr>
+                    <tr><td class="govform-label">थाना</td><td class="govform-value"><input type="text" id="inc_thana" required></td></tr>
+                    <tr><td class="govform-label">ब्लॉक</td><td class="govform-value"><input type="text" id="inc_block" required></td></tr>
+                    <tr><td class="govform-label">तहसील</td><td class="govform-value"><input type="text" id="inc_tahsil" required></td></tr>
+                    <tr><td class="govform-label">जनपद (जिला)</td><td class="govform-value"><input type="text" id="inc_district" value="Etah" required></td></tr>
+                    <tr><td class="govform-label">मोबाइल नंबर</td><td class="govform-value"><input type="tel" id="inc_mobile" pattern="[0-9]{10}" required></td></tr>
 
-                <div class="back-link"><a onclick="showSection('home')">← मुख्य पृष्ठ पर वापस जाएं</a></div>
+                    <tr class="govform-section-title"><td colspan="2">आय विवरण</td></tr>
+                    <tr><td class="govform-label">व्यवसाय</td><td class="govform-value"><input type="text" id="inc_occ" required></td></tr>
+                    <tr><td class="govform-label">वार्षिक आय (₹)</td><td class="govform-value"><input type="number" id="inc_income" required></td></tr>
+
+                    <tr class="govform-section-title"><td colspan="2">संलग्नक (Attachments)</td></tr>
+                    <tr><td class="govform-label">पासपोर्ट फोटो (JPG)</td><td class="govform-value"><input type="file" id="inc_photo" accept="image/jpeg,image/jpg,image/png" required></td></tr>
+                    <tr><td class="govform-label">आधार कार्ड (JPG)</td><td class="govform-value"><input type="file" id="inc_aadhar" accept="image/jpeg,image/jpg,image/png" required></td></tr>
+                </table>
+
+                <div class="govform-actions-bar">
+                    <button type="button" onclick="handleAction('save', 'Income Certificate')"><i class="fa-solid fa-floppy-disk"></i> ड्राफ्ट सेव करें</button>
+                    <button type="button" onclick="handleAction('preview', 'Income Certificate')"><i class="fa-solid fa-eye"></i> प्रीव्यू देखें</button>
+                    <button type="button" onclick="handleAction('edit', 'Income Certificate')"><i class="fa-solid fa-pen-to-square"></i> एडिट / सुधार</button>
+                    <button type="button" onclick="handleAction('submit', 'Income Certificate')"><i class="fa-solid fa-circle-check"></i> फाइनल सबमिट</button>
+                </div>
+                <div class="govform-footnote">** कृपया ध्यान दें: सबमिट करने के उपरांत आवेदन संख्या रसीद पर उपलब्ध होगी।</div>
+                <div class="govform-back-link"><a onclick="showSection('home')">← मुख्य पृष्ठ पर वापस जाएं</a></div>
             </form>
         </div>
     </div>
 
     <!-- 3. जाति प्रमाण पत्र फॉर्म -->
     <div id="caste-form" class="page-section">
-        <div class="form-container">
-            <h2>📄 जाति प्रमाण पत्र आवेदन फॉर्म</h2>
+        <div class="govform-container">
+            <div class="govform-title-bar">जाति प्रमाण-पत्र हेतु आवेदन-पत्र</div>
+            <div class="govform-notice"><i class="fa-solid fa-circle-info"></i> कृपया नीचे दिया गया संपूर्ण विवरण सही-सही भरें, गलत विवरण पर आवेदन निरस्त हो सकता है।</div>
+
             <form id="formCaste">
-                <div class="form-group"><label>आवेदक का पूरा नाम</label><input type="text" id="cas_name" required></div>
-                <div class="form-group"><label>माता का नाम</label><input type="text" id="cas_mother" required></div>
-                <div class="form-group">
-                    <label>पिता / पति</label>
-                    <div class="guardian-row">
-                        <select id="cas_gtype"><option value="Father">Father</option><option value="Husband">Husband</option></select>
-                        <input type="text" id="cas_gname" required>
-                    </div>
-                </div>
-                <div class="form-group"><label>आधार नंबर (12 अंक)</label><input type="text" id="cas_aadharnumber" pattern="[0-9]{12}" maxlength="12" placeholder="12 अंकों का आधार नंबर दर्ज करें" required></div>
-                <div class="row">
-                    <div class="form-group"><label>जाति वर्ग</label><select id="cas_cat" required><option value="">-- वर्ग --</option><option value="General">General</option><option value="OBC">OBC</option><option value="SC">SC</option><option value="ST">ST</option></select></div>
-                    <div class="form-group"><label>उपजाति</label><input type="text" id="cas_subcaste" required></div>
-                </div>
-                <div class="form-group"><label>क्षेत्र</label><select id="cas_area" required><option value="">-- चुनें --</option><option value="Rural">Rural</option><option value="Urban">Urban</option></select></div>
-                <div class="row">
-                    <div class="form-group"><label>ग्राम / मोहल्ला</label><input type="text" id="cas_village" required></div>
-                    <div class="form-group"><label>पोस्ट</label><input type="text" id="cas_post" required></div>
-                </div>
-                <div class="row">
-                    <div class="form-group"><label>थाना</label><input type="text" id="cas_thana" required></div>
-                    <div class="form-group"><label>ब्लॉक</label><input type="text" id="cas_block" required></div>
-                </div>
-                <div class="row">
-                    <div class="form-group"><label>तहसील</label><input type="text" id="cas_tahsil" required></div>
-                    <div class="form-group"><label>जिला</label><input type="text" id="cas_district" value="Etah" required></div>
-                </div>
-                <div class="form-group"><label>मोबाइल नंबर</label><input type="tel" id="cas_mobile" pattern="[0-9]{10}" required></div>
-                <div class="row">
-                    <div class="form-group"><label>पासपोर्ट फोटो (JPG)</label><input type="file" id="cas_photo" accept="image/jpeg,image/jpg,image/png" required></div>
-                    <div class="form-group"><label>आधार कार्ड (JPG)</label><input type="file" id="cas_aadhar" accept="image/jpeg,image/jpg,image/png" required></div>
-                </div>
+                <table class="govform-table">
+                    <tr class="govform-section-title"><td colspan="2">आवेदक का विवरण</td></tr>
+                    <tr><td class="govform-label">आवेदक का पूरा नाम</td><td class="govform-value"><input type="text" id="cas_name" required></td></tr>
+                    <tr><td class="govform-label">पिता / पति का नाम</td><td class="govform-value">
+                        <div class="guardian-row">
+                            <select id="cas_gtype"><option value="Father">Father</option><option value="Husband">Husband</option></select>
+                            <input type="text" id="cas_gname" required>
+                        </div>
+                    </td></tr>
+                    <tr><td class="govform-label">माता का नाम</td><td class="govform-value"><input type="text" id="cas_mother" required></td></tr>
+                    <tr><td class="govform-label">आधार नंबर (12 अंक)</td><td class="govform-value"><input type="text" id="cas_aadharnumber" pattern="[0-9]{12}" maxlength="12" placeholder="12 अंकों का आधार नंबर दर्ज करें" required></td></tr>
 
-                <div class="form-action-group">
-                    <button type="button" class="btn-save" onclick="handleAction('save', 'Caste Certificate')"><i class="fa-solid fa-floppy-disk"></i> ड्राफ्ट सेव करें (Save)</button>
-                    <button type="button" class="btn-preview" onclick="handleAction('preview', 'Caste Certificate')"><i class="fa-solid fa-eye"></i> प्रीव्यू देखें (Preview)</button>
-                    <button type="button" class="btn-edit" onclick="handleAction('edit', 'Caste Certificate')"><i class="fa-solid fa-pen-to-square"></i> एडिट / सुधार (Edit)</button>
-                    <button type="button" class="btn-submit" onclick="handleAction('submit', 'Caste Certificate')"><i class="fa-solid fa-circle-check"></i> फाइनल सबमिट (Submit)</button>
-                </div>
+                    <tr class="govform-section-title"><td colspan="2">जाति विवरण</td></tr>
+                    <tr><td class="govform-label">जाति वर्ग</td><td class="govform-value">
+                        <select id="cas_cat" required><option value="">-- वर्ग चुनें --</option><option value="General">General</option><option value="OBC">OBC</option><option value="SC">SC</option><option value="ST">ST</option></select>
+                    </td></tr>
+                    <tr><td class="govform-label">भेदी / उपजाति</td><td class="govform-value"><input type="text" id="cas_subcaste" required></td></tr>
 
-                <div class="back-link"><a onclick="showSection('home')">← मुख्य पृष्ठ पर वापस जाएं</a></div>
+                    <tr class="govform-section-title"><td colspan="2">स्थायी पता</td></tr>
+                    <tr><td class="govform-label">क्षेत्र</td><td class="govform-value">
+                        <select id="cas_area" required><option value="">-- चुनें --</option><option value="Rural">Rural</option><option value="Urban">Urban</option></select>
+                    </td></tr>
+                    <tr><td class="govform-label">ग्राम / मोहल्ला</td><td class="govform-value"><input type="text" id="cas_village" required></td></tr>
+                    <tr><td class="govform-label">मार्ग / पोस्ट</td><td class="govform-value"><input type="text" id="cas_post" required></td></tr>
+                    <tr><td class="govform-label">थाना</td><td class="govform-value"><input type="text" id="cas_thana" required></td></tr>
+                    <tr><td class="govform-label">ब्लॉक</td><td class="govform-value"><input type="text" id="cas_block" required></td></tr>
+                    <tr><td class="govform-label">तहसील</td><td class="govform-value"><input type="text" id="cas_tahsil" required></td></tr>
+                    <tr><td class="govform-label">जनपद (जिला)</td><td class="govform-value"><input type="text" id="cas_district" value="Etah" required></td></tr>
+                    <tr><td class="govform-label">मोबाइल नंबर</td><td class="govform-value"><input type="tel" id="cas_mobile" pattern="[0-9]{10}" required></td></tr>
+
+                    <tr class="govform-section-title"><td colspan="2">संलग्नक (Attachments)</td></tr>
+                    <tr><td class="govform-label">पासपोर्ट फोटो (JPG)</td><td class="govform-value"><input type="file" id="cas_photo" accept="image/jpeg,image/jpg,image/png" required></td></tr>
+                    <tr><td class="govform-label">आधार कार्ड (JPG)</td><td class="govform-value"><input type="file" id="cas_aadhar" accept="image/jpeg,image/jpg,image/png" required></td></tr>
+                </table>
+
+                <div class="govform-actions-bar">
+                    <button type="button" onclick="handleAction('save', 'Caste Certificate')"><i class="fa-solid fa-floppy-disk"></i> ड्राफ्ट सेव करें</button>
+                    <button type="button" onclick="handleAction('preview', 'Caste Certificate')"><i class="fa-solid fa-eye"></i> प्रीव्यू देखें</button>
+                    <button type="button" onclick="handleAction('edit', 'Caste Certificate')"><i class="fa-solid fa-pen-to-square"></i> एडिट / सुधार</button>
+                    <button type="button" onclick="handleAction('submit', 'Caste Certificate')"><i class="fa-solid fa-circle-check"></i> फाइनल सबमिट</button>
+                </div>
+                <div class="govform-footnote">** कृपया ध्यान दें: सबमिट करने के उपरांत आवेदन संख्या रसीद पर उपलब्ध होगी।</div>
+                <div class="govform-back-link"><a onclick="showSection('home')">← मुख्य पृष्ठ पर वापस जाएं</a></div>
             </form>
         </div>
     </div>
 
     <!-- 4. निवास प्रमाण पत्र फॉर्म -->
     <div id="domicile-form" class="page-section">
-        <div class="form-container">
-            <h2>📄 निवास प्रमाण पत्र आवेदन फॉर्म</h2>
+        <div class="govform-container">
+            <div class="govform-title-bar">निवास प्रमाण-पत्र हेतु आवेदन-पत्र</div>
+            <div class="govform-notice"><i class="fa-solid fa-circle-info"></i> कृपया नीचे दिया गया संपूर्ण विवरण सही-सही भरें, गलत विवरण पर आवेदन निरस्त हो सकता है।</div>
+
             <form id="formDomicile">
-                <div class="form-group"><label>आवेदक का पूरा नाम</label><input type="text" id="dom_name" required></div>
-                <div class="form-group"><label>माता का नाम</label><input type="text" id="dom_mother" required></div>
-                <div class="form-group">
-                    <label>पिता / पति</label>
-                    <div class="guardian-row">
-                        <select id="dom_gtype"><option value="Father">Father</option><option value="Husband">Husband</option></select>
-                        <input type="text" id="dom_gname" required>
-                    </div>
-                </div>
-                <div class="form-group"><label>आधार नंबर (12 अंक)</label><input type="text" id="dom_aadharnumber" pattern="[0-9]{12}" maxlength="12" placeholder="12 अंकों का आधार नंबर दर्ज करें" required></div>
-                <div class="form-group"><label>क्षेत्र</label><select id="dom_area" required><option value="">-- चुनें --</option><option value="Rural">Rural</option><option value="Urban">Urban</option></select></div>
-                <div class="row">
-                    <div class="form-group"><label>ग्राम / मोहल्ला</label><input type="text" id="dom_village" required></div>
-                    <div class="form-group"><label>पोस्ट</label><input type="text" id="dom_post" required></div>
-                </div>
-                <div class="row">
-                    <div class="form-group"><label>थाना</label><input type="text" id="dom_thana" required></div>
-                    <div class="form-group"><label>ब्लॉक</label><input type="text" id="dom_block" required></div>
-                </div>
-                <div class="row">
-                    <div class="form-group"><label>तहसील</label><input type="text" id="dom_tahsil" required></div>
-                    <div class="form-group"><label>जिला</label><input type="text" id="dom_district" value="Etah" required></div>
-                </div>
-                <div class="form-group"><label>मोबाइल नंबर</label><input type="tel" id="dom_mobile" pattern="[0-9]{10}" required></div>
-                <div class="row">
-                    <div class="form-group"><label>पासपोर्ट फोटो (JPG)</label><input type="file" id="dom_photo" accept="image/jpeg,image/jpg,image/png" required></div>
-                    <div class="form-group"><label>आधार कार्ड (JPG)</label><input type="file" id="dom_aadhar" accept="image/jpeg,image/jpg,image/png" required></div>
-                </div>
+                <table class="govform-table">
+                    <tr class="govform-section-title"><td colspan="2">आवेदक का विवरण</td></tr>
+                    <tr><td class="govform-label">आवेदक का पूरा नाम</td><td class="govform-value"><input type="text" id="dom_name" required></td></tr>
+                    <tr><td class="govform-label">पिता / पति का नाम</td><td class="govform-value">
+                        <div class="guardian-row">
+                            <select id="dom_gtype"><option value="Father">Father</option><option value="Husband">Husband</option></select>
+                            <input type="text" id="dom_gname" required>
+                        </div>
+                    </td></tr>
+                    <tr><td class="govform-label">माता का नाम</td><td class="govform-value"><input type="text" id="dom_mother" required></td></tr>
+                    <tr><td class="govform-label">आधार नंबर (12 अंक)</td><td class="govform-value"><input type="text" id="dom_aadharnumber" pattern="[0-9]{12}" maxlength="12" placeholder="12 अंकों का आधार नंबर दर्ज करें" required></td></tr>
 
-                <div class="form-action-group">
-                    <button type="button" class="btn-save" onclick="handleAction('save', 'Domicile Certificate')"><i class="fa-solid fa-floppy-disk"></i> ड्राफ्ट सेव करें (Save)</button>
-                    <button type="button" class="btn-preview" onclick="handleAction('preview', 'Domicile Certificate')"><i class="fa-solid fa-eye"></i> प्रीव्यू देखें (Preview)</button>
-                    <button type="button" class="btn-edit" onclick="handleAction('edit', 'Domicile Certificate')"><i class="fa-solid fa-pen-to-square"></i> एडिट / सुधार (Edit)</button>
-                    <button type="button" class="btn-submit" onclick="handleAction('submit', 'Domicile Certificate')"><i class="fa-solid fa-circle-check"></i> फाइनल सबमिट (Submit)</button>
-                </div>
+                    <tr class="govform-section-title"><td colspan="2">निवास स्थान का विवरण</td></tr>
+                    <tr><td class="govform-label">क्षेत्र</td><td class="govform-value">
+                        <select id="dom_area" required><option value="">-- चुनें --</option><option value="Rural">Rural</option><option value="Urban">Urban</option></select>
+                    </td></tr>
+                    <tr><td class="govform-label">ग्राम / मोहल्ला</td><td class="govform-value"><input type="text" id="dom_village" required></td></tr>
+                    <tr><td class="govform-label">पोस्ट</td><td class="govform-value"><input type="text" id="dom_post" required></td></tr>
+                    <tr><td class="govform-label">थाना</td><td class="govform-value"><input type="text" id="dom_thana" required></td></tr>
+                    <tr><td class="govform-label">ब्लॉक</td><td class="govform-value"><input type="text" id="dom_block" required></td></tr>
+                    <tr><td class="govform-label">तहसील</td><td class="govform-value"><input type="text" id="dom_tahsil" required></td></tr>
+                    <tr><td class="govform-label">जनपद (जिला)</td><td class="govform-value"><input type="text" id="dom_district" value="Etah" required></td></tr>
+                    <tr><td class="govform-label">मोबाइल नंबर</td><td class="govform-value"><input type="tel" id="dom_mobile" pattern="[0-9]{10}" required></td></tr>
 
-                <div class="back-link"><a onclick="showSection('home')">← मुख्य पृष्ठ पर वापस जाएं</a></div>
+                    <tr class="govform-section-title"><td colspan="2">संलग्नक (Attachments)</td></tr>
+                    <tr><td class="govform-label">पासपोर्ट फोटो (JPG)</td><td class="govform-value"><input type="file" id="dom_photo" accept="image/jpeg,image/jpg,image/png" required></td></tr>
+                    <tr><td class="govform-label">आधार कार्ड (JPG)</td><td class="govform-value"><input type="file" id="dom_aadhar" accept="image/jpeg,image/jpg,image/png" required></td></tr>
+                </table>
+
+                <div class="govform-actions-bar">
+                    <button type="button" onclick="handleAction('save', 'Domicile Certificate')"><i class="fa-solid fa-floppy-disk"></i> ड्राफ्ट सेव करें</button>
+                    <button type="button" onclick="handleAction('preview', 'Domicile Certificate')"><i class="fa-solid fa-eye"></i> प्रीव्यू देखें</button>
+                    <button type="button" onclick="handleAction('edit', 'Domicile Certificate')"><i class="fa-solid fa-pen-to-square"></i> एडिट / सुधार</button>
+                    <button type="button" onclick="handleAction('submit', 'Domicile Certificate')"><i class="fa-solid fa-circle-check"></i> फाइनल सबमिट</button>
+                </div>
+                <div class="govform-footnote">** कृपया ध्यान दें: सबमिट करने के उपरांत आवेदन संख्या रसीद पर उपलब्ध होगी।</div>
+                <div class="govform-back-link"><a onclick="showSection('home')">← मुख्य पृष्ठ पर वापस जाएं</a></div>
             </form>
         </div>
     </div>
@@ -568,6 +610,22 @@
         </div>
     </div>
 
+    <!-- सार्वजनिक प्रमाण पत्र डाउनलोड मॉडल -->
+    <div id="downloadCertModal" class="modal-overlay">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeDownloadCertModal()">×</button>
+            <h3 style="color: #1e3a8a; margin-bottom: 15px;"><i class="fa-solid fa-download"></i> प्रमाण पत्र डाउनलोड करें</h3>
+            <div class="modal-body" style="text-align: left;">
+                <div class="form-group">
+                    <label>अपनी आवेदन संख्या (App ID) दर्ज करें, जैसे: CSC123456</label>
+                    <input type="text" id="dl_app_id" placeholder="CSCXXXXXX">
+                </div>
+                <button onclick="downloadCertificateByAppId()" style="width: 100%; background: #16a34a; color: white; padding: 11px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 10px;"><i class="fa-solid fa-download"></i> डाउनलोड करें</button>
+                <p id="dl_cert_msg" style="margin-top: 12px; font-size: 13.5px; text-align: center;"></p>
+            </div>
+        </div>
+    </div>
+
     <!-- एडमिन सर्टिफिकेट अपलोड मॉडल -->
     <div id="uploadCertModal" class="modal-overlay">
         <div class="modal-content">
@@ -583,6 +641,38 @@
                     <input type="file" id="up_cert_pdf" accept="application/pdf">
                 </div>
                 <button onclick="uploadCustomerCertificatePDF()" style="width: 100%; background: #16a34a; color: white; padding: 11px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 10px;">अपलोड और सेव करें</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- सार्वजनिक आवेदन स्थिति मॉडल -->
+    <div id="statusCheckModal" class="modal-overlay">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeStatusCheckModal()">×</button>
+            <h3 style="color: #1e3a8a; margin-bottom: 15px;"><i class="fa-solid fa-ticket"></i> आवेदन की स्थिति देखें</h3>
+            <div class="modal-body" style="text-align: left;">
+                <div class="form-group">
+                    <label>अपनी आवेदन संख्या (App ID) दर्ज करें, जैसे: CSC123456</label>
+                    <input type="text" id="sc_app_id" placeholder="CSCXXXXXX">
+                </div>
+                <button onclick="checkApplicationStatus()" style="width: 100%; background: #9d174d; color: white; padding: 11px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 10px;"><i class="fa-solid fa-magnifying-glass"></i> स्थिति देखें</button>
+                <div id="sc_result_box" style="margin-top: 15px;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- सार्वजनिक प्रमाण पत्र सत्यापन मॉडल -->
+    <div id="verifyCertModal" class="modal-overlay">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeVerifyCertModal()">×</button>
+            <h3 style="color: #1e3a8a; margin-bottom: 15px;"><i class="fa-solid fa-circle-check"></i> प्रमाण पत्र सत्यापित करें</h3>
+            <div class="modal-body" style="text-align: left;">
+                <div class="form-group">
+                    <label>प्रमाण पत्र पर छपी आवेदन संख्या (App ID) दर्ज करें</label>
+                    <input type="text" id="vf_app_id" placeholder="CSCXXXXXX">
+                </div>
+                <button onclick="verifyCertificate()" style="width: 100%; background: #ea580c; color: white; padding: 11px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 10px;"><i class="fa-solid fa-circle-check"></i> सत्यापित करें</button>
+                <div id="vf_result_box" style="margin-top: 15px;"></div>
             </div>
         </div>
     </div>
@@ -641,12 +731,25 @@
         };
 
         firebase.initializeApp(firebaseConfig);
+
+        // Firebase App Check: blocks bots/scripts from hitting Firebase directly,
+        // only real browser page-loads of this site get valid tokens.
+        // STEP: replace RECAPTCHA_V3_SITE_KEY below with the site key you get from
+        // Firebase Console > App Check (see instructions given separately).
+        const RECAPTCHA_V3_SITE_KEY = "6Lfxts8tAAAAAGUS3Q85422IyXn_aJ4qesoh-nC-";
+        if (RECAPTCHA_V3_SITE_KEY !== "PASTE_YOUR_RECAPTCHA_V3_SITE_KEY_HERE") {
+            firebase.appCheck().activate(
+                new firebase.appCheck.ReCaptchaV3Provider(RECAPTCHA_V3_SITE_KEY),
+                true
+            );
+        }
+
         const auth = firebase.auth();
         const db = firebase.database();
-        // IMPORTANT: replace with the UID of your admin user from Firebase Authentication > Users.
+        // Admin UID set from Firebase Authentication > Users (rohitkumar396s@gmail...).
         // UID is an identifier, not a password. Real authorization is enforced by Firebase Rules.
         const ADMIN_UID = "IDRGhOnIaTNLGVAFbYGXxjK7HQ92";
-        const isAdmin = () => !!(auth.currentUser && ADMIN_UID !== "IDRGhOnIaTNLGVAFbYGXxjK7HQ92" && auth.currentUser.uid === ADMIN_UID);
+        const isAdmin = () => !!(auth.currentUser && auth.currentUser.uid === ADMIN_UID);
         auth.setPersistence(firebase.auth.Auth.Persistence.SESSION).catch(console.error);
         auth.onAuthStateChanged(user => {
             if (user && isAdmin()) {
@@ -692,12 +795,20 @@
             else { showSection('adhikari-login'); resetLoginForm(); }
         }
 
+        function logoutAdmin() {
+            auth.signOut().then(() => {
+                showSection('adhikari-login');
+                resetLoginForm();
+            }).catch((error) => {
+                alert("लॉग आउट करने में त्रुटि: " + error.message);
+            });
+        }
+
         function scrollToSearchBox() {
             showSection('home');
             setTimeout(() => {
-                const box = document.getElementById('search-box-section');
-                box.scrollIntoView({ behavior: 'smooth' });
-                document.getElementById('search_input').focus();
+                const box = document.getElementById('contact-box-section');
+                if (box) box.scrollIntoView({ behavior: 'smooth' });
             }, 100);
         }
 
@@ -863,9 +974,6 @@
         }
 
         function saveDataToFirebase(formData, successMessage, showReceipt = false) {
-            // Public direct writes containing Aadhaar/documents are disabled on Spark for privacy.
-            alert("सुरक्षा के लिए ऑनलाइन आवेदन/दस्तावेज़ अपलोड अस्थायी रूप से बंद हैं। कृपया केंद्र से संपर्क करें।");
-            return;
             db.ref('csc_applications').push(formData).then(() => {
                 if(successMessage) {
                     alert(successMessage);
@@ -1041,9 +1149,6 @@
             const password = document.getElementById('password').value;
             const error = document.getElementById('errorAlert');
             if (!email || !password) { error.innerText = "ईमेल और पासवर्ड दर्ज करें।"; error.style.display = "block"; return; }
-            if (ADMIN_UID === "IDRGhOnIaTNLGVAFbYGXxjK7HQ92") {
-                error.innerText = "पहले HTML में Firebase Authentication का Admin UID सेट करें।"; error.style.display = "block"; return;
-            }
             try {
                 const cred = await auth.signInWithEmailAndPassword(email, password);
                 if (cred.user.uid !== ADMIN_UID) {
@@ -1086,10 +1191,200 @@
         function closeUploadCertModal() { document.getElementById('uploadCertModal').style.display = 'none'; }
         function openUploadCertModal() { document.getElementById('uploadCertModal').style.display = 'flex'; }
         function closePasswordModal() { document.getElementById('passwordModal').style.display = 'none'; }
+
+        function openVerifyCertModal() {
+            document.getElementById('vf_app_id').value = "";
+            document.getElementById('vf_result_box').innerHTML = "";
+            document.getElementById('verifyCertModal').style.display = 'flex';
+        }
+        function closeVerifyCertModal() { document.getElementById('verifyCertModal').style.display = 'none'; }
+
+        function verifyCertificate() {
+            const appIdInput = document.getElementById('vf_app_id').value.trim();
+            const resultBox = document.getElementById('vf_result_box');
+            resultBox.innerHTML = "";
+
+            if (!appIdInput) {
+                resultBox.textContent = "कृपया आवेदन संख्या (App ID) दर्ज करें।";
+                resultBox.style.color = "#dc2626";
+                return;
+            }
+
+            resultBox.style.color = "#475569";
+            resultBox.textContent = "सत्यापित किया जा रहा है...";
+
+            // Exact App ID lookup only — no name/mobile search or full-table listing.
+            db.ref('csc_applications').orderByChild('appId').equalTo(appIdInput).once('value', (snapshot) => {
+                resultBox.innerHTML = "";
+                if (!snapshot.exists()) {
+                    const bad = document.createElement('p');
+                    bad.style.cssText = "color:#dc2626;font-weight:bold;text-align:center;";
+                    bad.textContent = "❌ यह प्रमाण पत्र मान्य नहीं है (आवेदन संख्या नहीं मिली)।";
+                    resultBox.appendChild(bad);
+                    return;
+                }
+                let app = null;
+                snapshot.forEach(child => { app = child.val(); });
+
+                const isGenuine = app.status === 'Complete' && !!app.certPdf;
+
+                // Built with createElement/textContent (not innerHTML) so stored applicant
+                // data can never execute as script here.
+                const card = document.createElement('div');
+                card.style.cssText = "background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:15px;font-size:13.5px;";
+
+                const badge = document.createElement('p');
+                badge.style.cssText = "font-weight:bold;text-align:center;margin-bottom:10px;font-size:14.5px;color:" + (isGenuine ? "#16a34a" : "#d97706") + ";";
+                badge.textContent = isGenuine ? "✅ यह प्रमाण पत्र मान्य एवं सत्यापित है (Verified)" : "⏳ यह प्रमाण पत्र अभी जारी नहीं हुआ है (Not Yet Verified)";
+                card.appendChild(badge);
+
+                const rows = [
+                    ["आवेदन संख्या", app.appId || appIdInput],
+                    ["आवेदक का नाम", app.name || "N/A"],
+                    ["प्रमाण पत्र प्रकार", app.type || "N/A"],
+                    ["आवेदन दिनांक", app.date || "N/A"],
+                    ["स्थिति", app.status || "Pending"]
+                ];
+                rows.forEach(([label, value]) => {
+                    const p = document.createElement('p');
+                    p.style.margin = "6px 0";
+                    const b = document.createElement('b');
+                    b.textContent = label + ": ";
+                    p.appendChild(b);
+                    p.appendChild(document.createTextNode(value));
+                    card.appendChild(p);
+                });
+
+                resultBox.appendChild(card);
+            }).catch(err => {
+                resultBox.textContent = "त्रुटि हुई: " + err.message;
+                resultBox.style.color = "#dc2626";
+            });
+        }
+
+        function openStatusCheckModal() {
+            document.getElementById('sc_app_id').value = "";
+            document.getElementById('sc_result_box').innerHTML = "";
+            document.getElementById('statusCheckModal').style.display = 'flex';
+        }
+        function closeStatusCheckModal() { document.getElementById('statusCheckModal').style.display = 'none'; }
+
+        function checkApplicationStatus() {
+            const appIdInput = document.getElementById('sc_app_id').value.trim();
+            const resultBox = document.getElementById('sc_result_box');
+            resultBox.innerHTML = "";
+
+            if (!appIdInput) {
+                resultBox.textContent = "कृपया अपनी आवेदन संख्या (App ID) दर्ज करें।";
+                resultBox.style.color = "#dc2626";
+                return;
+            }
+
+            resultBox.style.color = "#475569";
+            resultBox.textContent = "खोजा जा रहा है...";
+
+            // Exact App ID lookup only — no name/mobile search or full-table listing.
+            db.ref('csc_applications').orderByChild('appId').equalTo(appIdInput).once('value', (snapshot) => {
+                resultBox.innerHTML = "";
+                if (!snapshot.exists()) {
+                    resultBox.textContent = "इस आवेदन संख्या का कोई रिकॉर्ड नहीं मिला। कृपया संख्या जाँच लें।";
+                    resultBox.style.color = "#dc2626";
+                    return;
+                }
+                let app = null;
+                snapshot.forEach(child => { app = child.val(); });
+
+                // Built with createElement/textContent (not innerHTML) so stored applicant
+                // data can never execute as script here, even if it contains HTML-like text.
+                const card = document.createElement('div');
+                card.style.cssText = "background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:15px;font-size:13.5px;";
+
+                const rows = [
+                    ["आवेदन संख्या", app.appId || appIdInput],
+                    ["सेवा", app.type || "N/A"],
+                    ["आवेदन दिनांक", app.date || "N/A"],
+                    ["वर्तमान स्थिति", app.status || "Pending"]
+                ];
+                if ((app.status === 'Return' || app.status === 'Cancel') && app.statusDesc) {
+                    rows.push(["कारण", app.statusDesc]);
+                }
+
+                rows.forEach(([label, value]) => {
+                    const p = document.createElement('p');
+                    p.style.margin = "6px 0";
+                    const b = document.createElement('b');
+                    b.textContent = label + ": ";
+                    p.appendChild(b);
+                    p.appendChild(document.createTextNode(value));
+                    card.appendChild(p);
+                });
+
+                resultBox.appendChild(card);
+            }).catch(err => {
+                resultBox.textContent = "त्रुटि हुई: " + err.message;
+                resultBox.style.color = "#dc2626";
+            });
+        }
+
+        function openDownloadCertModal() {
+            document.getElementById('dl_app_id').value = "";
+            document.getElementById('dl_cert_msg').textContent = "";
+            document.getElementById('downloadCertModal').style.display = 'flex';
+        }
+        function closeDownloadCertModal() { document.getElementById('downloadCertModal').style.display = 'none'; }
+
+        function downloadCertificateByAppId() {
+            const appIdInput = document.getElementById('dl_app_id').value.trim();
+            const msg = document.getElementById('dl_cert_msg');
+            msg.style.color = "#475569";
+            if (!appIdInput) { msg.textContent = "कृपया अपनी आवेदन संख्या (App ID) दर्ज करें।"; msg.style.color = "#dc2626"; return; }
+
+            msg.textContent = "खोजा जा रहा है...";
+            // Exact App ID lookup only — no name/mobile search or full-table listing,
+            // so this stays safe even if Firebase Rules allow query.orderByChild('appId') reads.
+            db.ref('csc_applications').orderByChild('appId').equalTo(appIdInput).once('value', (snapshot) => {
+                if (!snapshot.exists()) {
+                    msg.textContent = "इस आवेदन संख्या का कोई रिकॉर्ड नहीं मिला। कृपया संख्या जाँच लें।";
+                    msg.style.color = "#dc2626";
+                    return;
+                }
+                let app = null;
+                snapshot.forEach(child => { app = child.val(); });
+
+                if (!app.certPdf) {
+                    msg.textContent = "आपका प्रमाण पत्र अभी तैयार नहीं है। स्थिति: " + (app.status || "Pending") + ". कृपया बाद में प्रयास करें।";
+                    msg.style.color = "#d97706";
+                    return;
+                }
+
+                const link = document.createElement('a');
+                link.href = app.certPdf;
+                link.download = appIdInput + "_Certificate.pdf";
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+
+                msg.textContent = "प्रमाण पत्र डाउनलोड हो गया है।";
+                msg.style.color = "#16a34a";
+            }).catch(err => {
+                msg.textContent = "त्रुटि हुई: " + err.message;
+                msg.style.color = "#dc2626";
+            });
+        }
         function closeEditStatusModal() { document.getElementById('editStatusModal').style.display = 'none'; }
 
         // --- DASHBOARD TABLE & DELETE FIX ---
         let allApplicationsData = [];
+
+        function viewDocumentImage(dbKey, field) {
+            let app = allApplicationsData.find(a => a.dbKey === dbKey);
+            if (!app || !app[field]) { alert("यह दस्तावेज़ उपलब्ध नहीं है।"); return; }
+            let title = field === 'photo' ? 'पासपोर्ट फोटो' : 'आधार कार्ड';
+            let win = window.open('', '_blank');
+            if (!win) { alert("पॉपअप ब्लॉक हो गया है। कृपया इस साइट के लिए पॉपअप की अनुमति दें और दोबारा कोशिश करें।"); return; }
+            win.document.write(`<!DOCTYPE html><html><head><title>${title}</title><meta name="viewport" content="width=device-width, initial-scale=1.0"></head><body style="margin:0;background:#111827;display:flex;align-items:center;justify-content:center;min-height:100vh;"><img src="${app[field]}" alt="${title}" style="max-width:100%;max-height:100vh;object-fit:contain;"></body></html>`);
+            win.document.close();
+        }
 
         function loadApplicationsToTable() {
             if (!isAdmin()) { showSection('adhikari-login'); return; }
@@ -1122,8 +1417,8 @@
             dataList.slice().reverse().forEach((app, index) => {
                 let tr = document.createElement('tr');
                 
-                let photoBadge = app.photo ? `<a href="${app.photo}" target="_blank" rel="noopener noreferrer" class="dash-action-btn" style="background:#0284c7;"><i class="fa-solid fa-image"></i> फोटो</a>` : '<span style="color:#94a3b8;">निशान नहीं</span>';
-                let aadharBadge = app.aadhar ? `<a href="${app.aadhar}" target="_blank" rel="noopener noreferrer" class="dash-action-btn" style="background:#0284c7;"><i class="fa-solid id-card"></i> आधार</a>` : '';
+                let photoBadge = app.photo ? `<button onclick="viewDocumentImage('${app.dbKey}', 'photo')" class="dash-action-btn" style="background:#0284c7; border:none; cursor:pointer;"><i class="fa-solid fa-image"></i> फोटो</button>` : '<span style="color:#94a3b8;">निशान नहीं</span>';
+                let aadharBadge = app.aadhar ? `<button onclick="viewDocumentImage('${app.dbKey}', 'aadhar')" class="dash-action-btn" style="background:#0284c7; border:none; cursor:pointer;"><i class="fa-solid fa-id-card"></i> आधार</button>` : '';
                 
                 let certPdfBadge = app.certPdf 
                     ? `<a href="${app.certPdf}" target="_blank" rel="noopener noreferrer" class="dash-action-btn" style="background:#16a34a;"><i class="fa-solid fa-file-pdf"></i> सर्टिफिकेट</a>` 
@@ -1265,11 +1560,6 @@
                 });
             };
             reader.readAsDataURL(fileInput);
-        }
-
-        function searchCustomerCertificate() {
-            const resultArea = document.getElementById('searchResultArea');
-            resultArea.textContent = "ग्राहक खोज अस्थायी रूप से बंद है। मोबाइल नंबर से सार्वजनिक खोज करने पर निजी आवेदन डेटा उजागर हो सकता है। केंद्र से संपर्क करें।";
         }
 
     </script>
