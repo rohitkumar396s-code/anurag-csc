@@ -14,6 +14,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
     <!-- Firebase App Check (bot/abuse protection) -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-check-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-functions-compat.js"></script>
 
     <!-- jsPDF aur html2canvas library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -219,6 +220,9 @@
             .guardian-row select { flex: none; }
             .form-action-group { grid-template-columns: 1fr; }
         }
+            .citizen-btn { background: #0d9488; color: white !important; padding: 7px 12px; border-radius: 20px; font-weight: 600; font-size: 12.5px; box-shadow: 0 2px 4px rgba(13,148,136,0.3); display: inline-flex; align-items: center; gap: 5px; text-decoration: none; white-space: nowrap; cursor: pointer; }
+        .cz-app-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 18px; }
+        .cz-app-row input { flex: 1; min-width: 220px; }
     </style>
 </head>
 <body>
@@ -275,6 +279,7 @@
 
             <a href="https://edistrict.up.gov.in/" target="_blank" rel="noopener noreferrer" class="edistrict-btn"><i class="fa-solid fa-user-shield"></i> ई-डिस्ट्रिक्ट लॉगिन</a>
             <a href="https://digitalseva.csc.gov.in/" target="_blank" rel="noopener noreferrer" class="csc-login-btn"><i class="fa-solid fa-right-to-bracket"></i> डिजिटल सेवा लॉगिन</a>
+            <a onclick="handleCitizenNavClick()" class="citizen-btn"><i class="fa-solid fa-user"></i> <span id="citizenNavLabel">नागरिक लॉगिन</span></a>
             <a onclick="handleOfficerNavClick()" class="officer-btn"><i class="fa-solid fa-user-shield"></i> एडमिन लॉगिन</a>
             <a href="tel:9760623097" class="login-btn"><i class="fa-solid fa-headset"></i> सहायता</a>
         </div>
@@ -496,6 +501,61 @@
         </div>
     </div>
 
+    <!-- नागरिक लॉगिन पोर्टल -->
+    <div id="citizen-portal" class="page-section">
+        <div class="login-card">
+            <h2 style="text-align:center;color:#1e3a8a;margin-bottom:18px;font-size:22px;"><i class="fa-solid fa-user"></i> नागरिक पोर्टल</h2>
+            <div class="login-nav-tabs">
+                <button type="button" id="czTabLogin" class="login-tab-btn active" onclick="showCitizenTab('login')">लॉगिन</button>
+                <button type="button" id="czTabReg" class="login-tab-btn" onclick="showCitizenTab('register')">रजिस्ट्रेशन</button>
+                <button type="button" id="czTabReset" class="login-tab-btn" onclick="showCitizenTab('reset')">पासवर्ड भूले</button>
+            </div>
+            <div id="citizenMsg" class="error-msg"></div>
+            <form id="citizenLoginForm" onsubmit="citizenLogin(event)">
+                <div class="form-group"><label>User ID (मोबाइल नंबर)</label><input type="tel" id="cz_mob" maxlength="10" inputmode="numeric" autocomplete="username" required></div>
+                <div class="form-group"><label>पासवर्ड</label><input type="password" id="cz_pass" autocomplete="current-password" required></div>
+                <button type="submit" class="login-submit-btn">लॉगिन करें</button>
+            </form>
+            <form id="citizenOtpForm" onsubmit="citizenOtpSubmit(event)" style="display:none;">
+                <div class="form-group" id="cz_name_group"><label>पूरा नाम</label><input type="text" id="cz_rname" maxlength="60" autocomplete="name"></div>
+                <div class="form-group"><label>मोबाइल नंबर</label><input type="tel" id="cz_omob" maxlength="10" inputmode="numeric"></div>
+                <div class="form-group" id="cz_newpw_group" style="display:none;"><label>नया पासवर्ड (कम से कम 8 अक्षर)</label><input type="password" id="cz_newpw" autocomplete="new-password"></div>
+                <button type="button" id="cz_send_btn" class="login-submit-btn" onclick="citizenSendOtp()">OTP भेजें</button>
+                <div id="cz_otp_group" style="display:none;margin-top:15px;">
+                    <div class="form-group"><label>मोबाइल पर आया OTP</label><input type="text" id="cz_otp" maxlength="6" inputmode="numeric" autocomplete="one-time-code"></div>
+                    <button type="submit" class="login-submit-btn" style="background:#16a34a;">OTP सत्यापित करें</button>
+                </div>
+                <div id="cz_recaptcha"></div>
+            </form>
+            <div class="back-link" style="margin-top:15px;"><a onclick="showSection('home')">← मुख्य पृष्ठ पर वापस जाएं</a></div>
+        </div>
+    </div>
+
+    <div id="citizen-dashboard" class="page-section">
+        <div class="container">
+            <div class="dash-header">
+                <div><h2 style="color:#1e3a8a;font-size:20px;">नमस्ते, <span id="citizenName"></span></h2><p id="citizenEmail" style="font-size:13px;color:#64748b;"></p></div>
+                <div class="dash-top-btns">
+                    <button class="logout-btn" onclick="citizenLogout()">लॉग आउट</button>
+                </div>
+            </div>
+            <div id="czMustBanner" class="error-msg" style="margin-bottom:15px;">⚠️ आपका पासवर्ड सिस्टम ने बनाया है। कृपया नीचे अपना नया पासवर्ड सेट करें, उसके बाद ही आवेदन कर पाएँगे।</div>
+            <div class="section-title">पासवर्ड बदलें</div>
+            <div class="cz-app-row"><input type="password" id="cz_cpw" placeholder="नया पासवर्ड (कम से कम 8 अक्षर)" autocomplete="new-password"><input type="password" id="cz_cpw2" placeholder="नया पासवर्ड दोबारा" autocomplete="new-password"><button class="btn-submit" style="padding:10px 18px;" onclick="citizenChangePassword()">बदलें</button></div>
+            <div class="section-title">नया आवेदन करें</div>
+            <div class="cert-row" style="margin-bottom:25px;">
+                <a onclick="showSection('income-form')" class="service-btn" style="background:#1e3a8a;"><i class="fa-solid fa-file-lines"></i> आय प्रमाण पत्र</a>
+                <a onclick="showSection('caste-form')" class="service-btn" style="background:#1e3a8a;"><i class="fa-solid fa-file-lines"></i> जाति प्रमाण पत्र</a>
+                <a onclick="showSection('domicile-form')" class="service-btn" style="background:#1e3a8a;"><i class="fa-solid fa-file-lines"></i> निवास प्रमाण पत्र</a>
+            </div>
+            <div class="section-title">पुराना आवेदन जोड़ें</div>
+            <div class="cz-app-row"><input type="text" id="cz_link_id" placeholder="आवेदन संख्या (CSCXXXXXXXXXXXX)" maxlength="15"><button class="btn-submit" style="padding:10px 18px;" onclick="citizenLinkApp()">जोड़ें</button></div>
+            <div class="section-title">मेरे आवेदन</div>
+            <div style="overflow-x:auto;"><table><thead><tr><th>आवेदन संख्या</th><th>सेवा</th><th>दिनांक</th><th>स्थिति</th><th>प्रमाण पत्र</th></tr></thead><tbody id="citizenAppsBody"></tbody></table></div>
+            <div class="back-link"><a onclick="showSection('home')">← मुख्य पृष्ठ</a></div>
+        </div>
+    </div>
+
     <!-- 5. एडमिन लॉगिन पेज -->
     <div id="adhikari-login" class="page-section">
         <div class="login-card">
@@ -617,8 +677,8 @@
             <h3 style="color: #1e3a8a; margin-bottom: 15px;"><i class="fa-solid fa-download"></i> प्रमाण पत्र डाउनलोड करें</h3>
             <div class="modal-body" style="text-align: left;">
                 <div class="form-group">
-                    <label>अपनी आवेदन संख्या (App ID) दर्ज करें, जैसे: CSC123456</label>
-                    <input type="text" id="dl_app_id" placeholder="CSCXXXXXX">
+                    <label>अपनी आवेदन संख्या (App ID) दर्ज करें, जैसे: CSCK7M2P9X4Q8TB</label>
+                    <input type="text" id="dl_app_id" placeholder="CSCXXXXXXXXXXXX">
                 </div>
                 <button onclick="downloadCertificateByAppId()" style="width: 100%; background: #16a34a; color: white; padding: 11px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 10px;"><i class="fa-solid fa-download"></i> डाउनलोड करें</button>
                 <p id="dl_cert_msg" style="margin-top: 12px; font-size: 13.5px; text-align: center;"></p>
@@ -633,8 +693,8 @@
             <h3 style="color: #1e3a8a; margin-bottom: 15px;"><i class="fa-solid fa-file-arrow-up"></i> कस्टमर के लिए सर्टिफिकेट अपलोड करें</h3>
             <div class="modal-body" style="text-align: left;">
                 <div class="form-group">
-                    <label>आवेदन संख्या (App ID दर्ज करें, जैसे: CSC123456)</label>
-                    <input type="text" id="up_app_id" placeholder="CSCXXXXXX">
+                    <label>आवेदन संख्या (App ID दर्ज करें, जैसे: CSCK7M2P9X4Q8TB)</label>
+                    <input type="text" id="up_app_id" placeholder="CSCXXXXXXXXXXXX">
                 </div>
                 <div class="form-group">
                     <label>सर्टिफिकेट PDF फ़ाइल चुनें</label>
@@ -652,8 +712,8 @@
             <h3 style="color: #1e3a8a; margin-bottom: 15px;"><i class="fa-solid fa-ticket"></i> आवेदन की स्थिति देखें</h3>
             <div class="modal-body" style="text-align: left;">
                 <div class="form-group">
-                    <label>अपनी आवेदन संख्या (App ID) दर्ज करें, जैसे: CSC123456</label>
-                    <input type="text" id="sc_app_id" placeholder="CSCXXXXXX">
+                    <label>अपनी आवेदन संख्या (App ID) दर्ज करें, जैसे: CSCK7M2P9X4Q8TB</label>
+                    <input type="text" id="sc_app_id" placeholder="CSCXXXXXXXXXXXX">
                 </div>
                 <button onclick="checkApplicationStatus()" style="width: 100%; background: #9d174d; color: white; padding: 11px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 10px;"><i class="fa-solid fa-magnifying-glass"></i> स्थिति देखें</button>
                 <div id="sc_result_box" style="margin-top: 15px;"></div>
@@ -669,7 +729,7 @@
             <div class="modal-body" style="text-align: left;">
                 <div class="form-group">
                     <label>प्रमाण पत्र पर छपी आवेदन संख्या (App ID) दर्ज करें</label>
-                    <input type="text" id="vf_app_id" placeholder="CSCXXXXXX">
+                    <input type="text" id="vf_app_id" placeholder="CSCXXXXXXXXXXXX">
                 </div>
                 <button onclick="verifyCertificate()" style="width: 100%; background: #ea580c; color: white; padding: 11px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 10px;"><i class="fa-solid fa-circle-check"></i> सत्यापित करें</button>
                 <div id="vf_result_box" style="margin-top: 15px;"></div>
@@ -752,13 +812,60 @@
         const isAdmin = () => !!(auth.currentUser && auth.currentUser.uid === ADMIN_UID);
         auth.setPersistence(firebase.auth.Auth.Persistence.SESSION).catch(console.error);
         auth.onAuthStateChanged(user => {
-            if (user && isAdmin()) {
-                resetInactivityTimer();
-            } else {
-                clearTimeout(inactivityTimer);
-                if (user && !isAdmin()) auth.signOut();
-            }
+            updateCitizenNav(user);
+            if (!user) czMustChange = false;
+            if (user && isAdmin()) resetInactivityTimer(); else clearTimeout(inactivityTimer);
+            if (!user || isAdmin()) { const act = document.querySelector('.page-section.active'); if (act && act.id === 'citizen-dashboard') showSection('citizen-portal'); }
         });
+
+        const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+        function safeDataUrl(v, kind) {
+            if (typeof v !== 'string') return '';
+            const re = kind === 'pdf' ? /^data:application\/pdf;base64,[A-Za-z0-9+\/=]+$/ : /^data:image\/(jpeg|png);base64,[A-Za-z0-9+\/=]+$/;
+            return re.test(v) ? v : '';
+        }
+        function generateAppId() {
+            const ch = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789', a = new Uint8Array(12);
+            crypto.getRandomValues(a);
+            return 'CSC' + Array.from(a, x => ch[x % 32]).join('');
+        }
+        const APP_ID_RE = /^CSC[A-Z0-9]{6,12}$/;
+        function lookupStatus(raw, onFound, onNotFound, onError) {
+            const id = String(raw).trim().toUpperCase();
+            if (!APP_ID_RE.test(id)) return onNotFound();
+            db.ref('app_status/' + id).once('value').then(s => s.exists() ? onFound(s.val(), id) : onNotFound()).catch(onError);
+        }
+        function makeInfoCard(rows, badge, color) {
+            const card = document.createElement('div');
+            card.style.cssText = 'background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:15px;font-size:13.5px;';
+            if (badge) { const b = document.createElement('p'); b.style.cssText = 'font-weight:bold;text-align:center;margin-bottom:10px;font-size:14.5px;color:' + color + ';'; b.textContent = badge; card.appendChild(b); }
+            rows.forEach(([l, v]) => { const p = document.createElement('p'); p.style.margin = '6px 0'; const b = document.createElement('b'); b.textContent = l + ': '; p.appendChild(b); p.appendChild(document.createTextNode(v)); card.appendChild(p); });
+            return card;
+        }
+        function compressImage(file, maxDim, cb) {
+            const fr = new FileReader();
+            fr.onload = () => {
+                const img = new Image();
+                img.onload = () => {
+                    const s = Math.min(1, maxDim / Math.max(img.width, img.height)), c = document.createElement('canvas');
+                    c.width = Math.round(img.width * s); c.height = Math.round(img.height * s);
+                    c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+                    cb(c.toDataURL('image/jpeg', 0.75));
+                };
+                img.onerror = () => { alert('अमान्य इमेज फ़ाइल।'); cb(null); };
+                img.src = fr.result;
+            };
+            fr.readAsDataURL(file);
+        }
+        // One-time admin migration: run migrateStatusNode() in the console after logging in as admin.
+        async function migrateStatusNode() {
+            if (!isAdmin()) return;
+            const snap = await db.ref('csc_applications').once('value'), u = {};
+            snap.forEach(c => { const a = c.val(); if (!a.appId) return;
+                u['app_status/' + a.appId] = { type: a.type || '', date: a.date || '', status: a.status || 'Pending', statusDesc: a.statusDesc || '', name: String(a.name || '').slice(0, 2) + '***' };
+                if (a.certPdf && a.appId.length > 12) u['app_status/' + a.appId].certPdf = a.certPdf; });
+            await db.ref().update(u); alert('Migrated: ' + Object.keys(u).length);
+        }
 
         function updateDateTime() {
             const now = new Date();
@@ -784,11 +891,14 @@
 
         function showSection(sectionId) {
             if (sectionId === 'officer-dashboard' && !isAdmin()) sectionId = 'adhikari-login';
+            if (sectionId === 'citizen-dashboard' && !isCitizen()) sectionId = 'citizen-portal';
+            if (czMustChange && isCitizen() && ['income-form', 'caste-form', 'domicile-form'].includes(sectionId)) { alert('पहले अपना नया पासवर्ड सेट करें।'); sectionId = 'citizen-dashboard'; }
             document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('active'));
             const target = document.getElementById(sectionId);
             if (target) target.classList.add('active');
             window.scrollTo(0, 0);
             if (sectionId === 'officer-dashboard' && isAdmin()) loadApplicationsToTable();
+            if (sectionId === 'citizen-dashboard' && isCitizen()) loadCitizenApps();
         }
         function handleOfficerNavClick() {
             if (isAdmin()) showSection('officer-dashboard');
@@ -813,6 +923,10 @@
         }
 
         function handleAction(actionType, certType) {
+            if (actionType === 'save' || actionType === 'submit') {
+                const fid = certType === 'Income Certificate' ? 'formIncome' : (certType === 'Caste Certificate' ? 'formCaste' : 'formDomicile');
+                if (!document.getElementById(fid).reportValidity()) return;
+            }
             let formData = collectFormBaseData(certType);
             if(!formData) return; 
 
@@ -851,41 +965,10 @@
         }
 
         function processFilesAndExecute(photoFile, aadharFile, callback) {
-            let photoResult = null;
-            let aadharResult = null;
-            let pending = 0;
-
-            function checkDone() {
-                if (pending === 0) {
-                    callback(photoResult, aadharResult);
-                }
-            }
-
-            if (photoFile) {
-                pending++;
-                let reader = new FileReader();
-                reader.onload = function(e) {
-                    photoResult = e.target.result;
-                    pending--;
-                    checkDone();
-                };
-                reader.readAsDataURL(photoFile);
-            }
-
-            if (aadharFile) {
-                pending++;
-                let reader = new FileReader();
-                reader.onload = function(e) {
-                    aadharResult = e.target.result;
-                    pending--;
-                    checkDone();
-                };
-                reader.readAsDataURL(aadharFile);
-            }
-
-            if (pending === 0) {
-                callback(null, null);
-            }
+            const out = [null, null]; let pending = 0;
+            const done = () => { if (--pending === 0) callback(out[0], out[1]); };
+            [photoFile, aadharFile].forEach((f, i) => { if (f) { pending++; compressImage(f, 1000, r => { out[i] = r; done(); }); } });
+            if (pending === 0) callback(null, null);
         }
 
         function collectFormBaseData(certType) {
@@ -896,7 +979,7 @@
             let rawDateString = `${yyyy}-${mm}-${dd}`;
 
             let formData = {
-                appId: 'CSC' + Math.floor(100000 + Math.random() * 900000),
+                appId: generateAppId(),
                 type: certType,
                 date: nowObj.toLocaleString('en-IN'),
                 rawDate: rawDateString,
@@ -974,16 +1057,14 @@
         }
 
         function saveDataToFirebase(formData, successMessage, showReceipt = false) {
-            db.ref('csc_applications').push(formData).then(() => {
-                if(successMessage) {
-                    alert(successMessage);
-                }
-                if(showReceipt) {
-                    showAutoReceiptModal(formData);
-                }
-            }).catch((error) => {
-                alert("डाटा सेव करने में त्रुटि: " + error.message);
-            });
+            const key = db.ref('csc_applications').push().key, u = {};
+            u['csc_applications/' + key] = formData;
+            u['app_status/' + formData.appId] = { type: formData.type, date: formData.date, status: formData.status, statusDesc: '', name: String(formData.name).slice(0, 2) + '***' };
+            if (isCitizen()) { formData.citizenUid = auth.currentUser.uid; u['citizen_apps/' + formData.citizenUid + '/' + formData.appId] = { type: formData.type, date: formData.date }; }
+            db.ref().update(u).then(() => {
+                if (successMessage) alert(successMessage);
+                if (showReceipt) showAutoReceiptModal(formData);
+            }).catch((error) => alert("डाटा सेव करने में त्रुटि: " + error.message));
         }
 
         function showPreviewModal(app) {
@@ -991,21 +1072,21 @@
             document.getElementById('modalTitle').innerHTML = `<i class="fa-solid fa-eye" style="color: #0284c7;"></i> फॉर्म डेटा एवं फोटो प्रीव्यू`;
             
             let photoHtml = app.photo 
-                ? `<div style="text-align: center; margin-bottom: 15px;"><img src="${app.photo}" alt="Passport Photo" style="width: 110px; height: 130px; object-fit: cover; border-radius: 6px; border: 3px solid #1e3a8a; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"></div>`
+                ? `<div style="text-align: center; margin-bottom: 15px;"><img src="${esc(app.photo)}" alt="Passport Photo" style="width: 110px; height: 130px; object-fit: cover; border-radius: 6px; border: 3px solid #1e3a8a; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"></div>`
                 : `<p style="color: #dc2626; text-align: center; font-size: 13px; margin-bottom: 15px;">⚠️ फोटो अपलोड नहीं की गई है</p>`;
 
             modalBody.innerHTML = `
                 ${photoHtml}
                 <div style="border: 1px solid #cbd5e1; padding: 15px; border-radius: 8px; background: #f8fafc; font-size: 13.5px;">
-                    <p style="margin-bottom: 6px;"><b>प्रमाण पत्र प्रकार:</b> ${app.type}</p>
-                    <p style="margin-bottom: 6px;"><b>आवेदक का नाम:</b> ${app.name}</p>
-                    <p style="margin-bottom: 6px;"><b>आधार नंबर:</b> ${app.aadharNumber || 'उपलब्ध नहीं'}</p>
-                    <p style="margin-bottom: 6px;"><b>माता का नाम:</b> ${app.mother}</p>
-                    <p style="margin-bottom: 6px;"><b>${app.guardianType} का नाम:</b> ${app.guardianName}</p>
-                    <p style="margin-bottom: 6px;"><b>गाँव / पता:</b> ${app.village}, पोस्ट: ${app.post}</p>
-                    <p style="margin-bottom: 6px;"><b>तहसील / जिला:</b> ${app.tahsil}, ${app.district}</p>
-                    <p style="margin-bottom: 6px;"><b>मोबाइल नंबर:</b> ${app.mobile}</p>
-                    <p style="margin-bottom: 0;"><b>अन्य विवरण:</b> ${app.incomeOrDetails}</p>
+                    <p style="margin-bottom: 6px;"><b>प्रमाण पत्र प्रकार:</b> ${esc(app.type)}</p>
+                    <p style="margin-bottom: 6px;"><b>आवेदक का नाम:</b> ${esc(app.name)}</p>
+                    <p style="margin-bottom: 6px;"><b>आधार नंबर:</b> ${esc(app.aadharNumber || 'उपलब्ध नहीं')}</p>
+                    <p style="margin-bottom: 6px;"><b>माता का नाम:</b> ${esc(app.mother)}</p>
+                    <p style="margin-bottom: 6px;"><b>${esc(app.guardianType)} का नाम:</b> ${esc(app.guardianName)}</p>
+                    <p style="margin-bottom: 6px;"><b>गाँव / पता:</b> ${esc(app.village)}, पोस्ट: ${esc(app.post)}</p>
+                    <p style="margin-bottom: 6px;"><b>तहसील / जिला:</b> ${esc(app.tahsil)}, ${esc(app.district)}</p>
+                    <p style="margin-bottom: 6px;"><b>मोबाइल नंबर:</b> ${esc(app.mobile)}</p>
+                    <p style="margin-bottom: 0;"><b>अन्य विवरण:</b> ${esc(app.incomeOrDetails)}</p>
                 </div>
             `;
 
@@ -1020,6 +1101,7 @@
             db.ref('csc_applications/' + dbKey).once('value', (snapshot) => {
                 let app = snapshot.val();
                 if(!app) { alert('Record not found!'); return; }
+                app.photo = safeDataUrl(app.photo, 'image');
 
                 let printContainer = document.createElement('div');
                 printContainer.style.position = 'absolute';
@@ -1034,7 +1116,7 @@
                 printContainer.style.borderRadius = '8px';
 
                 let photoSectionHtml = app.photo 
-                    ? `<div style="text-align: right; margin-bottom: 10px;"><img src="${app.photo}" style="width: 90px; height: 110px; object-fit: cover; border: 2px solid #1e3a8a; border-radius: 4px;"></div>` 
+                    ? `<div style="text-align: right; margin-bottom: 10px;"><img src="${esc(app.photo)}" style="width: 90px; height: 110px; object-fit: cover; border: 2px solid #1e3a8a; border-radius: 4px;"></div>` 
                     : '';
 
                 printContainer.innerHTML = `
@@ -1045,24 +1127,24 @@
                         </div>
                         <div>${photoSectionHtml}</div>
                     </div>
-                    <h3 style="color: #16a34a; font-size: 16px; margin-bottom: 15px; border-left: 4px solid #16a34a; padding-left: 8px;">आवेदन विवरण (${app.type})</h3>
+                    <h3 style="color: #16a34a; font-size: 16px; margin-bottom: 15px; border-left: 4px solid #16a34a; padding-left: 8px;">आवेदन विवरण (${esc(app.type)})</h3>
                     <table style="width: 100%; border-collapse: collapse; font-size: 13.5px;">
-                        <tr><td style="border: 1px solid #cbd5e1; padding: 8px 12px; background: #f8fafc; font-weight: bold; width: 38%;">आवेदन संख्या (App ID)</td><td style="border: 1px solid #cbd5e1; padding: 8px 12px; color: #dc2626; font-weight: bold;">${app.appId}</td></tr>
-                        <tr><td style="border: 1px solid #cbd5e1; padding: 8px 12px; background: #f8fafc; font-weight: bold;">आवेदन दिनांक एवं समय</td><td style="border: 1px solid #cbd5e1; padding: 8px 12px;">${app.date}</td></tr>
-                        <tr><td style="border: 1px solid #cbd5e1; padding: 8px 12px; background: #f8fafc; font-weight: bold;">आवेदक का नाम (Applicant Name)</td><td style="border: 1px solid #cbd5e1; padding: 8px 12px; font-weight: bold;">${app.name}</td></tr>
-                        <tr><td style="border: 1px solid #cbd5e1; padding: 8px 12px; background: #f8fafc; font-weight: bold;">आधार नंबर (Aadhaar Number)</td><td style="border: 1px solid #cbd5e1; padding: 8px 12px; font-weight: bold;">${app.aadharNumber || 'उपलब्ध नहीं'}</td></tr>
-                        <tr><td style="border: 1px solid #cbd5e1; padding: 8px 12px; background: #f8fafc; font-weight: bold;">माता का नाम (Mother's Name)</td><td style="border: 1px solid #cbd5e1; padding: 8px 12px;">${app.mother}</td></tr>
-                        <tr><td style="border: 1px solid #cbd5e1; padding: 8px 12px; background: #f8fafc; font-weight: bold;">${app.guardianType} का नाम</td><td style="border: 1px solid #cbd5e1; padding: 8px 12px;">${app.guardianName}</td></tr>
-                        <tr><td style="border: 1px solid #cbd5e1; padding: 8px 12px; background: #f8fafc; font-weight: bold;">क्षेत्र (Area Type)</td><td style="border: 1px solid #cbd5e1; padding: 8px 12px;">${app.area || 'N/A'}</td></tr>
-                        <tr><td style="border: 1px solid #cbd5e1; padding: 8px 12px; background: #f8fafc; font-weight: bold;">ग्राम / मोहल्ला (Village)</td><td style="border: 1px solid #cbd5e1; padding: 8px 12px;">${app.village}</td></tr>
-                        <tr><td style="border: 1px solid #cbd5e1; padding: 8px 12px; background: #f8fafc; font-weight: bold;">पोस्ट ऑफिस (Post)</td><td style="border: 1px solid #cbd5e1; padding: 8px 12px;">${app.post || 'N/A'}</td></tr>
-                        <tr><td style="border: 1px solid #cbd5e1; padding: 8px 12px; background: #f8fafc; font-weight: bold;">थाना (Thana)</td><td style="border: 1px solid #cbd5e1; padding: 8px 12px;">${app.thana || 'N/A'}</td></tr>
-                        <tr><td style="border: 1px solid #cbd5e1; padding: 8px 12px; background: #f8fafc; font-weight: bold;">ब्लॉक (Block)</td><td style="border: 1px solid #cbd5e1; padding: 8px 12px;">${app.block || 'N/A'}</td></tr>
-                        <tr><td style="border: 1px solid #cbd5e1; padding: 8px 12px; background: #f8fafc; font-weight: bold;">तहसील (Tahsil)</td><td style="border: 1px solid #cbd5e1; padding: 8px 12px;">${app.tahsil || 'N/A'}</td></tr>
-                        <tr><td style="border: 1px solid #cbd5e1; padding: 8px 12px; background: #f8fafc; font-weight: bold;">जिला (District)</td><td style="border: 1px solid #cbd5e1; padding: 8px 12px;">${app.district}</td></tr>
-                        <tr><td style="border: 1px solid #cbd5e1; padding: 8px 12px; background: #f8fafc; font-weight: bold;">मोबाइल नंबर (Mobile)</td><td style="border: 1px solid #cbd5e1; padding: 8px 12px;">${app.mobile}</td></tr>
-                        <tr><td style="border: 1px solid #cbd5e1; padding: 8px 12px; background: #f8fafc; font-weight: bold;">अन्य विवरण (Details)</td><td style="border: 1px solid #cbd5e1; padding: 8px 12px;">${app.incomeOrDetails}</td></tr>
-                        <tr><td style="border: 1px solid #cbd5e1; padding: 8px 12px; background: #f8fafc; font-weight: bold;">वर्तमान स्थिति (Status)</td><td style="border: 1px solid #cbd5e1; padding: 8px 12px; font-weight: bold; color: #16a34a;">${app.status} ${app.statusDesc ? '('+app.statusDesc+')' : ''}</td></tr>
+                        <tr><td style="border: 1px solid #cbd5e1; padding: 8px 12px; background: #f8fafc; font-weight: bold; width: 38%;">आवेदन संख्या (App ID)</td><td style="border: 1px solid #cbd5e1; padding: 8px 12px; color: #dc2626; font-weight: bold;">${esc(app.appId)}</td></tr>
+                        <tr><td style="border: 1px solid #cbd5e1; padding: 8px 12px; background: #f8fafc; font-weight: bold;">आवेदन दिनांक एवं समय</td><td style="border: 1px solid #cbd5e1; padding: 8px 12px;">${esc(app.date)}</td></tr>
+                        <tr><td style="border: 1px solid #cbd5e1; padding: 8px 12px; background: #f8fafc; font-weight: bold;">आवेदक का नाम (Applicant Name)</td><td style="border: 1px solid #cbd5e1; padding: 8px 12px; font-weight: bold;">${esc(app.name)}</td></tr>
+                        <tr><td style="border: 1px solid #cbd5e1; padding: 8px 12px; background: #f8fafc; font-weight: bold;">आधार नंबर (Aadhaar Number)</td><td style="border: 1px solid #cbd5e1; padding: 8px 12px; font-weight: bold;">${esc(app.aadharNumber || 'उपलब्ध नहीं')}</td></tr>
+                        <tr><td style="border: 1px solid #cbd5e1; padding: 8px 12px; background: #f8fafc; font-weight: bold;">माता का नाम (Mother's Name)</td><td style="border: 1px solid #cbd5e1; padding: 8px 12px;">${esc(app.mother)}</td></tr>
+                        <tr><td style="border: 1px solid #cbd5e1; padding: 8px 12px; background: #f8fafc; font-weight: bold;">${esc(app.guardianType)} का नाम</td><td style="border: 1px solid #cbd5e1; padding: 8px 12px;">${esc(app.guardianName)}</td></tr>
+                        <tr><td style="border: 1px solid #cbd5e1; padding: 8px 12px; background: #f8fafc; font-weight: bold;">क्षेत्र (Area Type)</td><td style="border: 1px solid #cbd5e1; padding: 8px 12px;">${esc(app.area || 'N/A')}</td></tr>
+                        <tr><td style="border: 1px solid #cbd5e1; padding: 8px 12px; background: #f8fafc; font-weight: bold;">ग्राम / मोहल्ला (Village)</td><td style="border: 1px solid #cbd5e1; padding: 8px 12px;">${esc(app.village)}</td></tr>
+                        <tr><td style="border: 1px solid #cbd5e1; padding: 8px 12px; background: #f8fafc; font-weight: bold;">पोस्ट ऑफिस (Post)</td><td style="border: 1px solid #cbd5e1; padding: 8px 12px;">${esc(app.post || 'N/A')}</td></tr>
+                        <tr><td style="border: 1px solid #cbd5e1; padding: 8px 12px; background: #f8fafc; font-weight: bold;">थाना (Thana)</td><td style="border: 1px solid #cbd5e1; padding: 8px 12px;">${esc(app.thana || 'N/A')}</td></tr>
+                        <tr><td style="border: 1px solid #cbd5e1; padding: 8px 12px; background: #f8fafc; font-weight: bold;">ब्लॉक (Block)</td><td style="border: 1px solid #cbd5e1; padding: 8px 12px;">${esc(app.block || 'N/A')}</td></tr>
+                        <tr><td style="border: 1px solid #cbd5e1; padding: 8px 12px; background: #f8fafc; font-weight: bold;">तहसील (Tahsil)</td><td style="border: 1px solid #cbd5e1; padding: 8px 12px;">${esc(app.tahsil || 'N/A')}</td></tr>
+                        <tr><td style="border: 1px solid #cbd5e1; padding: 8px 12px; background: #f8fafc; font-weight: bold;">जिला (District)</td><td style="border: 1px solid #cbd5e1; padding: 8px 12px;">${esc(app.district)}</td></tr>
+                        <tr><td style="border: 1px solid #cbd5e1; padding: 8px 12px; background: #f8fafc; font-weight: bold;">मोबाइल नंबर (Mobile)</td><td style="border: 1px solid #cbd5e1; padding: 8px 12px;">${esc(app.mobile)}</td></tr>
+                        <tr><td style="border: 1px solid #cbd5e1; padding: 8px 12px; background: #f8fafc; font-weight: bold;">अन्य विवरण (Details)</td><td style="border: 1px solid #cbd5e1; padding: 8px 12px;">${esc(app.incomeOrDetails)}</td></tr>
+                        <tr><td style="border: 1px solid #cbd5e1; padding: 8px 12px; background: #f8fafc; font-weight: bold;">वर्तमान स्थिति (Status)</td><td style="border: 1px solid #cbd5e1; padding: 8px 12px; font-weight: bold; color: #16a34a;">${esc(app.status)} ${app.statusDesc ? '('+esc(app.statusDesc)+')' : ''}</td></tr>
                     </table>
                     <p style="text-align: center; font-size: 11px; color: #64748b; margin-top: 25px;">यह अनुराग सीएससी सेंटर पोर्टल से कंप्यूटर जनित दस्तावेज़ है।</p>
                 `;
@@ -1090,7 +1172,7 @@
                         heightLeft -= pageHeight;
                     }
 
-                    pdf.save(`${app.appId}_Details.pdf`);
+                    pdf.save(`${esc(app.appId)}_Details.pdf`);
                 }).catch(err => {
                     document.body.removeChild(printContainer);
                     alert("PDF जनरेट करने में त्रुटि हुई: " + err);
@@ -1103,7 +1185,7 @@
             document.getElementById('modalTitle').innerHTML = `<i class="fa-solid fa-receipt" style="color: #16a34a;"></i> फॉर्म जमा रसीद (Acknowledgment)`;
             
             let receiptPhotoHtml = app.photo 
-                ? `<div style="text-align: right; margin-bottom: 8px;"><img src="${app.photo}" style="width: 75px; height: 90px; object-fit: cover; border: 2px solid #1e3a8a; border-radius: 4px;"></div>` 
+                ? `<div style="text-align: right; margin-bottom: 8px;"><img src="${esc(app.photo)}" style="width: 75px; height: 90px; object-fit: cover; border: 2px solid #1e3a8a; border-radius: 4px;"></div>` 
                 : '';
 
             modalBody.innerHTML = `
@@ -1116,14 +1198,14 @@
                         <div>${receiptPhotoHtml}</div>
                     </div>
                     <hr style="border: 1px solid #ddd; margin: 10px 0;">
-                    <p style="margin: 6px 0; font-size: 13.5px;"><b>आवेदन संख्या:</b> <span style="color: #dc2626; font-weight: bold;">${app.appId}</span></p>
-                    <p style="margin: 6px 0; font-size: 13.5px;"><b>दिनांक एवं समय:</b> ${app.date}</p>
-                    <p style="margin: 6px 0; font-size: 13.5px;"><b>सेवा:</b> ${app.type}</p>
-                    <p style="margin: 6px 0; font-size: 13.5px;"><b>आवेदक का नाम:</b> ${app.name}</p>
-                    <p style="margin: 6px 0; font-size: 13.5px;"><b>आधार नंबर:</b> ${app.aadharNumber || 'N/A'}</p>
-                    <p style="margin: 6px 0; font-size: 13.5px;"><b>मोबाइल नंबर:</b> ${app.mobile}</p>
-                    <p style="margin: 6px 0; font-size: 13.5px;"><b>गाँव / पता:</b> ${app.village}</p>
-                    <p style="margin: 6px 0; font-size: 13.5px;"><b>स्थिति:</b> <span style="color: #d97706; font-weight: bold;">${app.status}</span></p>
+                    <p style="margin: 6px 0; font-size: 13.5px;"><b>आवेदन संख्या:</b> <span style="color: #dc2626; font-weight: bold;">${esc(app.appId)}</span></p>
+                    <p style="margin: 6px 0; font-size: 13.5px;"><b>दिनांक एवं समय:</b> ${esc(app.date)}</p>
+                    <p style="margin: 6px 0; font-size: 13.5px;"><b>सेवा:</b> ${esc(app.type)}</p>
+                    <p style="margin: 6px 0; font-size: 13.5px;"><b>आवेदक का नाम:</b> ${esc(app.name)}</p>
+                    <p style="margin: 6px 0; font-size: 13.5px;"><b>आधार नंबर:</b> ${esc(app.aadharNumber || 'N/A')}</p>
+                    <p style="margin: 6px 0; font-size: 13.5px;"><b>मोबाइल नंबर:</b> ${esc(app.mobile)}</p>
+                    <p style="margin: 6px 0; font-size: 13.5px;"><b>गाँव / पता:</b> ${esc(app.village)}</p>
+                    <p style="margin: 6px 0; font-size: 13.5px;"><b>स्थिति:</b> <span style="color: #d97706; font-weight: bold;">${esc(app.status)}</span></p>
                     <hr style="border: 1px dashed #ddd; margin: 12px 0;">
                     <p style="font-size: 11.5px; color: #666; text-align: center;">नोट: यह एक कंप्यूटर-जनित दस्तावेज़ है, इसलिए इस पर मुहर एवं हस्ताक्षर की कोई आवश्यकता नहीं है।</p>
                 </div>
@@ -1200,66 +1282,18 @@
         function closeVerifyCertModal() { document.getElementById('verifyCertModal').style.display = 'none'; }
 
         function verifyCertificate() {
-            const appIdInput = document.getElementById('vf_app_id').value.trim();
-            const resultBox = document.getElementById('vf_result_box');
-            resultBox.innerHTML = "";
-
-            if (!appIdInput) {
-                resultBox.textContent = "कृपया आवेदन संख्या (App ID) दर्ज करें।";
-                resultBox.style.color = "#dc2626";
-                return;
-            }
-
-            resultBox.style.color = "#475569";
-            resultBox.textContent = "सत्यापित किया जा रहा है...";
-
-            // Exact App ID lookup only — no name/mobile search or full-table listing.
-            db.ref('csc_applications').orderByChild('appId').equalTo(appIdInput).once('value', (snapshot) => {
-                resultBox.innerHTML = "";
-                if (!snapshot.exists()) {
-                    const bad = document.createElement('p');
-                    bad.style.cssText = "color:#dc2626;font-weight:bold;text-align:center;";
-                    bad.textContent = "❌ यह प्रमाण पत्र मान्य नहीं है (आवेदन संख्या नहीं मिली)।";
-                    resultBox.appendChild(bad);
-                    return;
-                }
-                let app = null;
-                snapshot.forEach(child => { app = child.val(); });
-
-                const isGenuine = app.status === 'Complete' && !!app.certPdf;
-
-                // Built with createElement/textContent (not innerHTML) so stored applicant
-                // data can never execute as script here.
-                const card = document.createElement('div');
-                card.style.cssText = "background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:15px;font-size:13.5px;";
-
-                const badge = document.createElement('p');
-                badge.style.cssText = "font-weight:bold;text-align:center;margin-bottom:10px;font-size:14.5px;color:" + (isGenuine ? "#16a34a" : "#d97706") + ";";
-                badge.textContent = isGenuine ? "✅ यह प्रमाण पत्र मान्य एवं सत्यापित है (Verified)" : "⏳ यह प्रमाण पत्र अभी जारी नहीं हुआ है (Not Yet Verified)";
-                card.appendChild(badge);
-
-                const rows = [
-                    ["आवेदन संख्या", app.appId || appIdInput],
-                    ["आवेदक का नाम", app.name || "N/A"],
-                    ["प्रमाण पत्र प्रकार", app.type || "N/A"],
-                    ["आवेदन दिनांक", app.date || "N/A"],
-                    ["स्थिति", app.status || "Pending"]
-                ];
-                rows.forEach(([label, value]) => {
-                    const p = document.createElement('p');
-                    p.style.margin = "6px 0";
-                    const b = document.createElement('b');
-                    b.textContent = label + ": ";
-                    p.appendChild(b);
-                    p.appendChild(document.createTextNode(value));
-                    card.appendChild(p);
-                });
-
-                resultBox.appendChild(card);
-            }).catch(err => {
-                resultBox.textContent = "त्रुटि हुई: " + err.message;
-                resultBox.style.color = "#dc2626";
-            });
+            const box = document.getElementById('vf_result_box'), input = document.getElementById('vf_app_id').value;
+            box.textContent = '';
+            if (!input.trim()) { box.textContent = "कृपया आवेदन संख्या (App ID) दर्ज करें।"; box.style.color = "#dc2626"; return; }
+            box.style.color = "#475569"; box.textContent = "सत्यापित किया जा रहा है...";
+            lookupStatus(input, (app, id) => {
+                box.textContent = '';
+                const ok = app.status === 'Complete' && !!app.certPdf;
+                box.appendChild(makeInfoCard([["आवेदन संख्या", id], ["आवेदक का नाम", app.name || "N/A"], ["प्रमाण पत्र प्रकार", app.type || "N/A"], ["आवेदन दिनांक", app.date || "N/A"], ["स्थिति", app.status || "Pending"]],
+                    ok ? "✅ यह प्रमाण पत्र मान्य एवं सत्यापित है (Verified)" : "⏳ यह प्रमाण पत्र अभी जारी नहीं हुआ है (Not Yet Verified)", ok ? "#16a34a" : "#d97706"));
+            }, () => {
+                box.textContent = "❌ यह प्रमाण पत्र मान्य नहीं है (आवेदन संख्या नहीं मिली)।"; box.style.cssText = "color:#dc2626;font-weight:bold;text-align:center;";
+            }, err => { box.textContent = "त्रुटि हुई: " + err.message; box.style.color = "#dc2626"; });
         }
 
         function openStatusCheckModal() {
@@ -1270,60 +1304,17 @@
         function closeStatusCheckModal() { document.getElementById('statusCheckModal').style.display = 'none'; }
 
         function checkApplicationStatus() {
-            const appIdInput = document.getElementById('sc_app_id').value.trim();
-            const resultBox = document.getElementById('sc_result_box');
-            resultBox.innerHTML = "";
-
-            if (!appIdInput) {
-                resultBox.textContent = "कृपया अपनी आवेदन संख्या (App ID) दर्ज करें।";
-                resultBox.style.color = "#dc2626";
-                return;
-            }
-
-            resultBox.style.color = "#475569";
-            resultBox.textContent = "खोजा जा रहा है...";
-
-            // Exact App ID lookup only — no name/mobile search or full-table listing.
-            db.ref('csc_applications').orderByChild('appId').equalTo(appIdInput).once('value', (snapshot) => {
-                resultBox.innerHTML = "";
-                if (!snapshot.exists()) {
-                    resultBox.textContent = "इस आवेदन संख्या का कोई रिकॉर्ड नहीं मिला। कृपया संख्या जाँच लें।";
-                    resultBox.style.color = "#dc2626";
-                    return;
-                }
-                let app = null;
-                snapshot.forEach(child => { app = child.val(); });
-
-                // Built with createElement/textContent (not innerHTML) so stored applicant
-                // data can never execute as script here, even if it contains HTML-like text.
-                const card = document.createElement('div');
-                card.style.cssText = "background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:15px;font-size:13.5px;";
-
-                const rows = [
-                    ["आवेदन संख्या", app.appId || appIdInput],
-                    ["सेवा", app.type || "N/A"],
-                    ["आवेदन दिनांक", app.date || "N/A"],
-                    ["वर्तमान स्थिति", app.status || "Pending"]
-                ];
-                if ((app.status === 'Return' || app.status === 'Cancel') && app.statusDesc) {
-                    rows.push(["कारण", app.statusDesc]);
-                }
-
-                rows.forEach(([label, value]) => {
-                    const p = document.createElement('p');
-                    p.style.margin = "6px 0";
-                    const b = document.createElement('b');
-                    b.textContent = label + ": ";
-                    p.appendChild(b);
-                    p.appendChild(document.createTextNode(value));
-                    card.appendChild(p);
-                });
-
-                resultBox.appendChild(card);
-            }).catch(err => {
-                resultBox.textContent = "त्रुटि हुई: " + err.message;
-                resultBox.style.color = "#dc2626";
-            });
+            const box = document.getElementById('sc_result_box'), input = document.getElementById('sc_app_id').value;
+            box.textContent = '';
+            if (!input.trim()) { box.textContent = "कृपया अपनी आवेदन संख्या (App ID) दर्ज करें।"; box.style.color = "#dc2626"; return; }
+            box.style.color = "#475569"; box.textContent = "खोजा जा रहा है...";
+            lookupStatus(input, (app, id) => {
+                box.textContent = '';
+                const rows = [["आवेदन संख्या", id], ["सेवा", app.type || "N/A"], ["आवेदन दिनांक", app.date || "N/A"], ["वर्तमान स्थिति", app.status || "Pending"]];
+                if ((app.status === 'Return' || app.status === 'Cancel') && app.statusDesc) rows.push(["कारण", app.statusDesc]);
+                box.appendChild(makeInfoCard(rows));
+            }, () => { box.textContent = "इस आवेदन संख्या का कोई रिकॉर्ड नहीं मिला। कृपया संख्या जाँच लें।"; box.style.color = "#dc2626"; },
+            err => { box.textContent = "त्रुटि हुई: " + err.message; box.style.color = "#dc2626"; });
         }
 
         function openDownloadCertModal() {
@@ -1334,42 +1325,21 @@
         function closeDownloadCertModal() { document.getElementById('downloadCertModal').style.display = 'none'; }
 
         function downloadCertificateByAppId() {
-            const appIdInput = document.getElementById('dl_app_id').value.trim();
-            const msg = document.getElementById('dl_cert_msg');
-            msg.style.color = "#475569";
-            if (!appIdInput) { msg.textContent = "कृपया अपनी आवेदन संख्या (App ID) दर्ज करें।"; msg.style.color = "#dc2626"; return; }
-
-            msg.textContent = "खोजा जा रहा है...";
-            // Exact App ID lookup only — no name/mobile search or full-table listing,
-            // so this stays safe even if Firebase Rules allow query.orderByChild('appId') reads.
-            db.ref('csc_applications').orderByChild('appId').equalTo(appIdInput).once('value', (snapshot) => {
-                if (!snapshot.exists()) {
-                    msg.textContent = "इस आवेदन संख्या का कोई रिकॉर्ड नहीं मिला। कृपया संख्या जाँच लें।";
-                    msg.style.color = "#dc2626";
-                    return;
-                }
-                let app = null;
-                snapshot.forEach(child => { app = child.val(); });
-
-                if (!app.certPdf) {
-                    msg.textContent = "आपका प्रमाण पत्र अभी तैयार नहीं है। स्थिति: " + (app.status || "Pending") + ". कृपया बाद में प्रयास करें।";
-                    msg.style.color = "#d97706";
-                    return;
-                }
-
-                const link = document.createElement('a');
-                link.href = app.certPdf;
-                link.download = appIdInput + "_Certificate.pdf";
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-
-                msg.textContent = "प्रमाण पत्र डाउनलोड हो गया है।";
-                msg.style.color = "#16a34a";
-            }).catch(err => {
-                msg.textContent = "त्रुटि हुई: " + err.message;
-                msg.style.color = "#dc2626";
-            });
+            const msg = document.getElementById('dl_cert_msg'), input = document.getElementById('dl_app_id').value;
+            if (!input.trim()) { msg.textContent = "कृपया अपनी आवेदन संख्या (App ID) दर्ज करें।"; msg.style.color = "#dc2626"; return; }
+            msg.style.color = "#475569"; msg.textContent = "खोजा जा रहा है...";
+            lookupStatus(input, (app, id) => {
+                const pdf = safeDataUrl(app.certPdf, 'pdf');
+                if (!pdf) { msg.textContent = "आपका प्रमाण पत्र अभी तैयार नहीं है। स्थिति: " + (app.status || "Pending") + ". कृपया बाद में प्रयास करें।"; msg.style.color = "#d97706"; return; }
+                fetch(pdf).then(r => r.blob()).then(blob => {
+                    const url = URL.createObjectURL(blob), link = document.createElement('a');
+                    link.href = url; link.download = id + "_Certificate.pdf";
+                    document.body.appendChild(link); link.click(); document.body.removeChild(link);
+                    setTimeout(() => URL.revokeObjectURL(url), 2000);
+                    msg.textContent = "प्रमाण पत्र डाउनलोड हो गया है।"; msg.style.color = "#16a34a";
+                });
+            }, () => { msg.textContent = "इस आवेदन संख्या का कोई रिकॉर्ड नहीं मिला। कृपया संख्या जाँच लें।"; msg.style.color = "#dc2626"; },
+            err => { msg.textContent = "त्रुटि हुई: " + err.message; msg.style.color = "#dc2626"; });
         }
         function closeEditStatusModal() { document.getElementById('editStatusModal').style.display = 'none'; }
 
@@ -1377,13 +1347,14 @@
         let allApplicationsData = [];
 
         function viewDocumentImage(dbKey, field) {
-            let app = allApplicationsData.find(a => a.dbKey === dbKey);
-            if (!app || !app[field]) { alert("यह दस्तावेज़ उपलब्ध नहीं है।"); return; }
-            let title = field === 'photo' ? 'पासपोर्ट फोटो' : 'आधार कार्ड';
-            let win = window.open('', '_blank');
+            const app = allApplicationsData.find(a => a.dbKey === dbKey), src = app && safeDataUrl(app[field], 'image');
+            if (!src) { alert("यह दस्तावेज़ उपलब्ध नहीं है।"); return; }
+            const win = window.open('', '_blank');
             if (!win) { alert("पॉपअप ब्लॉक हो गया है। कृपया इस साइट के लिए पॉपअप की अनुमति दें और दोबारा कोशिश करें।"); return; }
-            win.document.write(`<!DOCTYPE html><html><head><title>${title}</title><meta name="viewport" content="width=device-width, initial-scale=1.0"></head><body style="margin:0;background:#111827;display:flex;align-items:center;justify-content:center;min-height:100vh;"><img src="${app[field]}" alt="${title}" style="max-width:100%;max-height:100vh;object-fit:contain;"></body></html>`);
-            win.document.close();
+            win.opener = null;
+            win.document.body.style.cssText = 'margin:0;background:#111827;display:flex;align-items:center;justify-content:center;min-height:100vh;';
+            const img = win.document.createElement('img'); img.src = src; img.style.cssText = 'max-width:100%;max-height:100vh;object-fit:contain;';
+            win.document.body.appendChild(img);
         }
 
         function loadApplicationsToTable() {
@@ -1406,58 +1377,47 @@
         }
 
         function renderTable(dataList) {
-            let tbody = document.getElementById('applicationTableBody');
-            tbody.innerHTML = "";
-
-            if(dataList.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="12" style="text-align:center; padding: 20px; color: #64748b;">कोई आवेदन उपलब्ध नहीं है।</td></tr>`;
-                return;
+            const tbody = document.getElementById('applicationTableBody');
+            tbody.textContent = '';
+            if (dataList.length === 0) {
+                const tr = document.createElement('tr'), td = document.createElement('td');
+                td.colSpan = 12; td.style.cssText = 'text-align:center;padding:20px;color:#64748b;'; td.textContent = 'कोई आवेदन उपलब्ध नहीं है।';
+                tr.appendChild(td); tbody.appendChild(tr); return;
             }
-
+            const btn = (label, icon, bg, fn) => {
+                const b = document.createElement('button'); b.className = 'dash-action-btn'; b.style.cssText = 'background:' + bg + ';border:none;cursor:pointer;';
+                const ic = document.createElement('i'); ic.className = 'fa-solid ' + icon; b.appendChild(ic); b.appendChild(document.createTextNode(' ' + label));
+                b.addEventListener('click', fn); return b;
+            };
+            const note = txt => { const s = document.createElement('span'); s.style.cssText = 'color:#d97706;font-size:11.5px;font-weight:600;'; s.textContent = txt; return s; };
             dataList.slice().reverse().forEach((app, index) => {
-                let tr = document.createElement('tr');
-                
-                let photoBadge = app.photo ? `<button onclick="viewDocumentImage('${app.dbKey}', 'photo')" class="dash-action-btn" style="background:#0284c7; border:none; cursor:pointer;"><i class="fa-solid fa-image"></i> फोटो</button>` : '<span style="color:#94a3b8;">निशान नहीं</span>';
-                let aadharBadge = app.aadhar ? `<button onclick="viewDocumentImage('${app.dbKey}', 'aadhar')" class="dash-action-btn" style="background:#0284c7; border:none; cursor:pointer;"><i class="fa-solid fa-id-card"></i> आधार</button>` : '';
-                
-                let certPdfBadge = app.certPdf 
-                    ? `<a href="${app.certPdf}" target="_blank" rel="noopener noreferrer" class="dash-action-btn" style="background:#16a34a;"><i class="fa-solid fa-file-pdf"></i> सर्टिफिकेट</a>` 
-                    : `<span style="color:#d97706; font-size:11.5px; font-weight:600;">अपलोड बाकी</span>`;
-
-                tr.innerHTML = `
-                    <td>${index + 1}</td>
-                    <td style="font-weight: bold; color: #1e3a8a;">${app.appId}</td>
-                    <td style="font-size: 11.5px; white-space: nowrap;">${app.date}</td>
-                    <td>${app.type}</td>
-                    <td style="font-weight: 600;">${app.name}</td>
-                    <td>${app.mobile}</td>
-                    <td>${app.aadharNumber || 'N/A'}</td>
-                    <td style="white-space: nowrap;">${photoBadge} ${aadharBadge}</td>
-                    <td><button onclick="downloadCustomerDetailsPDF('${app.dbKey}')" class="dash-action-btn" style="background: #475569;"><i class="fa-solid fa-download"></i> PDF</button></td>
-                    <td>${certPdfBadge}</td>
-                    <td>
-                        <span style="display:inline-block; padding: 3px 8px; border-radius: 4px; font-size: 11.5px; font-weight: bold; background: #e2e8f0; color: #1e293b;">${app.status}</span>
-                        ${app.statusDesc ? `<br><small style="color:#dc2626;">${app.statusDesc}</small>` : ''}
-                    </td>
-                    <td style="white-space: nowrap;">
-                        <button onclick="openEditStatusModal('${app.dbKey}', '${app.status}', '${app.statusDesc || ''}')" class="dash-action-btn" style="background: #d97706;" title="स्टेटस एडिट करें"><i class="fa-solid fa-pen-to-square"></i> स्टेटस</button>
-                        <button onclick="deleteApplication('${app.dbKey}', '${app.appId}')" class="dash-action-btn" style="background: #dc2626;" title="रिकॉर्ड डिलीट करें"><i class="fa-solid fa-trash"></i> डिलीट</button>
-                    </td>
-                `;
+                const tr = document.createElement('tr');
+                const cell = (content, style) => { const td = document.createElement('td'); if (style) td.style.cssText = style; if (content instanceof Node) td.appendChild(content); else td.textContent = content; tr.appendChild(td); return td; };
+                cell(String(index + 1)); cell(app.appId || '', 'font-weight:bold;color:#1e3a8a;'); cell(app.date || '', 'font-size:11.5px;white-space:nowrap;');
+                cell(app.type || ''); cell(app.name || '', 'font-weight:600;'); cell(app.mobile || ''); cell(app.aadharNumber || 'N/A');
+                const docs = cell('', 'white-space:nowrap;');
+                if (safeDataUrl(app.photo, 'image')) docs.appendChild(btn('फोटो', 'fa-image', '#0284c7', () => viewDocumentImage(app.dbKey, 'photo'))); else docs.appendChild(note('निशान नहीं'));
+                if (safeDataUrl(app.aadhar, 'image')) { docs.appendChild(document.createTextNode(' ')); docs.appendChild(btn('आधार', 'fa-id-card', '#0284c7', () => viewDocumentImage(app.dbKey, 'aadhar'))); }
+                cell(btn('PDF', 'fa-download', '#475569', () => downloadCustomerDetailsPDF(app.dbKey)));
+                const pdf = safeDataUrl(app.certPdf, 'pdf');
+                cell(pdf ? btn('सर्टिफिकेट', 'fa-file-pdf', '#16a34a', () => fetch(pdf).then(r => r.blob()).then(b => window.open(URL.createObjectURL(b)))) : note('अपलोड बाकी'));
+                const st = document.createElement('div'), badge = document.createElement('span');
+                badge.style.cssText = 'display:inline-block;padding:3px 8px;border-radius:4px;font-size:11.5px;font-weight:bold;background:#e2e8f0;color:#1e293b;'; badge.textContent = app.status || ''; st.appendChild(badge);
+                if (app.statusDesc) { st.appendChild(document.createElement('br')); const sm = document.createElement('small'); sm.style.color = '#dc2626'; sm.textContent = app.statusDesc; st.appendChild(sm); }
+                cell(st);
+                const act = cell('', 'white-space:nowrap;');
+                act.appendChild(btn('स्टेटस', 'fa-pen-to-square', '#d97706', () => openEditStatusModal(app.dbKey, app.status, app.statusDesc || '')));
+                act.appendChild(btn('डिलीट', 'fa-trash', '#dc2626', () => deleteApplication(app.dbKey, app.appId)));
                 tbody.appendChild(tr);
             });
         }
 
         function deleteApplication(dbKey, appId) {
             if (!isAdmin()) { alert("केवल अधिकृत Admin यह कार्य कर सकता है।"); return; }
-            if (confirm(`क्या आप वाकई आवेदन संख्या [ ${appId} ] को हटाना चाहते हैं? यह कार्रवाई वापस नहीं ली जा सकती।`)) {
-                db.ref('csc_applications/' + dbKey).remove()
-                    .then(() => {
-                        alert("आवेदन सफलतापूर्वक डिलीट कर दिया गया है।");
-                    })
-                    .catch((error) => {
-                        alert("डिलीट करने में त्रुटि हुई: " + error.message);
-                    });
+            if (confirm("क्या आप वाकई आवेदन संख्या [ " + appId + " ] को हटाना चाहते हैं? यह कार्रवाई वापस नहीं ली जा सकती।")) {
+                const u = {}; u['csc_applications/' + dbKey] = null; if (appId) u['app_status/' + appId] = null;
+                const d = allApplicationsData.find(x => x.dbKey === dbKey); if (d && d.citizenUid && appId) u['citizen_apps/' + d.citizenUid + '/' + appId] = null;
+                db.ref().update(u).then(() => alert("आवेदन सफलतापूर्वक डिलीट कर दिया गया है।")).catch(e => alert("डिलीट करने में त्रुटि हुई: " + e.message));
             }
         }
 
@@ -1513,54 +1473,174 @@
         }
 
         function saveUpdatedStatus() {
-            let dbKey = document.getElementById('edit_db_key').value;
-            let newStatus = document.getElementById('edit_status_select').value;
-            let newDesc = document.getElementById('edit_status_desc').value.trim();
-
-            db.ref('csc_applications/' + dbKey).update({
-                status: newStatus,
-                statusDesc: (newStatus === 'Return' || newStatus === 'Cancel') ? newDesc : ''
-            }).then(() => {
-                closeEditStatusModal();
-                alert("फॉर्म का स्टेटस सफलतापूर्वक अपडेट हो गया है!");
-            }).catch(err => {
-                alert("अपडेट करने में त्रुटि: " + err.message);
-            });
+            if (!isAdmin()) { alert("केवल अधिकृत Admin यह कार्य कर सकता है।"); return; }
+            const dbKey = document.getElementById('edit_db_key').value, newStatus = document.getElementById('edit_status_select').value;
+            const app = allApplicationsData.find(a => a.dbKey === dbKey);
+            if (!app) { alert('Record not found!'); return; }
+            const desc = (newStatus === 'Return' || newStatus === 'Cancel') ? document.getElementById('edit_status_desc').value.trim().slice(0, 300) : '';
+            const u = {};
+            u['csc_applications/' + dbKey + '/status'] = newStatus; u['csc_applications/' + dbKey + '/statusDesc'] = desc;
+            u['app_status/' + app.appId + '/status'] = newStatus; u['app_status/' + app.appId + '/statusDesc'] = desc;
+            db.ref().update(u).then(() => { closeEditStatusModal(); alert("फॉर्म का स्टेटस सफलतापूर्वक अपडेट हो गया है!"); })
+              .catch(err => alert("अपडेट करने में त्रुटि: " + err.message));
         }
 
         function uploadCustomerCertificatePDF() {
-            let appIdInput = document.getElementById('up_app_id').value.trim();
-            let fileInput = document.getElementById('up_cert_pdf').files[0];
+            if (!isAdmin()) { alert("केवल अधिकृत Admin यह कार्य कर सकता है।"); return; }
+            const appId = document.getElementById('up_app_id').value.trim().toUpperCase(), file = document.getElementById('up_cert_pdf').files[0];
+            if (!APP_ID_RE.test(appId) || !file) { alert("कृपया सही आवेदन संख्या (App ID) और PDF फाइल दोनों दर्ज करें!"); return; }
+            if (file.type !== 'application/pdf' || file.size > 3 * 1024 * 1024) { alert("केवल PDF (अधिकतम 3 MB) अपलोड करें।"); return; }
+            const reader = new FileReader();
+            reader.onload = e => {
+                const pdf = e.target.result;
+                if (!safeDataUrl(pdf, 'pdf')) { alert("अमान्य PDF फ़ाइल।"); return; }
+                db.ref('csc_applications').orderByChild('appId').equalTo(appId).once('value').then(snapshot => {
+                    if (!snapshot.exists()) { alert("इस आवेदन संख्या (App ID) का कोई रिकॉर्ड नहीं मिला!"); return; }
+                    let key; snapshot.forEach(c => { key = c.key; });
+                    const u = {};
+                    u['csc_applications/' + key + '/certPdf'] = pdf; u['csc_applications/' + key + '/status'] = 'Complete';
+                    u['app_status/' + appId + '/certPdf'] = pdf; u['app_status/' + appId + '/status'] = 'Complete';
+                    return db.ref().update(u).then(() => { closeUploadCertModal(); alert("सर्टिफिकेट PDF सफलतापूर्वक अपलोड और सेव कर दिया गया है!"); });
+                }).catch(err => alert("अपलोड में त्रुटि: " + err.message));
+            };
+            reader.readAsDataURL(file);
+        }
 
-            if(!appIdInput || !fileInput) {
-                alert("कृपया आवेदन संख्या (App ID) और PDF फाइल दोनों दर्ज करें!");
-                return;
+        const isCitizen = () => !!(auth.currentUser && auth.currentUser.uid !== ADMIN_UID);
+        function updateCitizenNav(user) { document.getElementById('citizenNavLabel').textContent = (user && user.uid !== ADMIN_UID) ? 'मेरा पोर्टल' : 'नागरिक लॉगिन'; }
+        function handleCitizenNavClick() { showSection(isCitizen() ? 'citizen-dashboard' : 'citizen-portal'); }
+        function setCitizenMsg(text, ok) { const e = document.getElementById('citizenMsg'); e.textContent = text; e.className = ok ? 'success-msg' : 'error-msg'; e.style.display = text ? 'block' : 'none'; }
+        let czMode = 'login', czConfirm = null, czMustChange = false, czRecaptcha = null;
+        const $z = id => document.getElementById(id);
+        const czMobOk = m => /^[6-9][0-9]{9}$/.test(m);
+        const czEmail = m => m + '@citizen.anuragcsc.app';
+        const czFn = name => firebase.app().functions('asia-south1').httpsCallable(name);
+        function showCitizenTab(tab) {
+            czMode = tab; czConfirm = null;
+            const lg = tab === 'login';
+            $z('citizenLoginForm').style.display = lg ? 'block' : 'none';
+            $z('citizenOtpForm').style.display = lg ? 'none' : 'block';
+            $z('cz_name_group').style.display = tab === 'register' ? 'block' : 'none';
+            $z('cz_newpw_group').style.display = tab === 'reset' ? 'block' : 'none';
+            $z('cz_otp_group').style.display = 'none'; $z('cz_send_btn').textContent = 'OTP भेजें';
+            [['czTabLogin', 'login'], ['czTabReg', 'register'], ['czTabReset', 'reset']].forEach(([id, k]) => $z(id).classList.toggle('active', k === tab));
+            setCitizenMsg('');
+        }
+        function citizenErr(e) {
+            if (e.code && e.code.indexOf('functions/') === 0 && e.message) return e.message;
+            const m = { 'auth/invalid-credential': 'मोबाइल नंबर या पासवर्ड गलत है।', 'auth/invalid-phone-number': 'सही मोबाइल नंबर दर्ज करें।', 'auth/too-many-requests': 'बहुत अधिक प्रयास हुए। कुछ देर बाद फिर कोशिश करें।', 'auth/quota-exceeded': 'SMS सीमा पूरी हो गई है, बाद में प्रयास करें।', 'auth/captcha-check-failed': 'सुरक्षा जाँच विफल रही, पेज रीफ़्रेश करें।', 'auth/invalid-verification-code': 'OTP गलत है।', 'auth/code-expired': 'OTP की समय-सीमा समाप्त हो गई, दोबारा भेजें।', 'auth/network-request-failed': 'इंटरनेट कनेक्शन जाँचें।', 'auth/weak-password': 'पासवर्ड कम से कम 8 अक्षर का रखें।' };
+            return m[e.code] || 'त्रुटि हुई, कृपया दोबारा प्रयास करें।';
+        }
+        async function citizenLogin(ev) {
+            ev.preventDefault();
+            const m = $z('cz_mob').value.trim();
+            if (!czMobOk(m)) { setCitizenMsg('सही 10 अंकों का मोबाइल नंबर दर्ज करें।'); return; }
+            try {
+                const c = await auth.signInWithEmailAndPassword(czEmail(m), $z('cz_pass').value);
+                if (c.user.uid === ADMIN_UID) { await auth.signOut(); throw { code: 'admin' }; }
+                const s = await db.ref('citizens/' + c.user.uid + '/mustChange').once('value');
+                czMustChange = s.val() === true;
+                $z('citizenLoginForm').reset(); setCitizenMsg('');
+                showSection('citizen-dashboard');
+            } catch (e) { setCitizenMsg(e.code === 'admin' ? 'एडमिन कृपया "एडमिन लॉगिन" से प्रवेश करें।' : citizenErr(e)); }
+        }
+        async function citizenSendOtp() {
+            const m = $z('cz_omob').value.trim(), btn = $z('cz_send_btn');
+            if (czMode === 'register' && $z('cz_rname').value.trim().length < 2) { setCitizenMsg('कृपया अपना पूरा नाम लिखें।'); return; }
+            if (czMode === 'reset' && $z('cz_newpw').value.length < 8) { setCitizenMsg('नया पासवर्ड कम से कम 8 अक्षर का रखें।'); return; }
+            if (!czMobOk(m)) { setCitizenMsg('सही 10 अंकों का मोबाइल नंबर दर्ज करें।'); return; }
+            btn.disabled = true; setCitizenMsg('OTP भेजा जा रहा है...', true);
+            try {
+                if (auth.currentUser) await auth.signOut();
+                try { if (czRecaptcha) czRecaptcha.clear(); } catch (_) {}
+                czRecaptcha = new firebase.auth.RecaptchaVerifier('cz_recaptcha', { size: 'invisible' });
+                czConfirm = await auth.signInWithPhoneNumber('+91' + m, czRecaptcha);
+                $z('cz_otp_group').style.display = 'block'; btn.textContent = 'OTP दोबारा भेजें';
+                setCitizenMsg('OTP आपके मोबाइल पर भेज दिया गया है।', true);
+            } catch (e) { setCitizenMsg(citizenErr(e)); }
+            btn.disabled = false;
+        }
+        async function citizenOtpSubmit(ev) {
+            ev.preventDefault();
+            const code = $z('cz_otp').value.trim(), m = $z('cz_omob').value.trim(), mode = czMode;
+            if (!czConfirm || !/^[0-9]{6}$/.test(code)) { setCitizenMsg('6 अंकों का सही OTP दर्ज करें।'); return; }
+            try {
+                await czConfirm.confirm(code);
+                let msg, r;
+                if (mode === 'register') {
+                    r = (await czFn('registerCitizen')({ name: $z('cz_rname').value.trim() })).data;
+                    msg = r.status === 'exists' ? 'यह मोबाइल पहले से पंजीकृत है। लॉगिन करें, या "पासवर्ड भूले" चुनें।'
+                        : r.status === 'sms_failed' ? 'रजिस्ट्रेशन हो गया, पर SMS नहीं जा सका। "पासवर्ड भूले" से नया पासवर्ड सेट करें।'
+                        : 'रजिस्ट्रेशन सफल! आपका User ID (मोबाइल नंबर) और पासवर्ड SMS से भेज दिया गया है। उसी से लॉगिन करें।';
+                } else {
+                    await czFn('resetCitizenPassword')({ password: $z('cz_newpw').value });
+                    msg = 'पासवर्ड बदल गया है। नए पासवर्ड से लॉगिन करें।';
+                }
+                await auth.signOut();
+                $z('citizenOtpForm').reset(); showCitizenTab('login'); $z('cz_mob').value = m; setCitizenMsg(msg, true);
+            } catch (e) { setCitizenMsg(citizenErr(e)); }
+        }
+        async function citizenChangePassword() {
+            if (!isCitizen()) return;
+            const p = $z('cz_cpw').value, p2 = $z('cz_cpw2').value, u = auth.currentUser;
+            if (p.length < 8 || p !== p2) { alert('पासवर्ड कम से कम 8 अक्षर का हो और दोनों बार एक जैसा लिखें।'); return; }
+            try {
+                await u.updatePassword(p);
+                await db.ref('citizens/' + u.uid + '/mustChange').set(false);
+                czMustChange = false; $z('cz_cpw').value = ''; $z('cz_cpw2').value = ''; $z('czMustBanner').style.display = 'none';
+                alert('पासवर्ड सफलतापूर्वक बदल गया है।');
+            } catch (e) {
+                if (e.code === 'auth/requires-recent-login') { alert('सुरक्षा के लिए कृपया दोबारा लॉगिन करें।'); auth.signOut().then(() => showSection('citizen-portal')); }
+                else alert(citizenErr(e));
             }
-
-            let reader = new FileReader();
-            reader.onload = function(e) {
-                let pdfBase64 = e.target.result;
-
-                db.ref('csc_applications').orderByChild('appId').equalTo(appIdInput).once('value', (snapshot) => {
-                    if(!snapshot.exists()) {
-                        alert("इस आवेदन संख्या (App ID) का कोई रिकॉर्ड नहीं मिला!");
-                        return;
-                    }
-
-                    snapshot.forEach((childSnapshot) => {
-                        let key = childSnapshot.key;
-                        db.ref('csc_applications/' + key).update({
-                            certPdf: pdfBase64,
-                            status: 'Complete'
-                        }).then(() => {
-                            closeUploadCertModal();
-                            alert("सर्टिफिकेट PDF सफलतापूर्वक अपलोड और सेव कर दिया गया है!");
-                        });
+        }
+        function citizenLogout() { auth.signOut().then(() => showSection('home')); }
+        function saveBlobPdf(pdf, id) {
+            fetch(pdf).then(r => r.blob()).then(blob => {
+                const url = URL.createObjectURL(blob), l = document.createElement('a');
+                l.href = url; l.download = id + '_Certificate.pdf'; document.body.appendChild(l); l.click(); document.body.removeChild(l);
+                setTimeout(() => URL.revokeObjectURL(url), 2000);
+            });
+        }
+        function loadCitizenApps() {
+            const u = auth.currentUser; if (!u || u.uid === ADMIN_UID) return;
+            document.getElementById('citizenName').textContent = u.displayName || u.email;
+            document.getElementById('citizenEmail').textContent = 'User ID: ' + String(u.email || '').split('@')[0];
+            document.getElementById('czMustBanner').style.display = czMustChange ? 'block' : 'none';
+            const tb = document.getElementById('citizenAppsBody');
+            const msgRow = txt => { tb.textContent = ''; const tr = document.createElement('tr'), td = document.createElement('td'); td.colSpan = 5; td.style.textAlign = 'center'; td.textContent = txt; tr.appendChild(td); tb.appendChild(tr); };
+            msgRow('लोड हो रहा है...');
+            db.ref('citizen_apps/' + u.uid).once('value').then(snap => {
+                const items = []; snap.forEach(c => { items.push(Object.assign({ id: c.key }, c.val())); });
+                if (!items.length) { msgRow('अभी कोई आवेदन नहीं है।'); return; }
+                items.reverse();
+                return Promise.all(items.map(it => db.ref('app_status/' + it.id).once('value').then(s => s.val(), () => null))).then(sts => {
+                    tb.textContent = '';
+                    items.forEach((it, i) => {
+                        const st = sts[i] || {}, tr = document.createElement('tr');
+                        const cell = (txt, style) => { const td = document.createElement('td'); if (style) td.style.cssText = style; if (txt instanceof Node) td.appendChild(txt); else td.textContent = txt; tr.appendChild(td); return td; };
+                        cell(it.id, 'font-weight:bold;color:#1e3a8a;'); cell(it.type || ''); cell(it.date || '', 'font-size:12px;white-space:nowrap;');
+                        let status = st.status || 'रिकॉर्ड नहीं मिला'; if ((st.status === 'Return' || st.status === 'Cancel') && st.statusDesc) status += ' — ' + st.statusDesc;
+                        cell(status);
+                        const pdf = safeDataUrl(st.certPdf, 'pdf');
+                        if (pdf) { const b = document.createElement('button'); b.className = 'dash-action-btn'; b.style.cssText = 'background:#16a34a;border:none;cursor:pointer;'; b.textContent = 'डाउनलोड'; b.addEventListener('click', () => saveBlobPdf(pdf, it.id)); cell(b); } else cell('—');
+                        tb.appendChild(tr);
                     });
                 });
-            };
-            reader.readAsDataURL(fileInput);
+            }).catch(() => msgRow('आवेदन लोड नहीं हो सके।'));
         }
+        function citizenLinkApp() {
+            const u = auth.currentUser, input = document.getElementById('cz_link_id'), id = input.value.trim().toUpperCase();
+            if (!u || u.uid === ADMIN_UID) return;
+            if (!APP_ID_RE.test(id)) { alert('सही आवेदन संख्या दर्ज करें।'); return; }
+            db.ref('app_status/' + id).once('value').then(s => {
+                if (!s.exists()) { alert('यह आवेदन संख्या नहीं मिली।'); return; }
+                return db.ref('citizen_apps/' + u.uid + '/' + id).set({ type: s.val().type, date: s.val().date }).then(() => { input.value = ''; loadCitizenApps(); });
+            }).catch(() => alert('आवेदन जोड़ा नहीं जा सका (शायद पहले से जुड़ा है)।'));
+        }
+
+        document.querySelectorAll('.govform-value input[type="text"]').forEach(i => { if (i.maxLength < 0) i.maxLength = 100; });
+        document.querySelectorAll('.govform-value input[type="tel"]').forEach(i => { i.maxLength = 10; });
 
     </script>
 </body>
